@@ -396,7 +396,8 @@ class MPDClient(object):
                 sock = socket.socket(af, socktype, proto)
                 sock.connect(sa)
                 return sock
-            except socket.error, err:
+            except socket.error as socket_err:
+                err = socket_err
                 if sock is not None:
                     sock.close()
         if err is not None:
@@ -411,8 +412,8 @@ class MPDClient(object):
             self._sock = self._connect_unix(host)
         else:
             self._sock = self._connect_tcp(host, port)
-        self._rfile = self._sock.makefile("rb")
-        self._wfile = self._sock.makefile("wb")
+        self._rfile = self._sock.makefile("r")
+        self._wfile = self._sock.makefile("w")
         try:
             self._hello()
         except:
