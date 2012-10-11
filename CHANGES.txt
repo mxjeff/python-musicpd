@@ -1,6 +1,15 @@
 python-mpd Changes List
 =======================
 
+Changes in 0.3.1 UNRELEASED
+----------------
+
+* python3 port
+* added searchadd and searchaddpl commands
+* added seekcur command
+* added client to client commands
+
+
 Changes in 0.3.0
 ----------------
 
