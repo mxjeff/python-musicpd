@@ -1,5 +1,6 @@
 # python-mpd: Python MPD client library
 # Copyright (C) 2008-2010  J. Alexander Treuman <jat@spatialrift.net>
+# Copyright (C)      2012  Kaliko Jack <kaliko@azylum.org>
 #
 # python-mpd is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as published by
@@ -84,6 +85,7 @@ class MPDClient(object):
             "previous":           self._fetch_nothing,
             "seek":               self._fetch_nothing,
             "seekid":             self._fetch_nothing,
+            "seekcur":            self._fetch_nothing,
             "stop":               self._fetch_nothing,
             # Playlist Commands
             "add":                self._fetch_nothing,
@@ -124,6 +126,8 @@ class MPDClient(object):
             "listallinfo":        self._fetch_database,
             "lsinfo":             self._fetch_database,
             "search":             self._fetch_songs,
+            "searchadd":          self._fetch_nothing,
+            "searchaddpl":        self._fetch_nothing,
             "update":             self._fetch_item,
             "rescan":             self._fetch_item,
             # Sticker Commands
@@ -147,6 +151,12 @@ class MPDClient(object):
             "tagtypes":           self._fetch_list,
             "urlhandlers":        self._fetch_list,
             "decoders":           self._fetch_plugins,
+            # Client to Client
+            "subscribe":          self._fetch_nothing,
+            "unsubscribe":        self._fetch_nothing,
+            "channels":           self._fetch_list,
+            "readmessages":       self._fetch_messages,
+            "sendmessage":        self._fetch_nothing,
         }
 
     def __getattr__(self, attr):
@@ -351,6 +361,9 @@ class MPDClient(object):
 
     def _fetch_plugins(self):
         return self._fetch_objects(["plugin"])
+
+    def _fetch_messages(self):
+        return self._fetch_objects(["channel"])
 
     def _fetch_command_list(self):
         return self._wrap_iterator(self._read_command_list())
