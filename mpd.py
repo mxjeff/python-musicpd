@@ -435,14 +435,11 @@ class MPDClient(object):
             raise
 
     def disconnect(self):
-        if isinstance(self._rfile, socket._fileobject):
-            print('closing r socket')
+        if hasattr(self._rfile, 'close'):
             self._rfile.close()
-        if isinstance(self._wfile, socket._fileobject):
-            print('closing w socket')
+        if hasattr(self._wfile, 'close'):
             self._wfile.close()
         if isinstance(self._sock, socket.socket):
-            print('closing socket')
             self._sock.close()
         self._reset()
 
