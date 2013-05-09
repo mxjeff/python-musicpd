@@ -440,7 +440,7 @@ class MPDClient(object):
             self._rfile.close()
         if hasattr(self._wfile, 'close'):
             self._wfile.close()
-        if isinstance(self._sock, socket.socket):
+        if hasattr(self._sock, 'close'):
             self._sock.close()
         self._reset()
 
