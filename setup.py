@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#! /usr/bin/env python3
 
 from distutils.core import setup
 
@@ -45,7 +45,7 @@ setup(
     author_email='kaliko@azylum.org',
     #url="http://jatreuman.indefero.net/p/python-mpd/",
     download_url="http://pypi.python.org/pypi/python-musicpd/",
-    py_modules=["mpd"],
+    py_modules=["musicpd"],
     classifiers=CLASSIFIERS,
     #license=LICENSE,
     keywords=["mpd"],

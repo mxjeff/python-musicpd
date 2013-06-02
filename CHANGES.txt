@@ -6,6 +6,7 @@ Changes in 0.3.1 UNRELEASED
 
 * renamed musicpd
 * python3 port
+* no python2 support
 * added searchadd and searchaddpl commands
 * added seekcur command
 * added client to client commands
