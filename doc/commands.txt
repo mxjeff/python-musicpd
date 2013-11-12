@@ -72,6 +72,7 @@ lsinfo             [<str>]                 -> fetch_database
 search             <locate>                -> fetch_songs
 update             [<str>]                 -> fetch_item
 rescan             [<str>]                 -> fetch_item
+readcomments       <str>                   -> fetch_object
 
 == Sticker Commands
 sticker   get      <str> <str> <str>       -> fetch_item
@@ -89,6 +90,7 @@ ping                                       -> fetch_nothing
 == Audio Output Commands
 disableoutput      <int>                   -> fetch_nothing
 enableoutput       <int>                   -> fetch_nothing
+toggleoutput       <int>                   -> fetch_nothing
 outputs                                    -> fetch_outputs
 
 == Reflection Commands

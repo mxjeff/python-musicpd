@@ -131,6 +131,7 @@ class MPDClient(object):
             "searchaddpl":        self._fetch_nothing,
             "update":             self._fetch_item,
             "rescan":             self._fetch_item,
+            "readcomments":       self._fetch_object,
             # Sticker Commands
             "sticker get":        self._fetch_item,
             "sticker set":        self._fetch_nothing,
@@ -145,6 +146,7 @@ class MPDClient(object):
             # Audio Output Commands
             "disableoutput":      self._fetch_nothing,
             "enableoutput":       self._fetch_nothing,
+            "toggleoutput":       self._fetch_nothing,
             "outputs":            self._fetch_outputs,
             # Reflection Commands
             "commands":           self._fetch_list,
