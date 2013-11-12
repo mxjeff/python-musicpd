@@ -2,6 +2,7 @@
 
 from distutils.core import setup
 
+from musicpd import VERSION
 
 DESCRIPTION = """\
 An MPD (Music Player Daemon) client library written in pure Python.\
@@ -38,12 +39,12 @@ along with python-musicpd.  If not, see <http://www.gnu.org/licenses/>.\
 
 setup(
     name='python-musicpd',
-    version='0.3.1',
+    version=VERSION,
     description='Python MPD client library',
     long_description=DESCRIPTION,
     author='Kaliko Jack',
     author_email='kaliko@azylum.org',
-    #url="http://jatreuman.indefero.net/p/python-mpd/",
+    url="http://kaliko.me/code/python-musicpd",
     download_url="http://pypi.python.org/pypi/python-musicpd/",
     py_modules=["musicpd"],
     classifiers=CLASSIFIERS,

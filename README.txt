@@ -14,7 +14,7 @@ Getting the latest source code
 If you would instead like to use the latest source code, you can grab a copy
 of the development version from git by running the command:
 
-  git clone git://jatreuman.indefero.net/jatreuman/python-mpd.git
+  git clone git://git.kaliko.me/python-musicpd.git
 
 
 Installing from source
@@ -22,10 +22,10 @@ Installing from source
 
 To install python-mpd from source, simply run the command:
 
-  python setup.py install
+  python3 setup.py install
 
 You can use the `--help` switch to `setup.py` for a complete list of commands
-and their options.  See the http://docs.python.org/inst/inst.html[Installing
+and their options.  See the http://docs.python.org/3/install/[Installing
 Python Modules] document for more details.
 
 
@@ -69,9 +69,12 @@ for song in client.playlistinfo():
 ------------------------------------------------------------------------------
 
 
-Contacting the author
----------------------
+Contacting authors
+------------------
 
-You can contact the author by emailing J. Alexander Treuman
+You can contact the original author by emailing J. Alexander Treuman
 <mailto:jat@spatialrift.net[]>.  He can also be found idling in #mpd on
 irc.freenode.net as jat.
+
+The current maintainer can be found on xmpp chat room kaliko.me@conf.azylum.org
+or you can contact him by email/xmpp <kaliko@azylum.org>.
