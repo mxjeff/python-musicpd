@@ -8,6 +8,10 @@ DESCRIPTION = """\
 An MPD (Music Player Daemon) client library written in pure Python.\
 """
 
+
+with open('README.txt') as file:
+    LONG_DESCRIPTION = file.read()
+
 CLASSIFIERS = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
@@ -40,8 +44,8 @@ along with python-musicpd.  If not, see <http://www.gnu.org/licenses/>.\
 setup(
     name='python-musicpd',
     version=VERSION,
-    description='Python MPD client library',
-    long_description=DESCRIPTION,
+    description=DESCRIPTION,
+    long_description=LONG_DESCRIPTION,
     author='Kaliko Jack',
     author_email='kaliko@azylum.org',
     url="http://kaliko.me/code/python-musicpd",

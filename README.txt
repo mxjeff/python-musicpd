@@ -1,11 +1,12 @@
-python-mpd
-==========
+==============
+python-musicpd
+==============
 
-Getting python-mpd
-------------------
+Getting python-musicpd
+----------------------
 
-The latest release of python-mpd can be found at
-http://pypi.python.org/pypi/python-mpd/[].
+The latest release of python-musicpd can be found at
+http://pypi.python.org/pypi/python-musicpd/.
 
 
 Getting the latest source code
@@ -20,61 +21,57 @@ of the development version from git by running the command:
 Installing from source
 ----------------------
 
-To install python-mpd from source, simply run the command:
+To install python-musicpd from source, simply run the command::
 
   python3 setup.py install
 
 You can use the `--help` switch to `setup.py` for a complete list of commands
-and their options.  See the http://docs.python.org/3/install/[Installing
-Python Modules] document for more details.
+and their options.  See the `Installing Python Modules`_ document for more details.
 
 
 Using the client library
 ------------------------
 
-The client library can be used as follows:
+The client library can be used as follows::
 
-------------------------------------------------------------------------------
-client = mpd.MPDClient()           # create client object
-client.connect("localhost", 6600)  # connect to localhost:6600
-print client.mpd_version           # print the mpd version
-print client.cmd("one", 2)         # print result of the command "cmd one 2"
-client.close()                     # send the close command
-client.disconnect()                # disconnect from the server
-------------------------------------------------------------------------------
+>>> client = mpd.MPDClient()           # create client object
+>>> client.connect("localhost", 6600)  # connect to localhost:6600
+>>> print client.mpd_version           # print the mpd version
+>>> print client.cmd("one", 2)         # print result of the command "cmd one 2"
+>>> client.close()                     # send the close command
+>>> client.disconnect()                # disconnect from the server
 
 A list of supported commands, their arguments (as MPD currently understands
 them), and the functions used to parse their responses can be found in
-`doc/commands.txt`.  See the
-http://www.musicpd.org/doc/protocol/[MPD protocol documentation] for more
+`doc/commands.txt`.  See the `MPD protocol documentation`_ for more
 details.
 
 Command lists are also supported using `command_list_ok_begin()` and
-`command_list_end()`:
+`command_list_end()` ::
 
-------------------------------------------------------------------------------
-client.command_list_ok_begin()       # start a command list
-client.update()                      # insert the update command into the list
-client.status()                      # insert the status command into the list
-results = client.command_list_end()  # results will be a list with the results
-------------------------------------------------------------------------------
+>>> client.command_list_ok_begin()       # start a command list
+>>> client.update()                      # insert the update command into the list
+>>> client.status()                      # insert the status command into the list
+>>> results = client.command_list_end()  # results will be a list with the results
+
 
 Commands may also return iterators instead of lists if `iterate` is set to
-`True`:
+`True`::
 
-------------------------------------------------------------------------------
-client.iterate = True
-for song in client.playlistinfo():
-    print song["file"]
-------------------------------------------------------------------------------
+>>> client.iterate = True
+>>> for song in client.playlistinfo():
+>>>     print song["file"]
 
 
 Contacting authors
 ------------------
 
 You can contact the original author by emailing J. Alexander Treuman
-<mailto:jat@spatialrift.net[]>.  He can also be found idling in #mpd on
+<jat⊘spatialrift.net>.  He can also be found idling in #mpd on
 irc.freenode.net as jat.
 
 The current maintainer can be found on xmpp chat room kaliko.me@conf.azylum.org
-or you can contact him by email/xmpp <kaliko@azylum.org>.
+or you can contact him by email/xmpp <kaliko⊘azylum.org>.
+
+ .. _Installing Python Modules: http://docs.python.org/3/install/
+ .. _MPD protocol documentation: http://www.musicpd.org/doc/protocol/
