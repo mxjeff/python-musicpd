@@ -6,7 +6,7 @@ Getting python-musicpd
 ----------------------
 
 The latest release of python-musicpd can be found at
-http://pypi.python.org/pypi/python-musicpd/.
+http://pypi.python.org/pypi/python-musicpd.
 
 
 Getting the latest source code
@@ -70,7 +70,7 @@ You can contact the original author by emailing J. Alexander Treuman
 <jat⊘spatialrift.net>.  He can also be found idling in #mpd on
 irc.freenode.net as jat.
 
-The current maintainer can be found on xmpp chat room kaliko.me@conf.azylum.org
+The current maintainer can be found on xmpp chat room <kaliko.me⊘conf.azylum.org>
 or you can contact him by email/xmpp <kaliko⊘azylum.org>.
 
  .. _Installing Python Modules: http://docs.python.org/3/install/

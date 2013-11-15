@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with python-musicpd.  If not, see <http://www.gnu.org/licenses/>.
 
+# pylint: disable=C0111
+
 import socket
 
 
@@ -22,7 +24,7 @@ HELLO_PREFIX = "OK MPD "
 ERROR_PREFIX = "ACK "
 SUCCESS = "OK"
 NEXT = "list_OK"
-VERSION = '0.4.0pr0'
+VERSION = '0.4.0pr1'
 
 
 class MPDError(Exception):
@@ -382,6 +384,7 @@ class MPDClient(object):
         self.mpd_version = line[len(HELLO_PREFIX):].strip()
 
     def _reset(self):
+        # pylint: disable=w0201
         self.mpd_version = None
         self._iterating = False
         self._pending = []
