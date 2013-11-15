@@ -34,12 +34,12 @@ Using the client library
 
 The client library can be used as follows::
 
->>> client = mpd.MPDClient()           # create client object
->>> client.connect("localhost", 6600)  # connect to localhost:6600
->>> print client.mpd_version           # print the mpd version
->>> print client.cmd("one", 2)         # print result of the command "cmd one 2"
->>> client.close()                     # send the close command
->>> client.disconnect()                # disconnect from the server
+    client = musicpd.MPDClient()       # create client object
+    client.connect('localhost', 6600)  # connect to localhost:6600
+    print client.mpd_version           # print the mpd version
+    print client.cmd('one', 2)         # print result of the command "cmd one 2"
+    client.close()                     # send the close command
+    client.disconnect()                # disconnect from the server
 
 A list of supported commands, their arguments (as MPD currently understands
 them), and the functions used to parse their responses can be found in
@@ -49,18 +49,18 @@ details.
 Command lists are also supported using `command_list_ok_begin()` and
 `command_list_end()` ::
 
->>> client.command_list_ok_begin()       # start a command list
->>> client.update()                      # insert the update command into the list
->>> client.status()                      # insert the status command into the list
->>> results = client.command_list_end()  # results will be a list with the results
+    client.command_list_ok_begin()       # start a command list
+    client.update()                      # insert the update command into the list
+    client.status()                      # insert the status command into the list
+    results = client.command_list_end()  # results will be a list with the results
 
 
 Commands may also return iterators instead of lists if `iterate` is set to
 `True`::
 
->>> client.iterate = True
->>> for song in client.playlistinfo():
->>>     print song["file"]
+    client.iterate = True
+    for song in client.playlistinfo():
+        print song['file']
 
 
 Contacting authors
