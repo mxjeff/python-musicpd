@@ -257,7 +257,9 @@ class MPDClient:
         self._wfile.write("%s\n" % line)
         self._wfile.flush()
 
-    def _write_command(self, command, args=[]):
+    def _write_command(self, command, args=None):
+        if args is None:
+            args = []
         parts = [command]
         for arg in args:
             if isinstance(arg, tuple):
@@ -310,11 +312,13 @@ class MPDClient:
             yield value
 
     def _read_playlist(self):
-        for key, value in self._read_pairs(":"):
+        for _, value in self._read_pairs(":"):
             yield value
 
-    def _read_objects(self, delimiters=[]):
+    def _read_objects(self, delimiters=None):
         obj = {}
+        if delimiters is None:
+            delimiters = []
         for key, value in self._read_pairs():
             key = key.lower()
             if obj:
@@ -438,7 +442,7 @@ class MPDClient:
         for res in socket.getaddrinfo(host, port, socket.AF_UNSPEC,
                                       socket.SOCK_STREAM, socket.IPPROTO_TCP,
                                       flags):
-            af, socktype, proto, canonname, sa = res
+            af, socktype, proto, _, sa = res
             sock = None
             try:
                 sock = socket.socket(af, socktype, proto)
