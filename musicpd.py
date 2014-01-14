@@ -24,7 +24,7 @@ HELLO_PREFIX = "OK MPD "
 ERROR_PREFIX = "ACK "
 SUCCESS = "OK"
 NEXT = "list_OK"
-VERSION = '0.4.0pr1'
+VERSION = '0.4.0pr2'
 
 
 class MPDError(Exception):
@@ -48,15 +48,40 @@ class PendingCommandError(MPDError):
 class IteratingError(MPDError):
     pass
 
+class Range:
 
-class _NotConnected(object):
+    def __init__(self, tpl):
+        self.tpl = tpl
+        self._check()
+
+    def __str__(self):
+        if len(self.tpl) == 1:
+            return '{0}:'.format(self.tpl[0])
+        return '{0[0]}:{0[1]}'.format(self.tpl)
+
+    def __repr__(self):
+        return 'Range({0})'.format(self.tpl)
+
+    def _check(self):
+        if not isinstance(self.tpl, tuple):
+            raise CommandError('Wrong type, provide a tuple')
+        if len(self.tpl) not in [1, 2]:
+            raise CommandError('length not in [1, 2]')
+        for index in self.tpl:
+            try:
+                index = int(index)
+            except (TypeError, ValueError):
+                raise CommandError('Not a tuple of int')
+
+
+class _NotConnected:
     def __getattr__(self, attr):
         return self._dummy
 
     def _dummy(*args):
         raise ConnectionError("Not connected")
 
-class MPDClient(object):
+class MPDClient:
     def __init__(self):
         self.iterate = False
         self._reset()
@@ -235,7 +260,10 @@ class MPDClient(object):
     def _write_command(self, command, args=[]):
         parts = [command]
         for arg in args:
-            parts.append('"%s"' % escape(str(arg)))
+            if isinstance(arg, tuple):
+                parts.append('{0!s}'.format(Range(arg)))
+            else:
+                parts.append('"%s"' % escape(str(arg)))
         self._write_line(" ".join(parts))
 
     def _read_line(self):
