@@ -24,7 +24,7 @@ HELLO_PREFIX = "OK MPD "
 ERROR_PREFIX = "ACK "
 SUCCESS = "OK"
 NEXT = "list_OK"
-VERSION = '0.4.0pr2'
+VERSION = '0.4.0'
 
 
 class MPDError(Exception):

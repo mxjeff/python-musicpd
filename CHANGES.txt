@@ -1,11 +1,10 @@
 python-musicpd Changes List
 ===========================
 
-Cahnges in 0.4.0 UNRELEASED
----------------------------
+Changes in 0.4.0
+----------------
 
 * support range
-
 
 Changes in 0.3.1 UNRELEASED
 ---------------------------
@@ -17,7 +16,6 @@ Changes in 0.3.1 UNRELEASED
 * added seekcur command
 * added client to client commands
 * added readcomments and toggleoutput commands
-
 
 Changes in 0.3.0
 ----------------
