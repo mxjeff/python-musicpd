@@ -9,7 +9,7 @@ An MPD (Music Player Daemon) client library written in pure Python.\
 """
 
 
-with open('README.rst') as file:
+with open('README.rst', encoding='UTF-8') as file:
     LONG_DESCRIPTION = file.read()
 
 CLASSIFIERS = [
