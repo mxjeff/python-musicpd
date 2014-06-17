@@ -62,6 +62,25 @@ Commands may also return iterators instead of lists if `iterate` is set to
     for song in client.playlistinfo():
         print song['file']
 
+Each command have a *send\_<CMD>* and a *fetch\_<CMD>* variant, which allows to
+send a MPD command and then fetch the result later.
+This is useful for the idle command::
+
+    >>> client.send_idle()
+    # do something else or use function like select()
+    # http://docs.python.org/howto/sockets.html#non-blocking-sockets
+    # ex. select([client], [], [])
+    >>> events = client.fetch_idle()
+
+    # more complex use for example, with glib/gobject:
+    >>> def callback(source, condition):
+    >>>    changes = client.fetch_idle()
+    >>>    print changes
+    >>>    return False  # removes the IO watcher
+
+    >>> client.send_idle()
+    >>> gobject.io_add_watch(client, gobject.IO_IN, callback)
+    >>> gobject.MainLoop().run()
 
 Contacting authors
 ------------------
