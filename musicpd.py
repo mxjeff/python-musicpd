@@ -24,7 +24,7 @@ HELLO_PREFIX = "OK MPD "
 ERROR_PREFIX = "ACK "
 SUCCESS = "OK"
 NEXT = "list_OK"
-VERSION = '0.4.0'
+VERSION = '0.4.1'
 
 
 class MPDError(Exception):
@@ -90,7 +90,7 @@ class MPDClient:
             "clearerror":         self._fetch_nothing,
             "currentsong":        self._fetch_object,
             "idle":               self._fetch_list,
-            "noidle":             None,
+            #"noidle":             None,
             "status":             self._fetch_object,
             "stats":              self._fetch_object,
             # Playback Option Commands
@@ -456,6 +456,14 @@ class MPDClient:
             raise ConnectionError(str(err))
         else:
             raise ConnectionError("getaddrinfo returns an empty list")
+
+    def noidle(self):
+        # noidle's special case
+        if not self._pending or self._pending[0] != 'idle':
+            raise CommandError('cannot send noidle if send_idle was not called')
+        del self._pending[0]
+        self._write_command("noidle")
+        return self._fetch_list()
 
     def connect(self, host, port):
         if self._sock is not None:
