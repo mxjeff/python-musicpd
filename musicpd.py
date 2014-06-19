@@ -190,6 +190,8 @@ class MPDClient:
         }
 
     def __getattr__(self, attr):
+        if attr == 'send_noidle':  # have send_noidle to cancel idle as well as noidle
+            return self.noidle()
         if attr.startswith("send_"):
             command = attr.replace("send_", "", 1)
             wrapper = self._send
