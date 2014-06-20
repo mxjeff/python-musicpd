@@ -1,6 +1,11 @@
 python-musicpd Changes List
 ===========================
 
+Changes in 0.4.2 UNRELEASED
+----------------
+
+* Add unittest (requires mock)
+
 Changes in 0.4.1
 ----------------
 
