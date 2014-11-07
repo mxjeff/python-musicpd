@@ -5,6 +5,8 @@ Changes in 0.4.2 UNRELEASED
 ----------------
 
 * Add unittest (requires mock)
+* Add mounts and neighbors commands (mount, unmount, listmounts and
+  listneighbors)
 
 Changes in 0.4.1
 ----------------

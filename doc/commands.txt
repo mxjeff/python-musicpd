@@ -74,6 +74,13 @@ update             [<str>]                 -> fetch_item
 rescan             [<str>]                 -> fetch_item
 readcomments       <str>                   -> fetch_object
 
+== Mounts and neighbors ==
+
+mount              <str> <str>             -> self._fetch_nothing
+unmount            <str>                   -> self._fetch_nothing
+listmounts                                 -> self._fetch_mounts
+listneighbors                              -> self._fetch_neighbors
+
 == Sticker Commands
 sticker   get      <str> <str> <str>       -> fetch_item
 sticker   set      <str> <str> <str> <str> -> fetch_nothing

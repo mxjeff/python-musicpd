@@ -1,6 +1,6 @@
 # python-musicpd: Python MPD client library
 # Copyright (C) 2008-2010  J. Alexander Treuman <jat@spatialrift.net>
-# Copyright (C) 2012-2013  Kaliko Jack <kaliko@azylum.org>
+# Copyright (C) 2012-2014  Kaliko Jack <kaliko@azylum.org>
 #
 # python-musicpd is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as published by
@@ -159,6 +159,11 @@ class MPDClient:
             "update":             self._fetch_item,
             "rescan":             self._fetch_item,
             "readcomments":       self._fetch_object,
+            # Mounts and neighbors
+            "mount":              self._fetch_nothing,
+            "unmount":            self._fetch_nothing,
+            "listmounts":         self._fetch_mounts,
+            "listneighbors":      self._fetch_neighbors,
             # Sticker Commands
             "sticker get":        self._fetch_item,
             "sticker set":        self._fetch_nothing,
@@ -404,6 +409,12 @@ class MPDClient:
 
     def _fetch_messages(self):
         return self._fetch_objects(["channel"])
+
+    def _fetch_mounts(self):
+        return self._fetch_objects(["mount"])
+
+    def _fetch_neighbors(self):
+        return self._fetch_objects(["neighbor"])
 
     def _fetch_command_list(self):
         return self._wrap_iterator(self._read_command_list())
