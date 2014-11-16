@@ -46,6 +46,7 @@ plchanges          <int>                   -> fetch_songs
 plchangesposid     <int>                   -> fetch_changes
 prio               <int> <int>|<range>     -> self._fetch_nothing,
 prioid             <int> <int>             -> self._fetch_nothing,
+rangeid            <int> <range>           -> self._fetch_nothing,
 shuffle            [<range>]               -> fetch_nothing
 swap               <int> <int>             -> fetch_nothing
 swapid             <int> <int>             -> fetch_nothing

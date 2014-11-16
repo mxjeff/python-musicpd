@@ -7,6 +7,7 @@ Changes in 0.4.2 UNRELEASED
 * Add unittest (requires mock)
 * Add mounts and neighbors commands (mount, unmount, listmounts and
   listneighbors)
+* Add rangeid command
 * Add tag editing commands (addtagid and cleartagid)
 * Add missing priority commands (prio and prioid)
 

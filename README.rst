@@ -54,7 +54,8 @@ Command lists are also supported using `command_list_ok_begin()` and
     client.status()                      # insert the status command into the list
     results = client.command_list_end()  # results will be a list with the results
 
-Provide a 2-tuple as argument for command supporting ranges (cf. `MPD protocol documentation`_ for more details)::
+Provide a 2-tuple as argument for command supporting ranges (cf. `MPD protocol documentation`_ for more details).
+Possible ranges are: "START:END", "START:" and ":" ::
 
     # An intelligent clear
     # clears played track in the queue, currentsong included
@@ -63,6 +64,14 @@ Provide a 2-tuple as argument for command supporting ranges (cf. `MPD protocol d
     client.delete((0, pos))
     # missing end interpreted as highest value possible, pay attention still need a tuple.
     client.delete((pos,))  # purge queue from current to the end
+
+A notable case is the `rangeid` command allowing an empty range specified
+as a single colon as argument (i.e. sending just ":")::
+
+    # sending "rangeid :" to clear the range, play everything
+    client.rangeid(())  # send an empty tuple
+
+Empty start in range (i.e. ":END") are not possible and will raise a CommandError.
 
 
 Commands may also return iterators instead of lists if `iterate` is set to

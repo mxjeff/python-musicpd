@@ -306,7 +306,12 @@ class TestMPDClient(unittest.TestCase):
         self.client.playlistinfo((10, 12))
         self.assertMPDReceived('playlistinfo 10:12\n')
 
-        for arg in [(10, "t"), (10, 1, 1)]:
+        self.MPDWillReturn("OK\n")
+        self.client.rangeid(())
+        self.assertMPDReceived('rangeid :\n')
+
+
+        for arg in [(10, "t"), (10, 1, 1), (None,1)]:
             self.MPDWillReturn("OK\n")
             with self.assertRaises(musicpd.CommandError):
                 self.client.playlistinfo(arg)
