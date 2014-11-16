@@ -130,9 +130,13 @@ class MPDClient:
             "playlistsearch":     self._fetch_songs,
             "plchanges":          self._fetch_songs,
             "plchangesposid":     self._fetch_changes,
+            "prio":               self._fetch_nothing,
+            "prioid":             self._fetch_nothing,
             "shuffle":            self._fetch_nothing,
             "swap":               self._fetch_nothing,
             "swapid":             self._fetch_nothing,
+            "addtagid":           self._fetch_nothing,
+            "cleartagid":         self._fetch_nothing,
             # Stored Playlist Commands
             "listplaylist":       self._fetch_list,
             "listplaylistinfo":   self._fetch_songs,

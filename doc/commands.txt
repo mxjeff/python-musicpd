@@ -33,26 +33,30 @@ stop                                       -> fetch_nothing
 add                <str>                   -> fetch_nothing
 addid              <str> [<int>]           -> fetch_item
 clear                                      -> fetch_nothing
-delete             <int>                   -> fetch_nothing
+delete             <int>|<range>           -> fetch_nothing
 deleteid           <int>                   -> fetch_nothing
-move               <int> <int>             -> fetch_nothing
+move               <int>|<range> <int>     -> fetch_nothing
 moveid             <int> <int>             -> fetch_nothing
 playlist                                   -> fetch_playlist
 playlistfind       <locate>                -> fetch_songs
 playlistid         [<int>]                 -> fetch_songs
-playlistinfo       [<int>]                 -> fetch_songs
+playlistinfo       [<int>|<range>]         -> fetch_songs
 playlistsearch     <locate>                -> fetch_songs
 plchanges          <int>                   -> fetch_songs
 plchangesposid     <int>                   -> fetch_changes
-shuffle            [<str>]                 -> fetch_nothing
+prio               <int> <int>|<range>     -> self._fetch_nothing,
+prioid             <int> <int>             -> self._fetch_nothing,
+shuffle            [<range>]               -> fetch_nothing
 swap               <int> <int>             -> fetch_nothing
 swapid             <int> <int>             -> fetch_nothing
+addtagid           <int> <str> <str>       -> fetch_nothing
+cleartagid         <int> [<str>]           -> fetch_nothing
 
 == Stored Playlist Commands
 listplaylist       <str>                   -> fetch_list
 listplaylistinfo   <str>                   -> fetch_songs
 listplaylists                              -> fetch_playlists
-load               <str>                   -> fetch_nothing
+load               <str> [<range>]         -> fetch_nothing
 playlistadd        <str> <str>             -> fetch_nothing
 playlistclear      <str>                   -> fetch_nothing
 playlistdelete     <str> <int>             -> fetch_nothing
