@@ -67,17 +67,20 @@ rm                 <str>                   -> fetch_nothing
 save               <str>                   -> fetch_nothing
 
 == Database Commands
-count              <locate>                -> fetch_object
-find               <locate>                -> fetch_songs
-findadd            <locate>                -> fetch_nothing
-list               <str> [<locate>]        -> fetch_list
-listall            [<str>]                 -> fetch_database
-listallinfo        [<str>]                 -> fetch_database
-lsinfo             [<str>]                 -> fetch_database
-search             <locate>                -> fetch_songs
-update             [<str>]                 -> fetch_item
-rescan             [<str>]                 -> fetch_item
-readcomments       <str>                   -> fetch_object
+count              <str> <str>                              -> fetch_object
+count              group <str>                              -> fetch_object
+find               <str> <str> [<str> <str>]...             -> fetch_songs
+findadd            <str> <str> [<str> <str>]                -> fetch_nothing
+list               <str> [<str> <str>]...[group <str>]...   -> fetch_list
+listall            [<str>]                                  -> fetch_database
+listallinfo        [<str>]                                  -> fetch_database
+lsinfo             [<str>]                                  -> fetch_database
+readcomments       <str>                                    -> fetch_object
+search             <str> <str> [<str> <str>]...             -> fetch_song
+searchadd          <str> <str> [<str> <str>]...             -> fetch_nothing
+searchaddpl        <str> <str> <str> [<str> <str>]...       -> fetch_nothing
+update             [<str>]                                  -> fetch_item
+rescan             [<str>]                                  -> fetch_item
 
 == Mounts and neighbors ==
 
