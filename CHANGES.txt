@@ -10,6 +10,7 @@ Changes in 0.4.2 UNRELEASED
 * Add rangeid command
 * Add tag editing commands (addtagid and cleartagid)
 * Add missing priority commands (prio and prioid)
+* Add config command
 
 Changes in 0.4.1
 ----------------

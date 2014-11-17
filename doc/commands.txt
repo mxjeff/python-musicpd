@@ -84,10 +84,10 @@ rescan             [<str>]                                  -> fetch_item
 
 == Mounts and neighbors ==
 
-mount              <str> <str>             -> self._fetch_nothing
-unmount            <str>                   -> self._fetch_nothing
-listmounts                                 -> self._fetch_mounts
-listneighbors                              -> self._fetch_neighbors
+mount              <str> <str>     -> self._fetch_nothing
+unmount            <str>           -> self._fetch_nothing
+listmounts                         -> self._fetch_mounts
+listneighbors                      -> self._fetch_neighbors
 
 == Sticker Commands
 sticker   get      <str> <str> <str>       -> fetch_item
@@ -97,20 +97,21 @@ sticker   list     <str> <str>             -> fetch_list
 sticker   find     <str> <str> <str>       -> fetch_songs
 
 == Connection Commands
-close                                      -> None
-kill                                       -> None
-password           <str>                   -> fetch_nothing
-ping                                       -> fetch_nothing
+close                       -> None
+kill                        -> None
+password           <str>    -> fetch_nothing
+ping                        -> fetch_nothing
 
 == Audio Output Commands
-disableoutput      <int>                   -> fetch_nothing
-enableoutput       <int>                   -> fetch_nothing
-toggleoutput       <int>                   -> fetch_nothing
-outputs                                    -> fetch_outputs
+disableoutput      <int>    -> fetch_nothing
+enableoutput       <int>    -> fetch_nothing
+toggleoutput       <int>    -> fetch_nothing
+outputs                     -> fetch_outputs
 
 == Reflection Commands
-commands                                   -> fetch_list
-notcommands                                -> fetch_list
-tagtypes                                   -> fetch_list
-urlhandlers                                -> fetch_list
-decoders                                   -> fetch_plugins
+config           -> fetch_object
+commands         -> fetch_list
+notcommands      -> fetch_list
+tagtypes         -> fetch_list
+urlhandlers      -> fetch_list
+decoders         -> fetch_plugins

@@ -188,6 +188,7 @@ class MPDClient:
             "toggleoutput":       self._fetch_nothing,
             "outputs":            self._fetch_outputs,
             # Reflection Commands
+            "config":             self._fetch_object,
             "commands":           self._fetch_list,
             "notcommands":        self._fetch_list,
             "tagtypes":           self._fetch_list,
