@@ -18,6 +18,7 @@
 # pylint: disable=C0111
 
 import socket
+from functools import wraps
 
 
 HELLO_PREFIX = "OK MPD "
@@ -25,6 +26,24 @@ ERROR_PREFIX = "ACK "
 SUCCESS = "OK"
 NEXT = "list_OK"
 VERSION = '0.4.2'
+
+
+def iterator_wrapper(func):
+    """Decorator handling iterate option"""
+    @wraps(func)
+    def decorated_function(instance, *args, **kwargs):
+        generator = func(instance, *args, **kwargs)
+        if not instance.iterate:
+            return list(generator)
+        instance._iterating = True
+        def iterator(gen):
+            try:
+                for item in gen:
+                    yield item
+            finally:
+                instance._iterating = False
+        return iterator(generator)
+    return decorated_function
 
 
 class MPDError(Exception):
@@ -74,7 +93,6 @@ class Range:
                 index = int(index)
             except (TypeError, ValueError):
                 raise CommandError('Not a tuple of int')
-
 
 class _NotConnected:
     def __getattr__(self, attr):
@@ -358,19 +376,6 @@ class MPDClient:
             self._command_list = None
         self._fetch_nothing()
 
-    def _iterator_wrapper(self, iterator):
-        try:
-            for item in iterator:
-                yield item
-        finally:
-            self._iterating = False
-
-    def _wrap_iterator(self, iterator):
-        if not self.iterate:
-            return list(iterator)
-        self._iterating = True
-        return self._iterator_wrapper(iterator)
-
     def _fetch_nothing(self):
         line = self._read_line()
         if line is not None:
@@ -382,11 +387,13 @@ class MPDClient:
             return
         return pairs[0][1]
 
+    @iterator_wrapper
     def _fetch_list(self):
-        return self._wrap_iterator(self._read_list())
+        return self._read_list()
 
+    @iterator_wrapper
     def _fetch_playlist(self):
-        return self._wrap_iterator(self._read_playlist())
+        return self._read_playlist()
 
     def _fetch_object(self):
         objs = list(self._read_objects())
@@ -394,8 +401,9 @@ class MPDClient:
             return {}
         return objs[0]
 
+    @iterator_wrapper
     def _fetch_objects(self, delimiters):
-        return self._wrap_iterator(self._read_objects(delimiters))
+        return self._read_objects(delimiters)
 
     def _fetch_changes(self):
         return self._fetch_objects(["cpos"])
@@ -424,8 +432,9 @@ class MPDClient:
     def _fetch_neighbors(self):
         return self._fetch_objects(["neighbor"])
 
+    @iterator_wrapper
     def _fetch_command_list(self):
-        return self._wrap_iterator(self._read_command_list())
+        return self._read_command_list()
 
     def _hello(self):
         line = self._rfile.readline()
@@ -537,6 +546,5 @@ class MPDClient:
 
 def escape(text):
     return text.replace("\\", "\\\\").replace('"', '\\"')
-
 
 # vim: set expandtab shiftwidth=4 softtabstop=4 textwidth=79:
