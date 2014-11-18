@@ -34,113 +34,124 @@ TEST_MPD_HOST, TEST_MPD_PORT = ('example.com', 10000)
 class TestMPDClient(unittest.TestCase):
 
     longMessage = True
-    # last sync: musicpd 0.4.0
+    # last sync: musicpd 0.4.2 unreleased / Mon Nov 17 21:45:22 CET 2014
     commands = {
             # Status Commands
-            "clearerror":         "nothing",
-            "currentsong":        "object",
-            "idle":               "list",
-            "noidle":             None,
-            "status":             "object",
-            "stats":              "object",
+            'clearerror':         'nothing',
+            'currentsong':        'object',
+            'idle':               'list',
+            'noidle':             None,
+            'status':             'object',
+            'stats':              'object',
             # Playback Option Commands
-            "consume":            "nothing",
-            "crossfade":          "nothing",
-            "mixrampdb":          "nothing",
-            "mixrampdelay":       "nothing",
-            "random":             "nothing",
-            "repeat":             "nothing",
-            "setvol":             "nothing",
-            "single":             "nothing",
-            "replay_gain_mode":   "nothing",
-            "replay_gain_status": "item",
-            "volume":             "nothing",
+            'consume':            'nothing',
+            'crossfade':          'nothing',
+            'mixrampdb':          'nothing',
+            'mixrampdelay':       'nothing',
+            'random':             'nothing',
+            'repeat':             'nothing',
+            'setvol':             'nothing',
+            'single':             'nothing',
+            'replay_gain_mode':   'nothing',
+            'replay_gain_status': 'item',
+            'volume':             'nothing',
             # Playback Control Commands
-            "next":               "nothing",
-            "pause":              "nothing",
-            "play":               "nothing",
-            "playid":             "nothing",
-            "previous":           "nothing",
-            "seek":               "nothing",
-            "seekid":             "nothing",
-            "seekcur":            "nothing",
-            "stop":               "nothing",
+            'next':               'nothing',
+            'pause':              'nothing',
+            'play':               'nothing',
+            'playid':             'nothing',
+            'previous':           'nothing',
+            'seek':               'nothing',
+            'seekid':             'nothing',
+            'seekcur':            'nothing',
+            'stop':               'nothing',
             # Playlist Commands
-            "add":                "nothing",
-            "addid":              "item",
-            "clear":              "nothing",
-            "delete":             "nothing",
-            "deleteid":           "nothing",
-            "move":               "nothing",
-            "moveid":             "nothing",
-            "playlist":           "playlist",
-            "playlistfind":       "songs",
-            "playlistid":         "songs",
-            "playlistinfo":       "songs",
-            "playlistsearch":     "songs",
-            "plchanges":          "songs",
-            "plchangesposid":     "changes",
-            "shuffle":            "nothing",
-            "swap":               "nothing",
-            "swapid":             "nothing",
+            'add':                'nothing',
+            'addid':              'item',
+            'clear':              'nothing',
+            'delete':             'nothing',
+            'deleteid':           'nothing',
+            'move':               'nothing',
+            'moveid':             'nothing',
+            'playlist':           'playlist',
+            'playlistfind':       'songs',
+            'playlistid':         'songs',
+            'playlistinfo':       'songs',
+            'playlistsearch':     'songs',
+            'plchanges':          'songs',
+            'plchangesposid':     'changes',
+            'prio':               'nothing',
+            'prioid':             'nothing',
+            'rangeid':            'nothing',
+            'shuffle':            'nothing',
+            'swap':               'nothing',
+            'swapid':             'nothing',
+            'addtagid':           'nothing',
+            'cleartagid':         'nothing',
             # Stored Playlist Commands
-            "listplaylist":       "list",
-            "listplaylistinfo":   "songs",
-            "listplaylists":      "playlists",
-            "load":               "nothing",
-            "playlistadd":        "nothing",
-            "playlistclear":      "nothing",
-            "playlistdelete":     "nothing",
-            "playlistmove":       "nothing",
-            "rename":             "nothing",
-            "rm":                 "nothing",
-            "save":               "nothing",
+            'listplaylist':       'list',
+            'listplaylistinfo':   'songs',
+            'listplaylists':      'playlists',
+            'load':               'nothing',
+            'playlistadd':        'nothing',
+            'playlistclear':      'nothing',
+            'playlistdelete':     'nothing',
+            'playlistmove':       'nothing',
+            'rename':             'nothing',
+            'rm':                 'nothing',
+            'save':               'nothing',
             # Database Commands
-            "count":              "object",
-            "find":               "songs",
-            "findadd":            "nothing",
-            "list":               "list",
-            "listall":            "database",
-            "listallinfo":        "database",
-            "lsinfo":             "database",
-            "search":             "songs",
-            "searchadd":          "nothing",
-            "searchaddpl":        "nothing",
-            "update":             "item",
-            "rescan":             "item",
-            "readcomments":       "object",
+            'count':              'object',
+            'find':               'songs',
+            'findadd':            'nothing',
+            'list':               'list',
+            'listall':            'database',
+            'listallinfo':        'database',
+            'lsinfo':             'database',
+            'search':             'songs',
+            'searchadd':          'nothing',
+            'searchaddpl':        'nothing',
+            'update':             'item',
+            'rescan':             'item',
+            'readcomments':       'object',
+            # Mounts and neighbors
+            'mount':              'nothing',
+            'unmount':            'nothing',
+            'listmounts':         'mounts',
+            'listneighbors':      'neighbors',
             # Sticker Commands
-            "sticker get":        "item",
-            "sticker set":        "nothing",
-            "sticker delete":     "nothing",
-            "sticker list":       "list",
-            "sticker find":       "songs",
+            'sticker get':        'item',
+            'sticker set':        'nothing',
+            'sticker delete':     'nothing',
+            'sticker list':       'list',
+            'sticker find':       'songs',
             # Connection Commands
-            "close":              None,
-            "kill":               None,
-            "password":           "nothing",
-            "ping":               "nothing",
+            'close':              None,
+            'kill':               None,
+            'password':           'nothing',
+            'ping':               'nothing',
             # Audio Output Commands
-            "disableoutput":      "nothing",
-            "enableoutput":       "nothing",
-            "toggleoutput":       "nothing",
-            "outputs":            "outputs",
+            'disableoutput':      'nothing',
+            'enableoutput':       'nothing',
+            'toggleoutput':       'nothing',
+            'outputs':            'outputs',
             # Reflection Commands
-            "commands":           "list",
-            "notcommands":        "list",
-            "tagtypes":           "list",
-            "urlhandlers":        "list",
-            "decoders":           "plugins",
+            'config':             'object',
+            'commands':           'list',
+            'notcommands':        'list',
+            'tagtypes':           'list',
+            'urlhandlers':        'list',
+            'decoders':           'plugins',
             # Client to Client
-            "subscribe":          "nothing",
-            "unsubscribe":        "nothing",
-            "channels":           "list",
-            "readmessages":       "messages",
-            "sendmessage":        "nothing",
+            'subscribe':          'nothing',
+            'unsubscribe':        'nothing',
+            'channels':           'list',
+            'readmessages':       'messages',
+            'sendmessage':        'nothing',
         }
 
     def setUp(self):
-        self.socket_patch = mock.patch("musicpd.socket")
+        self.socket_patch = mock.patch('musicpd.socket')
         self.socket_mock = self.socket_patch.start()
         self.socket_mock.getaddrinfo.return_value = [range(5)]
 
@@ -151,12 +162,12 @@ class TestMPDClient(unittest.TestCase):
             # attributes across calls).
             # That's probably what we want, since reconnecting is like
             # reinitializing the entire connection, and so, the mock.
-            mock.MagicMock(name="socket.socket"))
+            mock.MagicMock(name='socket.socket'))
 
         self.client = musicpd.MPDClient()
         self.client.connect(TEST_MPD_HOST, TEST_MPD_PORT)
         self.client._sock.reset_mock()
-        self.MPDWillReturn("ACK don't forget to setup your mock\n")
+        self.MPDWillReturn('ACK don\'t forget to setup your mock\n')
 
     def tearDown(self):
         self.socket_patch.stop()
@@ -171,8 +182,10 @@ class TestMPDClient(unittest.TestCase):
         self.client._wfile.write.assert_called_with(*lines)
 
     def test_metaclass_commands(self):
+        """Controls client has at least commands as last synchronized in
+        TestMPDClient.commands"""
         for cmd, ret in TestMPDClient.commands.items():
-            self.assertTrue(hasattr(self.client, cmd), msg='fails for{}'.format(cmd))
+            self.assertTrue(hasattr(self.client, cmd), msg='cmd "{}" not available!'.format(cmd))
             if ' ' in cmd:
                 self.assertTrue(hasattr(self.client, cmd.replace(' ', '_')))
 
@@ -204,7 +217,7 @@ class TestMPDClient(unittest.TestCase):
         self.assertIsInstance(stats, dict)
 
     def test_fetch_songs(self):
-        self.MPDWillReturn("file: my-song.ogg\n", "Pos: 0\n", "Id: 66\n", "OK\n")
+        self.MPDWillReturn('file: my-song.ogg\n', 'Pos: 0\n', 'Id: 66\n', 'OK\n')
         playlist = self.client.playlistinfo()
 
         self.assertMPDReceived('playlistinfo\n')
@@ -217,7 +230,7 @@ class TestMPDClient(unittest.TestCase):
         self.assertEqual('66', e['id'])
 
     def test_send_and_fetch(self):
-        self.MPDWillReturn("volume: 50\n", "OK\n")
+        self.MPDWillReturn('volume: 50\n', 'OK\n')
         result = self.client.send_status()
         self.assertEqual(None, result)
         self.assertMPDReceived('status\n')
@@ -227,16 +240,20 @@ class TestMPDClient(unittest.TestCase):
         self.assertEqual({'volume': '50'}, status)
 
     def test_iterating(self):
-        self.MPDWillReturn("file: my-song.ogg\n", "Pos: 0\n", "Id: 66\n", "OK\n")
+        self.MPDWillReturn('file: my-song.ogg\n', 'Pos: 0\n', 'Id: 66\n',
+                           'file: my-song.ogg\n', 'Pos: 0\n', 'Id: 66\n', 'OK\n')
         self.client.iterate = True
         playlist = self.client.playlistinfo()
         self.assertMPDReceived('playlistinfo\n')
         self.assertIsInstance(playlist, types.GeneratorType)
+        self.assertTrue(self.client._iterating)
         for song in playlist:
+            self.assertRaises(musicpd.IteratingError, self.client.status)
             self.assertIsInstance(song, dict)
             self.assertEqual('my-song.ogg', song['file'])
             self.assertEqual('0', song['pos'])
             self.assertEqual('66', song['id'])
+        self.assertFalse(self.client._iterating)
 
     def test_noidle(self):
         self.MPDWillReturn('OK\n') # nothing changed after idle-ing
@@ -244,7 +261,7 @@ class TestMPDClient(unittest.TestCase):
         self.MPDWillReturn('OK\n') # nothing changed after noidle
         self.assertEqual(self.client.noidle(), [])
         self.assertMPDReceived('noidle\n')
-        self.MPDWillReturn("volume: 50\n", "OK\n")
+        self.MPDWillReturn('volume: 50\n', 'OK\n')
         self.client.status()
         self.assertMPDReceived('status\n')
 
@@ -253,7 +270,7 @@ class TestMPDClient(unittest.TestCase):
         self.client.send_idle()
         self.MPDWillReturn('CHANGED: player\n', 'OK\n')  # noidle response
         self.assertEqual(self.client.noidle(), ['player'])
-        self.MPDWillReturn("volume: 50\n", "OK\n")
+        self.MPDWillReturn('volume: 50\n', 'OK\n')
         status = self.client.status()
         self.assertMPDReceived('status\n')
         self.assertEqual({'volume': '50'}, status)
@@ -273,19 +290,19 @@ class TestMPDClient(unittest.TestCase):
         self.MPDWillReturn('channel: monty\n', 'OK\n')
         channels = self.client.channels()
         self.assertMPDReceived('channels\n')
-        self.assertEqual(["monty"], channels)
+        self.assertEqual(['monty'], channels)
 
         self.MPDWillReturn('OK\n')
-        self.assertIsNone(self.client.sendmessage("monty", "SPAM"))
+        self.assertIsNone(self.client.sendmessage('monty', 'SPAM'))
         self.assertMPDReceived('sendmessage "monty" "SPAM"\n')
 
         self.MPDWillReturn('channel: monty\n', 'message: SPAM\n', 'OK\n')
         msg = self.client.readmessages()
         self.assertMPDReceived('readmessages\n')
-        self.assertEqual(msg, [{"channel":"monty", "message": "SPAM"}])
+        self.assertEqual(msg, [{'channel': 'monty', 'message': 'SPAM'}])
 
         self.MPDWillReturn('OK\n')
-        self.assertIsNone(self.client.unsubscribe("monty"))
+        self.assertIsNone(self.client.unsubscribe('monty'))
         self.assertMPDReceived('unsubscribe "monty"\n')
 
         self.MPDWillReturn('OK\n')
@@ -294,35 +311,34 @@ class TestMPDClient(unittest.TestCase):
         self.assertEqual([], channels)
 
     def test_ranges_in_command_args(self):
-        self.MPDWillReturn("OK\n")
+        self.MPDWillReturn('OK\n')
         self.client.playlistinfo((10,))
         self.assertMPDReceived('playlistinfo 10:\n')
 
-        self.MPDWillReturn("OK\n")
-        self.client.playlistinfo(("10",))
+        self.MPDWillReturn('OK\n')
+        self.client.playlistinfo(('10',))
         self.assertMPDReceived('playlistinfo 10:\n')
 
-        self.MPDWillReturn("OK\n")
+        self.MPDWillReturn('OK\n')
         self.client.playlistinfo((10, 12))
         self.assertMPDReceived('playlistinfo 10:12\n')
 
-        self.MPDWillReturn("OK\n")
+        self.MPDWillReturn('OK\n')
         self.client.rangeid(())
         self.assertMPDReceived('rangeid :\n')
 
-
-        for arg in [(10, "t"), (10, 1, 1), (None,1)]:
-            self.MPDWillReturn("OK\n")
+        for arg in [(10, 't'), (10, 1, 1), (None,1)]:
+            self.MPDWillReturn('OK\n')
             with self.assertRaises(musicpd.CommandError):
                 self.client.playlistinfo(arg)
 
     def test_numbers_as_command_args(self):
-        self.MPDWillReturn("OK\n")
-        self.client.find("file", 1)
+        self.MPDWillReturn('OK\n')
+        self.client.find('file', 1)
         self.assertMPDReceived('find "file" "1"\n')
 
     def test_commands_without_callbacks(self):
-        self.MPDWillReturn("\n")
+        self.MPDWillReturn('\n')
         self.client.close()
         self.assertMPDReceived('close\n')
 
@@ -346,17 +362,17 @@ class TestMPDClient(unittest.TestCase):
         self.assertIs(self.client._sock, None)
 
     def test_parse_sticker_get_no_sticker(self):
-        self.MPDWillReturn("ACK [50@0] {sticker} no such sticker\n")
+        self.MPDWillReturn('ACK [50@0] {sticker} no such sticker\n')
         self.assertRaises(musicpd.CommandError,
                           self.client.sticker_get, 'song', 'baz', 'foo')
 
     def test_parse_sticker_list(self):
-        self.MPDWillReturn("sticker: foo=bar\n", "sticker: lom=bok\n", "OK\n")
+        self.MPDWillReturn('sticker: foo=bar\n', 'sticker: lom=bok\n', 'OK\n')
         res = self.client.sticker_list('song', 'baz')
         self.assertEqual(['foo=bar', 'lom=bok'], res)
 
         # Even with only one sticker, we get a dict
-        self.MPDWillReturn("sticker: foo=bar\n", "OK\n")
+        self.MPDWillReturn('sticker: foo=bar\n', 'OK\n')
         res = self.client.sticker_list('song', 'baz')
         self.assertEqual(['foo=bar'], res)
 
