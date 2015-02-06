@@ -1,0 +1,12 @@
+language: python
+
+branches:
+  only:
+    - dev
+
+python:
+  - "3.2"
+  - "3.3"
+  - "3.4"
+
+script: python3 setup.py test
