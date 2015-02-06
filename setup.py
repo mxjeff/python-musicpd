@@ -1,6 +1,6 @@
 #! /usr/bin/env python3
 
-from distutils.core import setup
+from setuptools import setup
 
 from musicpd import VERSION
 
@@ -24,7 +24,7 @@ CLASSIFIERS = [
 
 LICENSE = """\
 Copyright (C) 2008-2010  J. Alexander Treuman <jat@spatialrift.net>
-Copyright (C) 2012-2014  Kaliko Jack <kaliko@azylum.org>
+Copyright (C) 2012-2015  Kaliko Jack <kaliko@azylum.org>
 
 python-musicpd is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published by
@@ -48,13 +48,14 @@ setup(
     long_description=LONG_DESCRIPTION,
     author='Kaliko Jack',
     author_email='kaliko@azylum.org',
-    url="http://kaliko.me/code/python-musicpd",
-    download_url="http://pypi.python.org/pypi/python-musicpd/",
-    py_modules=["musicpd"],
+    url='http://kaliko.me/code/python-musicpd',
+    download_url='http://pypi.python.org/pypi/python-musicpd/',
+    py_modules=['musicpd'],
     classifiers=CLASSIFIERS,
     license=LICENSE,
-    keywords=["mpd"],
-    platforms=["Independant"],
+    keywords=['mpd', 'Music Player Daemon'],
+    platforms=['Independant'],
+    test_suite='test.py',
 )
 
 
