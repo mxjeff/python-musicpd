@@ -8,6 +8,7 @@ Test suite highly borrowed^Wsteal from python-mpd2 [0] project.
 
 
 import itertools
+import os
 import sys
 import types
 import unittest
@@ -30,6 +31,43 @@ warnings.simplefilter('default')
 
 TEST_MPD_HOST, TEST_MPD_PORT = ('example.com', 10000)
 
+
+class testEnvVar(unittest.TestCase):
+
+    def test_envvar(self):
+        os.environ.pop('MPD_HOST', None)
+        os.environ.pop('MPD_PORT', None)
+        client = musicpd.MPDClient()
+        self.assertEqual(client.host, 'localhost')
+        self.assertEqual(client.port, '6600')
+
+        os.environ['MPD_HOST'] = 'pa55w04d@example.org'
+        client = musicpd.MPDClient()
+        self.assertEqual(client.password, 'pa55w04d')
+        self.assertEqual(client.host, 'example.org')
+        self.assertEqual(client.port, '6600')
+
+        os.environ.pop('MPD_HOST', None)
+        os.environ['MPD_PORT'] = '6666'
+        client = musicpd.MPDClient()
+        self.assertEqual(client.password, None)
+        self.assertEqual(client.host, 'localhost')
+        self.assertEqual(client.port, '6666')
+
+        # Test unix socket fallback
+        os.environ.pop('MPD_HOST', None)
+        os.environ.pop('MPD_PORT', None)
+        os.environ.pop('XDG_RUNTIME_DIR', None)
+        with mock.patch('os.path.exists', return_value=True):
+            client = musicpd.MPDClient()
+            self.assertEqual(client.host, '/run/mpd/socket')
+
+        os.environ.pop('MPD_HOST', None)
+        os.environ.pop('MPD_PORT', None)
+        os.environ['XDG_RUNTIME_DIR'] = '/run/user/1000/'
+        with mock.patch('os.path.exists', return_value=True):
+            client = musicpd.MPDClient()
+            self.assertEqual(client.host, '/run/user/1000/mpd/socket')
 
 class TestMPDClient(unittest.TestCase):
 

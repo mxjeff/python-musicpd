@@ -35,7 +35,10 @@ Using the client library
 The client library can be used as follows::
 
     client = musicpd.MPDClient()       # create client object
-    client.connect('localhost', 6600)  # connect to localhost:6600
+    client.connect()                   # use MPD_HOST/MPD_PORT if set else
+                                       #   test ${XDG_RUNTIME_DIR}/mpd/socket for existence
+                                       #   fallback to localhost:6600
+                                       # `connect` support host/port argument as well
     print client.mpd_version           # print the mpd version
     print client.cmd('one', 2)         # print result of the command "cmd one 2"
     client.close()                     # send the close command

@@ -1,6 +1,6 @@
 # python-musicpd: Python MPD client library
 # Copyright (C) 2008-2010  J. Alexander Treuman <jat@spatialrift.net>
-# Copyright (C) 2012-2014  Kaliko Jack <kaliko@azylum.org>
+# Copyright (C) 2012-2018  Kaliko Jack <kaliko@azylum.org>
 #
 # python-musicpd is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as published by
@@ -18,6 +18,8 @@
 # pylint: disable=missing-docstring
 
 import socket
+import os
+
 from functools import wraps
 
 
@@ -219,6 +221,32 @@ class MPDClient:
             "readmessages":       self._fetch_messages,
             "sendmessage":        self._fetch_nothing,
         }
+        self._get_envvars()
+
+    def _get_envvars(self):
+        """
+        Retrieve MPD env. var. to overrides "localhost:6600"
+            Use MPD_HOST/MPD_PORT if set
+            else use MPD_HOST=${XDG_RUNTIME_DIR:-/run/}/mpd/socket if file exists
+        """
+        self.host = 'localhost'
+        self.password = None
+        self.port = os.environ.get('MPD_PORT', '6600')
+        mpd_host_env = os.environ.get('MPD_HOST')
+        if mpd_host_env:
+            # If password is set:
+            # mpd_host_env = ['pass', 'host'] because MPD_HOST=pass@host
+            mpd_host_env = mpd_host_env.split('@')
+            mpd_host_env.reverse()
+            self.host = mpd_host_env[0]
+            if len(mpd_host_env) > 1 and mpd_host_env[1]:
+                self.password = mpd_host_env[1]
+        else:
+            # Is socket there
+            xdg_runtime_dir = os.environ.get('XDG_RUNTIME_DIR', '/run')
+            rundir = os.path.join(xdg_runtime_dir, 'mpd/socket')
+            if os.path.exists(rundir):
+                self.host = rundir
 
     def __getattr__(self, attr):
         if attr == 'send_noidle':  # have send_noidle to cancel idle as well as noidle
@@ -494,7 +522,11 @@ class MPDClient:
         self._write_command("noidle")
         return self._fetch_list()
 
-    def connect(self, host, port):
+    def connect(self, host=None, port=None):
+        if not host:
+            host = self.host
+        if not port:
+            port = self.port
         if self._sock is not None:
             raise ConnectionError("Already connected")
         if host.startswith("/"):
