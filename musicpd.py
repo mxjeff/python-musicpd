@@ -104,6 +104,11 @@ class _NotConnected:
         raise ConnectionError("Not connected")
 
 class MPDClient:
+    """MPDClient instance will look for ``MPD_HOST``/``MPD_PORT`` environment
+    variables and set instance attribute ``host``, ``port`` and ``password``
+    accordingly.
+    """
+
     def __init__(self):
         self.iterate = False
         self._reset()
@@ -523,6 +528,24 @@ class MPDClient:
         return self._fetch_list()
 
     def connect(self, host=None, port=None):
+        """Connects the MPD server
+
+        :param str host: hostname, IP or FQDN (defaults to `localhost` or socket, see below for details)
+        :param str port: port number (defaults to 6600)
+
+        The connect method honors MPD_HOST/MPD_PORT environment variables.
+
+        .. note:: Default host/port
+
+          If host evaluate to :py:obj:`False`
+           * if ``MPD_HOST`` env. var. is set, use it for host
+           * else looks for a existing file in ``${XDG_RUNTIME_DIR:-/run/}/mpd/socket``
+           * finally set host to ``localhost``
+
+          If port evaluate to :py:obj:`False`
+           * if ``MPD_PORT`` env. var. is set, use it for port
+           * else use ``6600``
+        """
         if not host:
             host = self.host
         if not port:
@@ -542,6 +565,10 @@ class MPDClient:
             raise
 
     def disconnect(self):
+        """Closes the MPD connection.
+        The client closes the actual socket and not using the
+        'close' request from MPD protocol as suggested in documentation.
+        """
         if hasattr(self._rfile, 'close'):
             self._rfile.close()
         if hasattr(self._wfile, 'close'):

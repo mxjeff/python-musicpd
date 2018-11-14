@@ -1,4 +1,5 @@
 #! /usr/bin/env python3
+# coding: utf-8
 
 from setuptools import setup
 
@@ -22,24 +23,6 @@ CLASSIFIERS = [
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
 
-LICENSE = """\
-Copyright (C) 2008-2010  J. Alexander Treuman <jat@spatialrift.net>
-Copyright (C) 2012-2018  Kaliko Jack <kaliko@azylum.org>
-
-python-musicpd is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-python-musicpd is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with python-musicpd.  If not, see <http://www.gnu.org/licenses/>.\
-"""
-
 
 setup(
     name='python-musicpd',
@@ -52,7 +35,7 @@ setup(
     download_url='http://pypi.python.org/pypi/python-musicpd/',
     py_modules=['musicpd'],
     classifiers=CLASSIFIERS,
-    license=LICENSE,
+    license='LGPLv3+',
     keywords=['mpd', 'Music Player Daemon'],
     platforms=['Independant'],
     test_suite='test.py',
