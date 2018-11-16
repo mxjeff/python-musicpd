@@ -38,7 +38,6 @@ setup(
     license='LGPLv3+',
     keywords=['mpd', 'Music Player Daemon'],
     platforms=['Independant'],
-    test_suite='test.py',
 )
 
 
