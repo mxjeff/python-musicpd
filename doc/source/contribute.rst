@@ -8,13 +8,14 @@ Git Workflow
 * ``master`` branch holds latest stable|release code
 * ``dev`` branch holds current development code
 * Work on a dedicated branch starting off ``dev``
-* I like fast forward merges, **please rebase on** ``dev`` **branch**
+* I like fast forward merges, **please rebase on** ``dev`` branch before submitting changes
 * Advertise your work (cf. Note)
 
 .. NOTE::
     **Git merge Workflow** |br|
     I currently don't care about a specific workflow concerning changes submission. |br|
-    gitlab merge request, gh pull request, plain email pointing out a repo/ref. All we need is a public git repo and a ref to fetch from as long you rebased on ``dev`` branch.
+    Don't bother with gitlab merge request or gh pull request. |br|
+    All we need is a public git repo and a ref to fetch from as long you rebased on ``dev`` branch.
 
 Coding
 -------

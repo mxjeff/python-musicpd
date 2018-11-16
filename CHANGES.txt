@@ -5,6 +5,7 @@ Changes in 0.4.3 UNRELEASED
 ---------------------------
 
 * Use setuptools
+* Add sphinx documentation
 * Add sensible defaults and honor environment variables
   Use MPD_HOST/MPD_PORT (honor password setting in MPD_HOST)
   If MPD_HOST is not set, tries to find a socket in

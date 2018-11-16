@@ -104,9 +104,22 @@ class _NotConnected:
         raise ConnectionError("Not connected")
 
 class MPDClient:
-    """MPDClient instance will look for ``MPD_HOST``/``MPD_PORT`` environment
+    """MPDClient instance will look for ``MPD_HOST``/``MPD_PORT``/``XDG_RUNTIME_DIR`` environment
     variables and set instance attribute ``host``, ``port`` and ``password``
     accordingly.
+
+    Then :py:obj:`musicpd.MPDClient.connect` will use ``host`` and ``port`` as defaults if not provided as args.
+
+    Cf. :py:obj:`musicpd.MPDClient.connect` for details.
+
+    >>> from os inport environ
+    >>> environ['MPD_HOST'] = 'pass@mpdhost'
+    >>> cli = musicpd.MPDClient()
+    >>> cli.password == environ['MPD_HOST'].split('@')[0]
+    True
+    >>> cli.host == environ['MPD_HOST'].split('@')[1]
+    True
+    >>> # cli.connect() will use host/port as set in MPD_HOST/MPD_PORT
     """
 
     def __init__(self):
@@ -538,9 +551,9 @@ class MPDClient:
         .. note:: Default host/port
 
           If host evaluate to :py:obj:`False`
-           * if ``MPD_HOST`` env. var. is set, use it for host
+           * use ``MPD_HOST`` env. var. if set, extract password if present,
            * else looks for a existing file in ``${XDG_RUNTIME_DIR:-/run/}/mpd/socket``
-           * finally set host to ``localhost``
+           * else set host to ``localhost``
 
           If port evaluate to :py:obj:`False`
            * if ``MPD_PORT`` env. var. is set, use it for port
@@ -566,8 +579,8 @@ class MPDClient:
 
     def disconnect(self):
         """Closes the MPD connection.
-        The client closes the actual socket and not using the
-        'close' request from MPD protocol as suggested in documentation.
+        The client closes the actual socket, it does not use the
+        'close' request from MPD protocol (as suggested in documentation).
         """
         if hasattr(self._rfile, 'close'):
             self._rfile.close()
