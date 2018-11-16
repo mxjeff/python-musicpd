@@ -105,7 +105,7 @@ class _NotConnected:
 
 class MPDClient:
     """MPDClient instance will look for ``MPD_HOST``/``MPD_PORT``/``XDG_RUNTIME_DIR`` environment
-    variables and set instance attribute ``host``, ``port`` and ``password``
+    variables and set instance attribute ``host``, ``port`` and ``pwd``
     accordingly.
 
     Then :py:obj:`musicpd.MPDClient.connect` will use ``host`` and ``port`` as defaults if not provided as args.
@@ -115,7 +115,7 @@ class MPDClient:
     >>> from os inport environ
     >>> environ['MPD_HOST'] = 'pass@mpdhost'
     >>> cli = musicpd.MPDClient()
-    >>> cli.password == environ['MPD_HOST'].split('@')[0]
+    >>> cli.pwd == environ['MPD_HOST'].split('@')[0]
     True
     >>> cli.host == environ['MPD_HOST'].split('@')[1]
     True
@@ -248,7 +248,7 @@ class MPDClient:
             else use MPD_HOST=${XDG_RUNTIME_DIR:-/run/}/mpd/socket if file exists
         """
         self.host = 'localhost'
-        self.password = None
+        self.pwd = None
         self.port = os.environ.get('MPD_PORT', '6600')
         mpd_host_env = os.environ.get('MPD_HOST')
         if mpd_host_env:
@@ -258,7 +258,7 @@ class MPDClient:
             mpd_host_env.reverse()
             self.host = mpd_host_env[0]
             if len(mpd_host_env) > 1 and mpd_host_env[1]:
-                self.password = mpd_host_env[1]
+                self.pwd = mpd_host_env[1]
         else:
             # Is socket there
             xdg_runtime_dir = os.environ.get('XDG_RUNTIME_DIR', '/run')
