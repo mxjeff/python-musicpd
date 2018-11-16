@@ -43,14 +43,14 @@ class testEnvVar(unittest.TestCase):
 
         os.environ['MPD_HOST'] = 'pa55w04d@example.org'
         client = musicpd.MPDClient()
-        self.assertEqual(client.password, 'pa55w04d')
+        self.assertEqual(client.pwd, 'pa55w04d')
         self.assertEqual(client.host, 'example.org')
         self.assertEqual(client.port, '6600')
 
         os.environ.pop('MPD_HOST', None)
         os.environ['MPD_PORT'] = '6666'
         client = musicpd.MPDClient()
-        self.assertEqual(client.password, None)
+        self.assertEqual(client.pwd, None)
         self.assertEqual(client.host, 'localhost')
         self.assertEqual(client.port, '6666')
 
