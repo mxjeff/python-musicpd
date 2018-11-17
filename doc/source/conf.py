@@ -1,6 +1,6 @@
 # coding: utf-8
 #
-# Python ListenBrainz Module documentation build configuration file, created by
+# Python MPD Module documentation build configuration file, created by
 # sphinx-quickstart on Mon Mar 12 14:37:32 2018.
 #
 # This file is execfile()d with the current directory set to its
@@ -55,7 +55,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'Python ListenBrainz Module'
+project = u'Python MPD Module'
 copyright = u'2018, {}'.format(__author__)
 author = __author__
 
@@ -143,7 +143,7 @@ html_theme = 'classic'
 # The name for this set of Sphinx documents.
 # "<project> v<release> documentation" by default.
 #
-# html_title = u'Python ListenBrainz Module v0.0.1'
+# html_title = u'Python MPD Module v0.0.1'
 
 # A shorter title for the navigation bar.  Default is the same as html_title.
 #
@@ -244,7 +244,7 @@ html_show_sphinx = False
 # html_search_scorer = 'scorer.js'
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'PythonListenBrainzModuledoc'
+htmlhelp_basename = 'PythonMPDModuledoc'
 
 # -- Options for LaTeX output ---------------------------------------------
 
@@ -270,7 +270,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'PythonListenBrainzModule.tex', u'Python ListenBrainz Module Documentation',
+    (master_doc, 'PythonMPDModule.tex', u'Python MPD Module Documentation',
      u'kaliko', 'manual'),
 ]
 
@@ -312,7 +312,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'pythonlistenbrainzmodule', u'Python ListenBrainz Module Documentation',
+    (master_doc, 'pythonmpdmodule', u'Python MPD Module Documentation',
      [author], 1)
 ]
 
@@ -327,8 +327,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'PythonListenBrainzModule', u'Python ListenBrainz Module Documentation',
-     author, 'PythonListenBrainzModule', 'One line description of project.',
+    (master_doc, 'PythonMPDModule', u'Python MPD Module Documentation',
+     author, 'PythonMPDModule', 'One line description of project.',
      'Miscellaneous'),
 ]
 
