@@ -1,8 +1,8 @@
 python-musicpd Changes List
 ===========================
 
-Changes in 0.4.3 UNRELEASED
----------------------------
+Changes in 0.4.3
+----------------
 
 * Use setuptools
 * Add sphinx documentation
