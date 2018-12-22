@@ -102,6 +102,11 @@ kill                        -> None
 password           <str>    -> fetch_nothing
 ping                        -> fetch_nothing
 
+== Partition Commands
+partition          <str>    -> fetch_nothing
+listpartitions              -> fetch_list
+newpartition       <str>    -> fetch_nothing
+
 == Audio Output Commands
 disableoutput      <int>    -> fetch_nothing
 enableoutput       <int>    -> fetch_nothing

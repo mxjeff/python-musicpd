@@ -168,6 +168,10 @@ class TestMPDClient(unittest.TestCase):
             'kill':               None,
             'password':           'nothing',
             'ping':               'nothing',
+            # Partition Commands
+            'partition':          'nothing',
+            'listpartitions':     'list',
+            'newpartition':       'nothing',
             # Audio Output Commands
             'disableoutput':      'nothing',
             'enableoutput':       'nothing',
