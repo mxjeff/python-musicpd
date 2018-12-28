@@ -112,7 +112,7 @@ class MPDClient:
 
     Cf. :py:obj:`musicpd.MPDClient.connect` for details.
 
-    >>> from os inport environ
+    >>> from os import environ
     >>> environ['MPD_HOST'] = 'pass@mpdhost'
     >>> cli = musicpd.MPDClient()
     >>> cli.pwd == environ['MPD_HOST'].split('@')[0]
