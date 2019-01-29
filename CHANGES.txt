@@ -1,6 +1,11 @@
 python-musicpd Changes List
 ===========================
 
+Changes in 0.4.4 UNRELEASED
+---------------------------
+
+* Add partition commands (Thanks Naglis Jonaitis)
+
 Changes in 0.4.3
 ----------------
 

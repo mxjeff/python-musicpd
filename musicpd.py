@@ -1,6 +1,7 @@
 # python-musicpd: Python MPD client library
 # Copyright (C) 2008-2010  J. Alexander Treuman <jat@spatialrift.net>
-# Copyright (C) 2012-2018  Kaliko Jack <kaliko@azylum.org>
+# Copyright (C) 2012-2019  Kaliko Jack <kaliko@azylum.org>
+# Copyright (C) 2019       Naglis Jonaitis <naglis@mailbox.org>
 #
 # python-musicpd is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as published by
@@ -27,7 +28,7 @@ HELLO_PREFIX = "OK MPD "
 ERROR_PREFIX = "ACK "
 SUCCESS = "OK"
 NEXT = "list_OK"
-VERSION = '0.4.3'
+VERSION = '0.4.4'
 
 
 def iterator_wrapper(func):
