@@ -39,6 +39,7 @@ def iterator_wrapper(func):
         if not instance.iterate:
             return list(generator)
         instance._iterating = True
+
         def iterator(gen):
             try:
                 for item in gen:
@@ -52,23 +53,30 @@ def iterator_wrapper(func):
 class MPDError(Exception):
     pass
 
+
 class ConnectionError(MPDError):
     pass
+
 
 class ProtocolError(MPDError):
     pass
 
+
 class CommandError(MPDError):
     pass
+
 
 class CommandListError(MPDError):
     pass
 
+
 class PendingCommandError(MPDError):
     pass
 
+
 class IteratingError(MPDError):
     pass
+
 
 class Range:
 
@@ -97,14 +105,18 @@ class Range:
             except (TypeError, ValueError):
                 raise CommandError('Not a tuple of int')
 
+
 class _NotConnected:
+
     def __getattr__(self, attr):
         return self._dummy
 
     def _dummy(*args):
         raise ConnectionError("Not connected")
 
+
 class MPDClient:
+
     """MPDClient instance will look for ``MPD_HOST``/``MPD_PORT``/``XDG_RUNTIME_DIR`` environment
     variables and set instance attribute ``host``, ``port`` and ``pwd``
     accordingly.
@@ -322,13 +334,13 @@ class MPDClient:
             raise IteratingError("Cannot execute '%s' while iterating" %
                                  command)
         if self._pending:
-            raise PendingCommandError("Cannot execute '%s' with "
-                                      "pending commands" % command)
+            raise PendingCommandError(
+                "Cannot execute '%s' with pending commands" % command)
         retval = self._commands[command]
         if self._command_list is not None:
             if not callable(retval):
-                raise CommandListError("'%s' not allowed in command list" %
-                                        command)
+                raise CommandListError(
+                    "'%s' not allowed in command list" % command)
             self._write_command(command, args)
             self._command_list.append(retval)
         else:
@@ -507,8 +519,8 @@ class MPDClient:
 
     def _connect_unix(self, path):
         if not hasattr(socket, "AF_UNIX"):
-            raise ConnectionError("Unix domain sockets not supported "
-                                  "on this platform")
+            raise ConnectionError(
+                "Unix domain sockets not supported on this platform")
         sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
         sock.connect(path)
         return sock
@@ -540,7 +552,8 @@ class MPDClient:
     def noidle(self):
         # noidle's special case
         if not self._pending or self._pending[0] != 'idle':
-            raise CommandError('cannot send noidle if send_idle was not called')
+            raise CommandError(
+                'cannot send noidle if send_idle was not called')
         del self._pending[0]
         self._write_command("noidle")
         return self._fetch_list()
