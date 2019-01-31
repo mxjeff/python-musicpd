@@ -16,6 +16,31 @@ Installation
     pip install git+https://gitlab.com/kaliko/python-musicpd.git
 
 
+Library overview
+----------------
+Here is a snippet allowing to list the last modified artists in the media library:
+
+.. code:: python3
+
+        #!/usr/bin/env python3
+        # coding: utf-8
+        import musicpd
+
+        def main():
+            cli = musicpd.MPDClient()
+            cli.connect()
+            # Gets files count in the library
+            nb_files = int(cli.stats()['songs'])
+            # Gets the last 100 files modified
+            files = cli.search('file', '', 'sort', 'Last-Modified', 'window', (nb_files-100,))
+            # Print last modified artists in media library
+            print(' / '.join({f.get('albumartist') for f in files}))
+            cli.disconnect()
+
+        # Script starts here
+        if __name__ == '__main__':
+            main()
+
 
 Build documentation
 --------------------
