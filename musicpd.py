@@ -211,7 +211,7 @@ class MPDClient:
             "list":               self._fetch_list,
             "listall":            self._fetch_database,
             "listallinfo":        self._fetch_database,
-            "listfiles":          self._fetch_songs,
+            "listfiles":          self._fetch_database,
             "lsinfo":             self._fetch_database,
             "readcomments":       self._fetch_object,
             "search":             self._fetch_songs,
