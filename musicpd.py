@@ -168,7 +168,7 @@ class MPDClient:
             "seekid":             self._fetch_nothing,
             "seekcur":            self._fetch_nothing,
             "stop":               self._fetch_nothing,
-            # Playlist Commands
+            # Queue Commands
             "add":                self._fetch_nothing,
             "addid":              self._fetch_item,
             "clear":              self._fetch_nothing,
@@ -204,19 +204,21 @@ class MPDClient:
             "rm":                 self._fetch_nothing,
             "save":               self._fetch_nothing,
             # Database Commands
+            #"albumart":           self._fetch_object,
             "count":              self._fetch_object,
             "find":               self._fetch_songs,
             "findadd":            self._fetch_nothing,
             "list":               self._fetch_list,
             "listall":            self._fetch_database,
             "listallinfo":        self._fetch_database,
+            "listfiles":          self._fetch_songs,
             "lsinfo":             self._fetch_database,
+            "readcomments":       self._fetch_object,
             "search":             self._fetch_songs,
             "searchadd":          self._fetch_nothing,
             "searchaddpl":        self._fetch_nothing,
             "update":             self._fetch_item,
             "rescan":             self._fetch_item,
-            "readcomments":       self._fetch_object,
             # Mounts and neighbors
             "mount":              self._fetch_nothing,
             "unmount":            self._fetch_nothing,
@@ -233,6 +235,11 @@ class MPDClient:
             "kill":               None,
             "password":           self._fetch_nothing,
             "ping":               self._fetch_nothing,
+            "tagtypes":           self._fetch_list,
+            "tagtypes disable":   self._fetch_nothing,
+            "tagtypes enable":    self._fetch_nothing,
+            "tagtypes clear":     self._fetch_nothing,
+            "tagtypes all":       self._fetch_nothing,
             # Partition Commands
             "partition":          self._fetch_nothing,
             "listpartitions":     self._fetch_list,
@@ -242,11 +249,11 @@ class MPDClient:
             "enableoutput":       self._fetch_nothing,
             "toggleoutput":       self._fetch_nothing,
             "outputs":            self._fetch_outputs,
+            "outputset":          self._fetch_nothing,
             # Reflection Commands
             "config":             self._fetch_object,
             "commands":           self._fetch_list,
             "notcommands":        self._fetch_list,
-            "tagtypes":           self._fetch_list,
             "urlhandlers":        self._fetch_list,
             "decoders":           self._fetch_plugins,
             # Client to Client
