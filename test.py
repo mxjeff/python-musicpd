@@ -418,6 +418,15 @@ class TestMPDClient(unittest.TestCase):
         res = self.client.sticker_list('song', 'baz')
         self.assertEqual(['foo=bar'], res)
 
+    def test_albumart(self):
+        data = bytes('\xff\xd8\xff\xe0\x00\x10JFIF\x00\x01\x01\x00\x00\x01'
+                     '\x00\x01\x00\x00\xff\xdb\x00C\x00\x05\x03\x04',
+                     encoding='utf8')
+        data_str = data.decode(encoding='utf-8', errors='surrogateescape')
+        self.MPDWillReturn('size: 36474\n', 'binary: 8192\n',
+                           data_str+'\n', 'OK\n')
+        res = self.client.albumart('muse/Raised Fist/2002-Dedication/', 0)
+        self.assertEqual(res.get('data'), data)
 
 if __name__ == '__main__':
     unittest.main()

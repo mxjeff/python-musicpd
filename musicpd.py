@@ -204,7 +204,7 @@ class MPDClient:
             "rm":                 self._fetch_nothing,
             "save":               self._fetch_nothing,
             # Database Commands
-            #"albumart":           self._fetch_object,
+            "albumart":           self._fetch_composite,
             "count":              self._fetch_object,
             "find":               self._fetch_songs,
             "findadd":            self._fetch_nothing,
@@ -502,6 +502,17 @@ class MPDClient:
     def _fetch_neighbors(self):
         return self._fetch_objects(["neighbor"])
 
+    def _fetch_composite(self):
+        obj = {}
+        for key, value in self._read_pairs():
+            key = key.lower()
+            obj[key] = value
+            if key == 'binary':
+                break
+        by = self._read_line()
+        obj['data'] = by.encode(errors='surrogateescape')
+        return obj
+
     @iterator_wrapper
     def _fetch_command_list(self):
         return self._read_command_list()
@@ -594,7 +605,7 @@ class MPDClient:
             self._sock = self._connect_unix(host)
         else:
             self._sock = self._connect_tcp(host, port)
-        self._rfile = self._sock.makefile("r", encoding='utf-8')
+        self._rfile = self._sock.makefile("r", encoding='utf-8', errors='surrogateescape')
         self._wfile = self._sock.makefile("w", encoding='utf-8')
         try:
             self._hello()
