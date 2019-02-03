@@ -66,6 +66,7 @@ Contents
 
    use.rst
    doc.rst
+   commands.rst
    contribute.rst
 
 
@@ -73,8 +74,8 @@ Indices and tables
 ==================
 
 * :ref:`genindex`
-* :ref:`modindex`
 * :ref:`search`
+.. * :ref:`modindex`
 
 
 .. vim: spell spelllang=en
