@@ -30,6 +30,7 @@ SUCCESS = "OK"
 NEXT = "list_OK"
 VERSION = '0.4.4'
 
+CONNECTION_TIMEOUT = 5  # seconds before a tcp connection attempt times out
 
 def iterator_wrapper(func):
     """Decorator handling iterate option"""
@@ -556,7 +557,9 @@ class MPDClient:
             sock = None
             try:
                 sock = socket.socket(af, socktype, proto)
+                sock.settimeout(CONNECTION_TIMEOUT)
                 sock.connect(sa)
+                sock.settimeout(None)
                 return sock
             except socket.error as socket_err:
                 err = socket_err
