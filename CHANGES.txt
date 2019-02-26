@@ -4,6 +4,8 @@ python-musicpd Changes List
 Changes in 0.4.4 UNRELEASED
 ---------------------------
 
+* Add tcp socket timeout, exposed in musicpd.CONNECTION_TIMEOUT, defaults to 5s
+  (Thanks to Bart Van Loon)
 * Add partition commands (Thanks Naglis Jonaitis)
 * Add listfiles command
 * Add tagtypes (disable|enable|clear|all) commands

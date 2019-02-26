@@ -2,6 +2,7 @@
 # Copyright (C) 2008-2010  J. Alexander Treuman <jat@spatialrift.net>
 # Copyright (C) 2012-2019  Kaliko Jack <kaliko@azylum.org>
 # Copyright (C) 2019       Naglis Jonaitis <naglis@mailbox.org>
+# Copyright (C) 2019       Bart Van Loon <bbb@bbbart.be>
 #
 # python-musicpd is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as published by
@@ -29,8 +30,8 @@ ERROR_PREFIX = "ACK "
 SUCCESS = "OK"
 NEXT = "list_OK"
 VERSION = '0.4.4'
-
 CONNECTION_TIMEOUT = 5  # seconds before a tcp connection attempt times out
+
 
 def iterator_wrapper(func):
     """Decorator handling iterate option"""
