@@ -56,7 +56,8 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'Python MPD Module'
-copyright = u'2018, {}'.format(__author__)
+from datetime import datetime
+copyright = u'2012-{}, {}'.format(datetime.now().year, __author__)
 author = __author__
 
 # The version info for the project you're documenting, acts as replacement for
