@@ -5,8 +5,6 @@ branches:
     - dev
 
 python:
-  - "3.2"
-  - "3.3"
-  - "3.4"
+  - "3.7"
 
 script: python3 setup.py test
