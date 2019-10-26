@@ -4,7 +4,7 @@ python-musicpd Changes List
 Changes in 0.#.# UNRELEASED
 ----------------------------
 
-* ...
+* Update host and port attributes when reconnecting
 
 Changes in 0.4.4
 ----------------

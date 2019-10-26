@@ -1,8 +1,8 @@
 # python-musicpd: Python MPD client library
-# Copyright (C) 2008-2010  J. Alexander Treuman <jat@spatialrift.net>
-# Copyright (C) 2012-2019  Kaliko Jack <kaliko@azylum.org>
+# Copyright (C) 2012-2019  kaliko <kaliko@azylum.org>
 # Copyright (C) 2019       Naglis Jonaitis <naglis@mailbox.org>
 # Copyright (C) 2019       Bart Van Loon <bbb@bbbart.be>
+# Copyright (C) 2008-2010  J. Alexander Treuman <jat@spatialrift.net>
 #
 # python-musicpd is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as published by
@@ -118,10 +118,10 @@ class _NotConnected:
 
 
 class MPDClient:
-
     """MPDClient instance will look for ``MPD_HOST``/``MPD_PORT``/``XDG_RUNTIME_DIR`` environment
     variables and set instance attribute ``host``, ``port`` and ``pwd``
-    accordingly.
+    accordingly. Regarding ``MPD_HOST`` format to expose password refer
+    MPD client manual :manpage:`mpc (1)`.
 
     Then :py:obj:`musicpd.MPDClient.connect` will use ``host`` and ``port`` as defaults if not provided as args.
 
@@ -135,6 +135,19 @@ class MPDClient:
     >>> cli.host == environ['MPD_HOST'].split('@')[1]
     True
     >>> # cli.connect() will use host/port as set in MPD_HOST/MPD_PORT
+
+    .. warning:: Instance attribute host/port/pwd
+
+      While :py:attr:`musicpd.MPDClient().host` and
+      :py:attr:`musicpd.MPDClient().port` keep track of current connection
+      host and port, :py:attr:`musicpd.MPDClient().pwd` is set once with
+      password extracted from environment variable.
+      Calling :py:meth:`musicpd.MPDClient().password()` with a new password
+      won't update :py:attr:`musicpd.MPDClient().pwd` value.
+
+      Moreover, :py:attr:`musicpd.MPDClient().pwd` is only an helper attribute
+      exposing password extracted from ``MPD_HOST`` environment variable, it
+      will not be used as default value for the :py:meth:`password` method
     """
 
     def __init__(self):
@@ -584,25 +597,30 @@ class MPDClient:
         """Connects the MPD server
 
         :param str host: hostname, IP or FQDN (defaults to `localhost` or socket, see below for details)
-        :param str port: port number (defaults to 6600)
+        :param port: port number (defaults to 6600)
+        :type port: str or int
 
         The connect method honors MPD_HOST/MPD_PORT environment variables.
 
         .. note:: Default host/port
 
           If host evaluate to :py:obj:`False`
-           * use ``MPD_HOST`` env. var. if set, extract password if present,
+           * use ``MPD_HOST`` environment variable if set, extract password if present,
            * else looks for a existing file in ``${XDG_RUNTIME_DIR:-/run/}/mpd/socket``
            * else set host to ``localhost``
 
           If port evaluate to :py:obj:`False`
-           * if ``MPD_PORT`` env. var. is set, use it for port
+           * if ``MPD_PORT`` environment variable is set, use it for port
            * else use ``6600``
         """
         if not host:
             host = self.host
+        else:
+            self.host = host
         if not port:
             port = self.port
+        else:
+            self.port = port
         if self._sock is not None:
             raise ConnectionError("Already connected")
         if host.startswith("/"):
