@@ -30,7 +30,8 @@ ERROR_PREFIX = "ACK "
 SUCCESS = "OK"
 NEXT = "list_OK"
 VERSION = '0.4.5'
-CONNECTION_TIMEOUT = 5  # seconds before a tcp connection attempt times out
+#: seconds before a tcp connection attempt times out
+CONNECTION_TIMEOUT = 5
 
 
 def iterator_wrapper(func):
@@ -134,7 +135,11 @@ class MPDClient:
     True
     >>> cli.host == environ['MPD_HOST'].split('@')[1]
     True
-    >>> # cli.connect() will use host/port as set in MPD_HOST/MPD_PORT
+    >>> cli.connect() # will use host/port as set in MPD_HOST/MPD_PORT
+
+    :ivar str host: host used with the current connection
+    :ivar str,int port: port used with the current connection
+    :ivar str pwd: password detected in ``MPD_HOST`` environment variable
 
     .. warning:: Instance attribute host/port/pwd
 
