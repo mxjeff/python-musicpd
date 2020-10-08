@@ -11,10 +11,12 @@ The client library can be used as follows:
                                        #   fallback to localhost:6600
                                        # connect support host/port argument as well
     print(client.mpd_version)          # print the mpd protocol version
-    print(client.cmd('one', 2))        # print result of the command "cmd one 2"
+    print(client.cmd('foo', 42))       # print result of the request "cmd foo 42"
+                                       # (nb. for actual command, see link to the protocol below)
     client.disconnect()                # disconnect from the server
 
-For a list of supported commands, their arguments (as MPD currently understands
+In the example above `cmd` in not an actual MPD command, for a list of
+supported commands, their arguments (as MPD currently understands
 them), and the functions used to parse their responses see :ref:`commands`.
 
 See the `MPD protocol documentation`_ for more details.
