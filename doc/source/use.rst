@@ -1,6 +1,9 @@
 Using the client library
 =========================
 
+Introduction
+------------
+
 The client library can be used as follows:
 
 .. code-block:: python
@@ -21,6 +24,9 @@ them), and the functions used to parse their responses see :ref:`commands`.
 
 See the `MPD protocol documentation`_ for more details.
 
+Command lists
+-------------
+
 Command lists are also supported using `command_list_ok_begin()` and
 `command_list_end()` :
 
@@ -30,6 +36,9 @@ Command lists are also supported using `command_list_ok_begin()` and
     client.update()                      # insert the update command into the list
     client.status()                      # insert the status command into the list
     results = client.command_list_end()  # results will be a list with the results
+
+Ranges
+------
 
 Provide a 2-tuple as argument for command supporting ranges (cf. `MPD protocol documentation`_ for more details).
 Possible ranges are: "START:END", "START:" and ":" :
@@ -54,6 +63,8 @@ as a single colon as argument (i.e. sending just ":"):
 
 Empty start in range (i.e. ":END") are not possible and will raise a CommandError.
 
+Iterators
+----------
 
 Commands may also return iterators instead of lists if `iterate` is set to
 `True`:
@@ -63,6 +74,9 @@ Commands may also return iterators instead of lists if `iterate` is set to
     client.iterate = True
     for song in client.playlistinfo():
         print song['file']
+
+Idle prefixed commands
+----------------------
 
 Each command have a *send\_<CMD>* and a *fetch\_<CMD>* variant, which allows to
 send a MPD command and then fetch the result later.
@@ -86,5 +100,30 @@ This is useful for the idle command:
     >>> gobject.io_add_watch(client, gobject.IO_IN, callback)
     >>> gobject.MainLoop().run()
 
+Fetching binary content (cover art)
+-----------------------------------
+
+Fetching album covers is possible with albumart, here is an example:
+
+.. code-block:: python
+
+    >>> fetched_cover_file = '/tmp/cover'
+    >>> cli = musicpd.MPDClient()
+    >>> cli.connect()
+    >>> track = "Steve Reich/1978-Music for 18 Musicians"
+    >>> with open(fetched_cover_file, 'wb') as cover:
+    >>>     aart = cli.albumart(track, 0)
+    >>>     received = int(aart.get('binary'))
+    >>>     size = int(aart.get('size'))
+    >>>     cover.write(aart.get('data'))
+    >>>     while received < size:
+    >>>         aart = cli.albumart(track, received)
+    >>>         cover.write(aart.get('data'))
+    >>>         received += int(aart.get('binary'))
+    >>>     if received != size:
+    >>>         print('something went wrong', file=sys.stderr)
+    >>> cli.disconnect()
+
+Refer to `MPD protocol documentation`_ for the meaning of `binary`, `size` and `data`.
 
 .. _MPD protocol documentation: http://www.musicpd.org/doc/protocol/

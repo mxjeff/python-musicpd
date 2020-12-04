@@ -5,6 +5,7 @@ Changes in 0.#.# UNRELEASED
 ----------------------------
 
 * Update host and port attributes when reconnecting
+* Fixed albumart
 
 Changes in 0.4.4
 ----------------

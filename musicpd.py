@@ -1,5 +1,5 @@
 # python-musicpd: Python MPD client library
-# Copyright (C) 2012-2019  kaliko <kaliko@azylum.org>
+# Copyright (C) 2012-2020  kaliko <kaliko@azylum.org>
 # Copyright (C) 2019       Naglis Jonaitis <naglis@mailbox.org>
 # Copyright (C) 2019       Bart Van Loon <bbb@bbbart.be>
 # Copyright (C) 2008-2010  J. Alexander Treuman <jat@spatialrift.net>
@@ -23,7 +23,6 @@ import socket
 import os
 
 from functools import wraps
-
 
 HELLO_PREFIX = "OK MPD "
 ERROR_PREFIX = "ACK "
@@ -391,8 +390,22 @@ class MPDClient:
                 parts.append('"%s"' % escape(str(arg)))
         self._write_line(" ".join(parts))
 
-    def _read_line(self):
-        line = self._rfile.readline()
+    def _read_binary(self, amount):
+        chunk = bytearray()
+        while amount > 0:
+            result = self._rbfile.recv(amount)
+            if len(result) == 0:
+                self.disconnect()
+                raise ConnectionError("Connection lost while reading binary content")
+            chunk.extend(result)
+            amount -= len(result)
+        return bytes(chunk)
+
+    def _read_line(self, binary=False):
+        if binary:
+            line = self._rbfile.readline().decode('utf-8')
+        else:
+            line = self._rfile.readline()
         if not line.endswith("\n"):
             self.disconnect()
             raise ConnectionError("Connection lost while reading line")
@@ -409,8 +422,8 @@ class MPDClient:
             return
         return line
 
-    def _read_pair(self, separator):
-        line = self._read_line()
+    def _read_pair(self, separator, binary=False):
+        line = self._read_line(binary=binary)
         if line is None:
             return
         pair = line.split(separator, 1)
@@ -418,11 +431,11 @@ class MPDClient:
             raise ProtocolError("Could not parse pair: '%s'" % line)
         return pair
 
-    def _read_pairs(self, separator=": "):
-        pair = self._read_pair(separator)
+    def _read_pairs(self, separator=": ", binary=False):
+        pair = self._read_pair(separator, binary=binary)
         while pair:
             yield pair
-            pair = self._read_pair(separator)
+            pair = self._read_pair(separator, binary=binary)
 
     def _read_list(self):
         seen = None
@@ -524,13 +537,23 @@ class MPDClient:
 
     def _fetch_composite(self):
         obj = {}
-        for key, value in self._read_pairs():
+        for key, value in self._read_pairs(binary=True):
             key = key.lower()
             obj[key] = value
             if key == 'binary':
                 break
-        by = self._read_line()
-        obj['data'] = by.encode(errors='surrogateescape')
+        amount = int(obj['binary'])
+        try:
+            obj['data'] = self._read_binary(amount)
+        except IOError as err:
+            raise ConnectionError('Error reading binary content: %s' % err)
+        if len(obj['data']) != amount:
+            raise ConnectionError('Error reading binary content: '
+                      'Expects %sB, got %s' % (amount, len(obj['data'])))
+        # Fetches trailing new line
+        self._read_line(binary=True)
+        # Fetches SUCCESS code
+        self._read_line(binary=True)
         return obj
 
     @iterator_wrapper
@@ -553,6 +576,7 @@ class MPDClient:
         self._command_list = None
         self._sock = None
         self._rfile = _NotConnected()
+        self._rbfile = _NotConnected()
         self._wfile = _NotConnected()
 
     def _connect_unix(self, path):
@@ -633,6 +657,7 @@ class MPDClient:
         else:
             self._sock = self._connect_tcp(host, port)
         self._rfile = self._sock.makefile("r", encoding='utf-8', errors='surrogateescape')
+        self._rbfile = self._sock.makefile("rb")
         self._wfile = self._sock.makefile("w", encoding='utf-8')
         try:
             self._hello()
@@ -647,6 +672,8 @@ class MPDClient:
         """
         if hasattr(self._rfile, 'close'):
             self._rfile.close()
+        if hasattr(self._rbfile, 'close'):
+            self._rbfile.close()
         if hasattr(self._wfile, 'close'):
             self._wfile.close()
         if hasattr(self._sock, 'close'):

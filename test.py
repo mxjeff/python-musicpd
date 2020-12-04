@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# pylint: disable=missing-docstring
 """
 Test suite highly borrowed^Wsteal from python-mpd2 [0] project.
 
@@ -220,6 +221,27 @@ class TestMPDClient(unittest.TestCase):
         self.client._rfile.readline.side_effect = itertools.chain(
             lines, itertools.repeat(''))
 
+    def MPDWillReturnBinary(self, lines):
+        data = bytearray(b''.join(lines))
+        print(data)
+
+        def recv(amount):
+            val = bytearray()
+            while amount > 0:
+                amount -= 1
+                _ = data.pop(0)
+                print(hex(_))
+                val.append(_)
+            return val
+
+        def readline():
+            val = bytearray()
+            while not val.endswith(b'\x0a'):
+                val.append(data.pop(0))
+            return val
+        self.client._rbfile.readline.side_effect = readline
+        self.client._rbfile.recv.side_effect = recv
+
     def assertMPDReceived(self, *lines):
         self.client._wfile.write.assert_called_with(*lines)
 
@@ -419,14 +441,16 @@ class TestMPDClient(unittest.TestCase):
         self.assertEqual(['foo=bar'], res)
 
     def test_albumart(self):
+        # here is a 34 bytes long data
         data = bytes('\xff\xd8\xff\xe0\x00\x10JFIF\x00\x01\x01\x00\x00\x01'
                      '\x00\x01\x00\x00\xff\xdb\x00C\x00\x05\x03\x04',
                      encoding='utf8')
-        data_str = data.decode(encoding='utf-8', errors='surrogateescape')
-        self.MPDWillReturn('size: 36474\n', 'binary: 8192\n',
-                           data_str+'\n', 'OK\n')
+        read_lines = [b'size: 42\nbinary: 34\n', data, b'\nOK\n']
+        self.MPDWillReturnBinary(read_lines)
+        # Reading albumart / offset 0 should return the data
         res = self.client.albumart('muse/Raised Fist/2002-Dedication/', 0)
         self.assertEqual(res.get('data'), data)
+
 
 if __name__ == '__main__':
     unittest.main()
