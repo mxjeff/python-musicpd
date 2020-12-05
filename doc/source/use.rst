@@ -107,14 +107,14 @@ Fetching album covers is possible with albumart, here is an example:
 
 .. code-block:: python
 
-    >>> fetched_cover_file = '/tmp/cover'
     >>> cli = musicpd.MPDClient()
     >>> cli.connect()
     >>> track = "Steve Reich/1978-Music for 18 Musicians"
-    >>> with open(fetched_cover_file, 'wb') as cover:
-    >>>     aart = cli.albumart(track, 0)
-    >>>     received = int(aart.get('binary'))
-    >>>     size = int(aart.get('size'))
+    >>> aart = cli.albumart(track, 0)
+    >>> received = int(aart.get('binary'))
+    >>> size = int(aart.get('size'))
+    >>> with open('/tmp/cover', 'wb') as cover:
+    >>>     # aart = {'size': 42, 'binary': 2051, data: bytes(...)}
     >>>     cover.write(aart.get('data'))
     >>>     while received < size:
     >>>         aart = cli.albumart(track, received)
@@ -122,6 +122,30 @@ Fetching album covers is possible with albumart, here is an example:
     >>>         received += int(aart.get('binary'))
     >>>     if received != size:
     >>>         print('something went wrong', file=sys.stderr)
+    >>> cli.disconnect()
+
+A `CommandError` is raised if the album does not expose a cover.
+
+You can also use `readpicture` command to fetch embedded picture:
+
+.. code-block:: python
+
+    >>> cli = musicpd.MPDClient()
+    >>> cli.connect()
+    >>> track = 'muse/Amon Tobin/2011-ISAM/01-Amon Tobin - Journeyman.mp3'
+    >>> rpict = cli.readpicture(track, 0)
+    >>> if not rpict:
+    >>>     print('No embedded picture found', file=sys.stderr)
+    >>>     sys.exit(1)
+    >>> size = int(rpict['size'])
+    >>> done = int(rpict['binary'])
+    >>> with open('/tmp/cover', 'wb') as cover:
+    >>>     cover.write(rpict['data'])
+    >>>     while size > done:
+    >>>         rpict = cli.readpicture(track, done)
+    >>>         done += int(rpict['binary'])
+    >>>         print(f'writing {rpict["binary"]}, done {100*done/size:03.0f}%')
+    >>>         cover.write(rpict['data'])
     >>> cli.disconnect()
 
 Refer to `MPD protocol documentation`_ for the meaning of `binary`, `size` and `data`.

@@ -233,6 +233,7 @@ class MPDClient:
             "listfiles":          self._fetch_database,
             "lsinfo":             self._fetch_database,
             "readcomments":       self._fetch_object,
+            "readpicture":        self._fetch_composite,
             "search":             self._fetch_songs,
             "searchadd":          self._fetch_nothing,
             "searchaddpl":        self._fetch_nothing,
@@ -542,6 +543,10 @@ class MPDClient:
             obj[key] = value
             if key == 'binary':
                 break
+        if not obj:
+            # If the song file was recognized, but there is no picture, the
+            # response is successful, but is otherwise empty.
+            return obj
         amount = int(obj['binary'])
         try:
             obj['data'] = self._read_binary(amount)
