@@ -22,7 +22,7 @@ build:
   script:
   # packaging test
   - python setup.py bdist_wheel sdist
-  - pip install dist/*
+  - pip install dist/*.whl
   artifacts:
     expire_in: 1 week
     paths:
