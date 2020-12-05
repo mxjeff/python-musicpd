@@ -223,15 +223,14 @@ class TestMPDClient(unittest.TestCase):
 
     def MPDWillReturnBinary(self, lines):
         data = bytearray(b''.join(lines))
-        print(data)
 
-        def recv(amount):
+        def read(amount):
             val = bytearray()
             while amount > 0:
                 amount -= 1
-                _ = data.pop(0)
-                print(hex(_))
-                val.append(_)
+                # _ = data.pop(0)
+                # print(hex(_))
+                val.append(data.pop(0))
             return val
 
         def readline():
@@ -240,7 +239,7 @@ class TestMPDClient(unittest.TestCase):
                 val.append(data.pop(0))
             return val
         self.client._rbfile.readline.side_effect = readline
-        self.client._rbfile.recv.side_effect = recv
+        self.client._rbfile.read.side_effect = read
 
     def assertMPDReceived(self, *lines):
         self.client._wfile.write.assert_called_with(*lines)

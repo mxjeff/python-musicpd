@@ -393,7 +393,7 @@ class MPDClient:
     def _read_binary(self, amount):
         chunk = bytearray()
         while amount > 0:
-            result = self._rbfile.recv(amount)
+            result = self._rbfile.read(amount)
             if len(result) == 0:
                 self.disconnect()
                 raise ConnectionError("Connection lost while reading binary content")
