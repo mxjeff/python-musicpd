@@ -225,6 +225,7 @@ class MPDClient:
             # Database Commands
             "albumart":           self._fetch_composite,
             "count":              self._fetch_object,
+            "getfingerprint":     self._fetch_object,
             "find":               self._fetch_songs,
             "findadd":            self._fetch_nothing,
             "list":               self._fetch_list,

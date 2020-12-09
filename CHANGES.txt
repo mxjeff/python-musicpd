@@ -5,6 +5,7 @@ Changes in 0.#.# UNRELEASED
 ----------------------------
 
 * Add readpicture command
+* Add getfingerprint command
 * Update host and port attributes when reconnecting
 * Fixed albumart
 
