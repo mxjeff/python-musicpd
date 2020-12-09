@@ -68,9 +68,10 @@ rm                 <str>                   -> fetch_nothing
 save               <str>                   -> fetch_nothing
 
 == Database Commands
-albumart           <str> <int>                              -> fetch_object
+albumart           <str> <int>                              -> fetch_composite
 count              <str> <str>                              -> fetch_object
 count              group <str>                              -> fetch_object
+getfingerprint     <str>                                    -> fetch_object
 find               <str> <str> [<str> <str>]...             -> fetch_songs
 findadd            <str> <str> [<str> <str>]                -> fetch_nothing
 list               <str> [<str> <str>]...[group <str>]...   -> fetch_list
@@ -79,6 +80,7 @@ listallinfo        [<str>]                                  -> fetch_database
 listfiles          <str>                                    -> fetch_database
 lsinfo             [<str>]                                  -> fetch_database
 readcomments       [<str>]                                  -> fetch_object
+readpicture        <str> <int>                              -> fetch_composite
 search             <str> <str> [<str> <str>]...             -> fetch_song
 searchadd          <str> <str> [<str> <str>]...             -> fetch_nothing
 searchaddpl        <str> <str> <str> [<str> <str>]...       -> fetch_nothing
@@ -113,13 +115,15 @@ tagtypes all:                       -> fetch_nothing
 partition          <str>    -> fetch_nothing
 listpartitions              -> fetch_list
 newpartition       <str>    -> fetch_nothing
+delpartition       <str>    -> fetch_nothing
+moveoutput         <str>    -> fetch_nothing
 
 == Audio Output Commands
 disableoutput      <int>       -> fetch_nothing
 enableoutput       <int>       -> fetch_nothing
 toggleoutput       <int>       -> fetch_nothing
 outputs                        -> fetch_outputs
-outputset  <str> <str> <str>   -> fetch_nothing 
+outputset  <str> <str> <str>   -> fetch_nothing
 
 == Reflection Commands
 config           -> fetch_object

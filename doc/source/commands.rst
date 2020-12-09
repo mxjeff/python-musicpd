@@ -11,6 +11,6 @@ Get current available commands:
    print(' '.join([cmd for cmd in musicpd.MPDClient()._commands.keys()]))
 
 
-List, last updated for v0.4.4:
+List, last updated for v0.4.5:
 
 .. literalinclude:: commands.txt
