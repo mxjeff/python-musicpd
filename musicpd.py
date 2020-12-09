@@ -265,6 +265,8 @@ class MPDClient:
             "partition":          self._fetch_nothing,
             "listpartitions":     self._fetch_list,
             "newpartition":       self._fetch_nothing,
+            "delpartition":       self._fetch_nothing,
+            "moveoutput":         self._fetch_nothing,
             # Audio Output Commands
             "disableoutput":      self._fetch_nothing,
             "enableoutput":       self._fetch_nothing,

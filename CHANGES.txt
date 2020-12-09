@@ -6,6 +6,8 @@ Changes in 0.#.# UNRELEASED
 
 * Add readpicture command
 * Add getfingerprint command
+* Add delpartition command
+* Add moveoutput command
 * Update host and port attributes when reconnecting
 * Fixed albumart
 
