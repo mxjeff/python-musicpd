@@ -1,6 +1,11 @@
 python-musicpd Changes List
 ===========================
 
+Changes in 0.6.0
+----------------
+
+* Remove bztar from sdist
+
 Changes in 0.5.0
 ----------------
 
