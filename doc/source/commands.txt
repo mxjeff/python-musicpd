@@ -106,10 +106,10 @@ kill                                -> None
 password           <str>            -> fetch_nothing
 ping                                -> fetch_nothing
 tagtypes                            -> fetch_list
-tagtypes disable: <str> [<str>]...  -> fetch_nothing
-tagtypes enable:  <str> [<str>]...  -> fetch_nothing
-tagtypes clear:                     -> fetch_nothing
-tagtypes all:                       -> fetch_nothing
+tagtypes disable <str> [<str>]...   -> fetch_nothing
+tagtypes enable <str> [<str>]...    -> fetch_nothing
+tagtypes clear                      -> fetch_nothing
+tagtypes all                        -> fetch_nothing
 
 == Partition Commands
 partition          <str>    -> fetch_nothing
