@@ -31,8 +31,8 @@ setup(
     long_description=LONG_DESCRIPTION,
     author='Kaliko Jack',
     author_email='kaliko@azylum.org',
-    url='http://kaliko.me/code/python-musicpd',
-    download_url='http://pypi.python.org/pypi/python-musicpd/',
+    url='https://kaliko.me/python-musicpd/',
+    download_url='https://pypi.org/project/python-musicpd/'
     py_modules=['musicpd'],
     classifiers=CLASSIFIERS,
     license='LGPLv3+',
