@@ -5,6 +5,7 @@ Changes in 0.6.0
 ----------------
 
 * Remove bztar from sdist
+* Switch to xztar sdist
 
 Changes in 0.5.0
 ----------------
