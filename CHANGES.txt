@@ -1,6 +1,12 @@
 python-musicpd Changes List
 ===========================
 
+Changes in 0.6.1 UNRELEASED
+---------------------------
+
+* 
+
+
 Changes in 0.5.1
 ----------------
 
