@@ -4,7 +4,8 @@ python-musicpd Changes List
 Changes in 0.6.1 UNRELEASED
 ---------------------------
 
-* 
+* Switch back to gztar (even though official python doc mention xztar, PEP 527
+  considers only gztar and zip)
 
 
 Changes in 0.5.1
