@@ -32,7 +32,7 @@ setup(
     author='Kaliko Jack',
     author_email='kaliko@azylum.org',
     url='https://kaliko.me/python-musicpd/',
-    download_url='https://pypi.org/project/python-musicpd/'
+    download_url='https://pypi.org/project/python-musicpd/',
     py_modules=['musicpd'],
     classifiers=CLASSIFIERS,
     license='LGPLv3+',
