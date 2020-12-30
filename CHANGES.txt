@@ -1,9 +1,10 @@
 python-musicpd Changes List
 ===========================
 
-Changes in 0.6.0
+Changes in 0.5.1
 ----------------
 
+* Clean up packaging (remove useless files and html doc)
 * Remove bztar from sdist
 * Switch to xztar sdist
 

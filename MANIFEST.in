@@ -1,2 +1,2 @@
-include *.txt
-recursive-include doc *
+include CHANGES.txt
+recursive-include doc/source *
