@@ -173,6 +173,7 @@ class MPDClient:
             "random":             self._fetch_nothing,
             "repeat":             self._fetch_nothing,
             "setvol":             self._fetch_nothing,
+            "getvol":             self._fetch_object,
             "single":             self._fetch_nothing,
             "replay_gain_mode":   self._fetch_nothing,
             "replay_gain_status": self._fetch_item,

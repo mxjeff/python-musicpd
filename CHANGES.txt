@@ -7,6 +7,7 @@ Changes in 0.6.0 UNRELEASED
 * Switch back to gztar (even though official python doc mention xztar, PEP 527
   considers only gztar and zip)
 * Add binarylimit command
+* Add getvol command
 
 
 Changes in 0.5.1

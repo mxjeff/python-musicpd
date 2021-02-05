@@ -14,6 +14,7 @@ mixrampdelay       <int>                   -> fetch_nothing
 random             <bool>                  -> fetch_nothing
 repeat             <bool>                  -> fetch_nothing
 setvol             <int>                   -> fetch_nothing
+getvol                                     -> fetch_object
 single             <bool>                  -> fetch_nothing
 replay_gain_mode   <str>                   -> fetch_nothing
 replay_gain_status                         -> fetch_item
