@@ -1,5 +1,5 @@
 # python-musicpd: Python MPD client library
-# Copyright (C) 2012-2020  kaliko <kaliko@azylum.org>
+# Copyright (C) 2012-2021  kaliko <kaliko@azylum.org>
 # Copyright (C) 2019       Naglis Jonaitis <naglis@mailbox.org>
 # Copyright (C) 2019       Bart Van Loon <bbb@bbbart.be>
 # Copyright (C) 2008-2010  J. Alexander Treuman <jat@spatialrift.net>
@@ -256,6 +256,7 @@ class MPDClient:
             "kill":               None,
             "password":           self._fetch_nothing,
             "ping":               self._fetch_nothing,
+            "binarylimit":        self._fetch_nothing,
             "tagtypes":           self._fetch_list,
             "tagtypes disable":   self._fetch_nothing,
             "tagtypes enable":    self._fetch_nothing,

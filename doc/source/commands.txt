@@ -105,6 +105,7 @@ close                               -> None
 kill                                -> None
 password           <str>            -> fetch_nothing
 ping                                -> fetch_nothing
+binarylimit        <str>            -> fetch_nothing
 tagtypes                            -> fetch_list
 tagtypes disable <str> [<str>]...   -> fetch_nothing
 tagtypes enable <str> [<str>]...    -> fetch_nothing
