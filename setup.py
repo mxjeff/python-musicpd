@@ -3,43 +3,6 @@
 
 from setuptools import setup
 
-from musicpd import VERSION
-
-DESCRIPTION = """\
-An MPD (Music Player Daemon) client library written in pure Python.\
-"""
-
-
-with open('README.rst', encoding='UTF-8') as file:
-    LONG_DESCRIPTION = file.read()
-
-CLASSIFIERS = [
-    "Development Status :: 5 - Production/Stable",
-    "Intended Audience :: Developers",
-    "License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)",
-    "Natural Language :: English",
-    "Operating System :: OS Independent",
-    "Programming Language :: Python :: 3",
-    "Topic :: Software Development :: Libraries :: Python Modules",
-]
-
-
-setup(
-    name='python-musicpd',
-    version=VERSION,
-    description=DESCRIPTION,
-    long_description=LONG_DESCRIPTION,
-    long_description_content_type='text/x-rst',
-    author='Kaliko Jack',
-    author_email='kaliko@azylum.org',
-    url='https://kaliko.me/python-musicpd/',
-    download_url='https://pypi.org/project/python-musicpd/',
-    py_modules=['musicpd'],
-    classifiers=CLASSIFIERS,
-    license='LGPLv3+',
-    keywords=['mpd', 'Music Player Daemon'],
-    platforms=['Independant'],
-)
-
+setup()
 
 # vim: set expandtab shiftwidth=4 softtabstop=4 textwidth=79:
