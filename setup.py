@@ -29,6 +29,7 @@ setup(
     version=VERSION,
     description=DESCRIPTION,
     long_description=LONG_DESCRIPTION,
+    long_description_content_type='text/x-rst',
     author='Kaliko Jack',
     author_email='kaliko@azylum.org',
     url='https://kaliko.me/python-musicpd/',
