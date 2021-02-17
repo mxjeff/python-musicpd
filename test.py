@@ -70,6 +70,17 @@ class testEnvVar(unittest.TestCase):
             client = musicpd.MPDClient()
             self.assertEqual(client.host, '/run/user/1000/mpd/socket')
 
+        os.environ.pop('MPD_TIMEOUT', None)
+        client = musicpd.MPDClient()
+        self.assertEqual(client.mpd_timeout, 30)
+        os.environ['MPD_TIMEOUT'] = 'garbage'
+        client = musicpd.MPDClient()
+        self.assertEqual(client.mpd_timeout, 30)
+        os.environ['MPD_TIMEOUT'] = '42'
+        client = musicpd.MPDClient()
+        self.assertEqual(client.mpd_timeout, 42)
+
+
 class TestMPDClient(unittest.TestCase):
 
     longMessage = True

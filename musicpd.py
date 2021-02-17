@@ -29,8 +29,9 @@ ERROR_PREFIX = "ACK "
 SUCCESS = "OK"
 NEXT = "list_OK"
 VERSION = '0.6.0'
-#: seconds before a tcp connection attempt times out
-CONNECTION_TIMEOUT = 5
+#: seconds before a tcp connection attempt times out (overriden by MPD_TIMEOUT env. var.)
+CONNECTION_TIMEOUT = 30
+
 
 
 def iterator_wrapper(func):
@@ -298,8 +299,8 @@ class MPDClient:
         """
         self.host = 'localhost'
         self.pwd = None
-        self.port = os.environ.get('MPD_PORT', '6600')
-        mpd_host_env = os.environ.get('MPD_HOST')
+        self.port = os.getenv('MPD_PORT', '6600')
+        mpd_host_env = os.getenv('MPD_HOST')
         if mpd_host_env:
             # If password is set:
             # mpd_host_env = ['pass', 'host'] because MPD_HOST=pass@host
@@ -310,10 +311,15 @@ class MPDClient:
                 self.pwd = mpd_host_env[1]
         else:
             # Is socket there
-            xdg_runtime_dir = os.environ.get('XDG_RUNTIME_DIR', '/run')
+            xdg_runtime_dir = os.getenv('XDG_RUNTIME_DIR', '/run')
             rundir = os.path.join(xdg_runtime_dir, 'mpd/socket')
             if os.path.exists(rundir):
                 self.host = rundir
+        self.mpd_timeout = os.getenv('MPD_TIMEOUT')
+        if self.mpd_timeout and self.mpd_timeout.isdigit():
+            self.mpd_timeout = int(self.mpd_timeout)
+        else:  # Use 30s default even is MPD_TIMEOUT carries gargage
+            self.mpd_timeout = CONNECTION_TIMEOUT
 
     def __getattr__(self, attr):
         if attr == 'send_noidle':  # have send_noidle to cancel idle as well as noidle
@@ -610,7 +616,7 @@ class MPDClient:
             sock = None
             try:
                 sock = socket.socket(af, socktype, proto)
-                sock.settimeout(CONNECTION_TIMEOUT)
+                sock.settimeout(self.mpd_timeout)
                 sock.connect(sa)
                 sock.settimeout(None)
                 return sock
@@ -640,6 +646,9 @@ class MPDClient:
         :type port: str or int
 
         The connect method honors MPD_HOST/MPD_PORT environment variables.
+
+        The underlying tcp socket also honors MPD_TIMEOUT environment variable
+        and defaults to :py:obj:`musicpd.CONNECTION_TIMEOUT`.
 
         .. note:: Default host/port
 
