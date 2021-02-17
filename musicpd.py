@@ -300,15 +300,20 @@ class MPDClient:
         self.host = 'localhost'
         self.pwd = None
         self.port = os.getenv('MPD_PORT', '6600')
-        mpd_host_env = os.getenv('MPD_HOST')
-        if mpd_host_env:
-            # If password is set:
-            # mpd_host_env = ['pass', 'host'] because MPD_HOST=pass@host
-            mpd_host_env = mpd_host_env.split('@')
-            mpd_host_env.reverse()
-            self.host = mpd_host_env[0]
-            if len(mpd_host_env) > 1 and mpd_host_env[1]:
-                self.pwd = mpd_host_env[1]
+        if os.getenv('MPD_HOST'):
+            # If password is set: MPD_HOST=pass@host
+            if '@' in os.getenv('MPD_HOST'):
+                mpd_host_env = os.getenv('MPD_HOST').split('@', 1)
+                if mpd_host_env[0]:
+                    # A password is actually set
+                    self.pwd = mpd_host_env[0]
+                    self.host = mpd_host_env[1]
+                else:
+                    # No password set but leading @ is an abstract socket
+                    self.host = '@'+mpd_host_env[1]
+            else:
+                # MPD_HOST is a plain host
+                self.host = os.getenv('MPD_HOST')
         else:
             # Is socket there
             xdg_runtime_dir = os.getenv('XDG_RUNTIME_DIR', '/run')
@@ -599,6 +604,9 @@ class MPDClient:
         if not hasattr(socket, "AF_UNIX"):
             raise ConnectionError(
                 "Unix domain sockets not supported on this platform")
+        # abstract socket
+        if path.startswith('@'):
+            path = '\0'+path[1:]
         sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
         sock.connect(path)
         return sock
@@ -671,7 +679,7 @@ class MPDClient:
             self.port = port
         if self._sock is not None:
             raise ConnectionError("Already connected")
-        if host.startswith("/"):
+        if host[0] in ['/', '@']:
             self._sock = self._connect_unix(host)
         else:
             self._sock = self._connect_tcp(host, port)

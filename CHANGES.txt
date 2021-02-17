@@ -10,6 +10,7 @@ Changes in 0.6.0 UNRELEASED
 * Add getvol command
 * Honor MPD_TIMEOUT environment variables
 * Default connection timeout is now 30s (previously 5s)
+* Add abstract unix socket support
 
 
 Changes in 0.5.1

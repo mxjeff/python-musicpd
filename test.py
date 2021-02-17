@@ -66,6 +66,17 @@ class testEnvVar(unittest.TestCase):
         client = musicpd.MPDClient()
         self.assertEqual(client.host, '/unix/sock')
 
+        # Test plain abstract socket extraction
+        os.environ['MPD_HOST'] = '@abstract'
+        client = musicpd.MPDClient()
+        self.assertEqual(client.host, '@abstract')
+
+        # Test password and abstract socket extraction
+        os.environ['MPD_HOST'] = 'pass@@abstract'
+        client = musicpd.MPDClient()
+        self.assertEqual(client.pwd, 'pass')
+        self.assertEqual(client.host, '@abstract')
+
         # Test unix socket fallback
         os.environ.pop('MPD_HOST', None)
         os.environ.pop('MPD_PORT', None)
