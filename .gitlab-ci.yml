@@ -10,9 +10,8 @@ stages:
 test:
   stage: test
   script:
-  - pip install pytest-cov docutils
+  - pip install pytest-cov
   - py.test -q --cov=musicpd test.py
-  - python setup.py check -r -s
   coverage: '/musicpd.py\s+\d+\s+\d+\s+(\d+)%/'
   only:
     - pushes
@@ -23,6 +22,8 @@ build:
   # packaging test
   - python setup.py bdist_wheel sdist
   - pip install dist/*.whl
+  - pip install twine
+  - twine check dist/*
   artifacts:
     expire_in: 1 week
     paths:
