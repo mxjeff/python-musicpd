@@ -36,24 +36,35 @@ TEST_MPD_HOST, TEST_MPD_PORT = ('example.com', 10000)
 class testEnvVar(unittest.TestCase):
 
     def test_envvar(self):
-        os.environ.pop('MPD_HOST', None)
-        os.environ.pop('MPD_PORT', None)
-        client = musicpd.MPDClient()
-        self.assertEqual(client.host, 'localhost')
-        self.assertEqual(client.port, '6600')
+        # mock "os.path.exists" here to ensure there are no socket in
+        # XDG_RUNTIME_DIR/mpd or /run/mpd since with test defaults fallbacks
+        # when :
+        #   * neither MPD_HOST nor XDG_RUNTIME_DIR are not set
+        #   * /run/mpd does not expose a socket
+        with mock.patch('os.path.exists', return_value=False):
+            os.environ.pop('MPD_HOST', None)
+            os.environ.pop('MPD_PORT', None)
+            client = musicpd.MPDClient()
+            self.assertEqual(client.host, 'localhost')
+            self.assertEqual(client.port, '6600')
 
+            os.environ.pop('MPD_HOST', None)
+            os.environ['MPD_PORT'] = '6666'
+            client = musicpd.MPDClient()
+            self.assertEqual(client.pwd, None)
+            self.assertEqual(client.host, 'localhost')
+            self.assertEqual(client.port, '6666')
+
+        # Test password extraction
         os.environ['MPD_HOST'] = 'pa55w04d@example.org'
         client = musicpd.MPDClient()
         self.assertEqual(client.pwd, 'pa55w04d')
         self.assertEqual(client.host, 'example.org')
-        self.assertEqual(client.port, '6600')
 
-        os.environ.pop('MPD_HOST', None)
-        os.environ['MPD_PORT'] = '6666'
+        # Test unix socket extraction
+        os.environ['MPD_HOST'] = 'pa55w04d@/unix/sock'
         client = musicpd.MPDClient()
-        self.assertEqual(client.pwd, None)
-        self.assertEqual(client.host, 'localhost')
-        self.assertEqual(client.port, '6666')
+        self.assertEqual(client.host, '/unix/sock')
 
         # Test unix socket fallback
         os.environ.pop('MPD_HOST', None)
@@ -62,6 +73,9 @@ class testEnvVar(unittest.TestCase):
         with mock.patch('os.path.exists', return_value=True):
             client = musicpd.MPDClient()
             self.assertEqual(client.host, '/run/mpd/socket')
+            os.environ['XDG_RUNTIME_DIR'] = '/run/user/1000'
+            client = musicpd.MPDClient()
+            self.assertEqual(client.host, '/run/user/1000/mpd/socket')
 
         os.environ.pop('MPD_HOST', None)
         os.environ.pop('MPD_PORT', None)
