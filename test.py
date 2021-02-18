@@ -61,6 +61,13 @@ class testEnvVar(unittest.TestCase):
         self.assertEqual(client.pwd, 'pa55w04d')
         self.assertEqual(client.host, 'example.org')
 
+        # Test password extraction (no host)
+        os.environ['MPD_HOST'] = 'pa55w04d@'
+        with mock.patch('os.path.exists', return_value=False):
+            client = musicpd.MPDClient()
+        self.assertEqual(client.pwd, 'pa55w04d')
+        self.assertEqual(client.host, 'localhost')
+
         # Test unix socket extraction
         os.environ['MPD_HOST'] = 'pa55w04d@/unix/sock'
         client = musicpd.MPDClient()

@@ -307,7 +307,8 @@ class MPDClient:
                 if mpd_host_env[0]:
                     # A password is actually set
                     self.pwd = mpd_host_env[0]
-                    self.host = mpd_host_env[1]
+                    if mpd_host_env[1]:
+                        self.host = mpd_host_env[1]
                 else:
                     # No password set but leading @ is an abstract socket
                     self.host = '@'+mpd_host_env[1]
