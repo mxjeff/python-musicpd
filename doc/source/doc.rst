@@ -1,4 +1,4 @@
-MPD client class
+musicpd namespace
 =================
 
 .. autodata:: musicpd.CONNECTION_TIMEOUT

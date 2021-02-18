@@ -8,7 +8,7 @@ Changes in 0.6.0 UNRELEASED
   considers only gztar and zip)
 * Add binarylimit command
 * Add getvol command
-* Honor MPD_TIMEOUT environment variables
+* Honor MPD_TIMEOUT environment variable
 * Default connection timeout is now 30s (previously 5s)
 * Add abstract unix socket support
 

@@ -13,7 +13,7 @@ Installation
 
 .. code:: bash
 
-    pip install git+https://gitlab.com/kaliko/python-musicpd.git
+    pip install git+https://gitlab.com/kaliko/python-musicpd.git@dev
 
 
 Library overview
@@ -75,7 +75,6 @@ Indices and tables
 
 * :ref:`genindex`
 * :ref:`search`
-.. * :ref:`modindex`
 
 
 .. vim: spell spelllang=en
