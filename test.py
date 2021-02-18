@@ -503,6 +503,21 @@ class TestMPDClient(unittest.TestCase):
         res = self.client.albumart('muse/Raised Fist/2002-Dedication/', 0)
         self.assertEqual(res.get('data'), data)
 
+    def test_command_list(self):
+        self.MPDWillReturn('updating_db: 42\n',
+                           f'{musicpd.NEXT}\n',
+                           'repeat: 0\n',
+                           'random: 0\n',
+                           f'{musicpd.NEXT}\n',
+                           f'{musicpd.NEXT}\n',
+                           'OK\n')
+        self.client.command_list_ok_begin()
+        self.client.update()
+        self.client.status()
+        self.client.repeat(1)
+        self.client.command_list_end()
+        self.assertMPDReceived('command_list_end\n')
+
 
 if __name__ == '__main__':
     unittest.main()
