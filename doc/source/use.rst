@@ -24,6 +24,28 @@ them), and the functions used to parse their responses see :ref:`commands`.
 
 See the `MPD protocol documentation`_ for more details.
 
+Environment variables
+---------------------
+
+The client honors the following environment variables:
+
+  * ``MPD_HOST`` MPD host (:abbr:`FQDN (fully qualified domain name)`, socket path or abstract socket) and password.
+
+    | To define a password set MPD_HOST to "`password@host`" (password only "`password@`")
+    | For abstract socket use "@" as prefix : "`@socket`" and then with a password  "`pass@@socket`"
+    | Regular unix socket are set with an absolute path: "`/run/mpd/socket`"
+  * ``MPD_PORT`` MPD port, relevant for TCP socket only, ie with :abbr:`FQDN (fully qualified domain name)` defined host
+  * ``MPD_TIMEOUT`` timeout for connecting to MPD and for waiting for MPD’s response in seconds
+  * ``XDG_RUNTIME_DIR`` path to look for potential socket: ``${XDG_RUNTIME_DIR}/mpd/socket``
+
+Defaults settings
+-----------------
+
+  * If ``MPD_HOST`` is not set, then look for a socket in ``${XDG_RUNTIME_DIR}/mpd/socket``
+  * If there is no socket use ``localhost``
+  * If ``MPD_PORT`` is not set, then use ``6600``
+  * If ``MPD_TIMEOUT`` is not set, then uses :py:obj:`musicpd.CONNECTION_TIMEOUT`
+
 Command lists
 -------------
 
