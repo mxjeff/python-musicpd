@@ -68,6 +68,13 @@ class testEnvVar(unittest.TestCase):
         self.assertEqual(client.pwd, 'pa55w04d')
         self.assertEqual(client.host, 'localhost')
 
+        # Test badly formatted MPD_HOST
+        os.environ['MPD_HOST'] = '@'
+        with mock.patch('os.path.exists', return_value=False):
+            client = musicpd.MPDClient()
+        self.assertEqual(client.pwd, None)
+        self.assertEqual(client.host, 'localhost')
+
         # Test unix socket extraction
         os.environ['MPD_HOST'] = 'pa55w04d@/unix/sock'
         client = musicpd.MPDClient()
