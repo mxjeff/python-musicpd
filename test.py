@@ -552,5 +552,35 @@ class TestMPDClient(unittest.TestCase):
         self.assertMPDReceived('command_list_end\n')
 
 
+class testConnection(unittest.TestCase):
+
+    def test_exposing_fileno(self):
+        with mock.patch('musicpd.socket') as socket_mock:
+            sock = mock.MagicMock(name='socket')
+            socket_mock.socket.return_value = sock
+            cli = musicpd.MPDClient()
+            cli.connect()
+            cli.fileno()
+            cli._sock.fileno.assert_called_with()
+
+    def test_connect_abstract(self):
+        os.environ['MPD_HOST'] = '@abstract'
+        with mock.patch('musicpd.socket') as socket_mock:
+            sock = mock.MagicMock(name='socket')
+            socket_mock.socket.return_value = sock
+            cli = musicpd.MPDClient()
+            cli.connect()
+            sock.connect.assert_called_with('\0abstract')
+
+    def test_connect_unix(self):
+        os.environ['MPD_HOST'] = '/run/mpd/socket'
+        with mock.patch('musicpd.socket') as socket_mock:
+            sock = mock.MagicMock(name='socket')
+            socket_mock.socket.return_value = sock
+            cli = musicpd.MPDClient()
+            cli.connect()
+            sock.connect.assert_called_with('/run/mpd/socket')
+
+
 if __name__ == '__main__':
     unittest.main()
