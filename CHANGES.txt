@@ -4,13 +4,14 @@ python-musicpd Changes List
 Changes in 0.6.0 UNRELEASED
 ---------------------------
 
-* Switch back to gztar (even though official python doc mention xztar, PEP 527
-  considers only gztar and zip)
 * Add binarylimit command
 * Add getvol command
 * Honor MPD_TIMEOUT environment variable
 * Default connection timeout is now 30s (previously 5s)
 * Add abstract unix socket support
+* Add tests, improved coverage
+* Switch back to gztar (even though official python doc mention xztar, PEP 527
+  considers only gztar and zip)
 
 
 Changes in 0.5.1
