@@ -351,6 +351,16 @@ class TestMPDClient(unittest.TestCase):
         self.assertMPDReceived('stats\n')
         self.assertIsInstance(stats, dict)
 
+        output = ['outputid: 0\n',
+                  'outputname: default detected output\n',
+                  'plugin: sndio\n',
+                  'outputenabled: 1\n']
+        self.MPDWillReturn(*output, 'OK\n')
+        outputs = self.client.outputs()
+        self.assertMPDReceived('outputs\n')
+        self.assertIsInstance(outputs, list)
+        self.assertEqual([{'outputid': '0', 'outputname': 'default detected output', 'plugin': 'sndio', 'outputenabled': '1'}], outputs)
+
     def test_fetch_songs(self):
         self.MPDWillReturn('file: my-song.ogg\n', 'Pos: 0\n', 'Id: 66\n', 'OK\n')
         playlist = self.client.playlistinfo()
@@ -416,8 +426,6 @@ class TestMPDClient(unittest.TestCase):
         self.assertRaises(musicpd.CommandError, self.client.noidle)
 
     def test_client_to_client(self):
-        # client to client is at this time in beta!
-
         self.MPDWillReturn('OK\n')
         self.assertIsNone(self.client.subscribe("monty"))
         self.assertMPDReceived('subscribe "monty"\n')
@@ -521,6 +529,12 @@ class TestMPDClient(unittest.TestCase):
         # Reading albumart / offset 0 should return the data
         res = self.client.albumart('muse/Raised Fist/2002-Dedication/', 0)
         self.assertEqual(res.get('data'), data)
+
+    def test_reading_binary(self):
+        # readpicture when there are no picture returns empty object
+        self.MPDWillReturnBinary([b'OK\n'])
+        res = self.client.readpicture('muse/Raised Fist/2002-Dedication/', 0)
+        self.assertEqual(res, {})
 
     def test_command_list(self):
         self.MPDWillReturn('updating_db: 42\n',
