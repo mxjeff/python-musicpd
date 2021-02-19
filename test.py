@@ -132,7 +132,7 @@ class testEnvVar(unittest.TestCase):
 class TestMPDClient(unittest.TestCase):
 
     longMessage = True
-    # last sync: musicpd 0.4.2 unreleased / Mon Nov 17 21:45:22 CET 2014
+    # last sync: musicpd 0.6.0 unreleased / Fri Feb 19 15:34:53 CET 2021
     commands = {
             # Status Commands
             'clearerror':         'nothing',
@@ -149,6 +149,7 @@ class TestMPDClient(unittest.TestCase):
             'random':             'nothing',
             'repeat':             'nothing',
             'setvol':             'nothing',
+            'getvol':             'object',
             'single':             'nothing',
             'replay_gain_mode':   'nothing',
             'replay_gain_status': 'item',
@@ -163,7 +164,7 @@ class TestMPDClient(unittest.TestCase):
             'seekid':             'nothing',
             'seekcur':            'nothing',
             'stop':               'nothing',
-            # Playlist Commands
+            # Queue Commands
             'add':                'nothing',
             'addid':              'item',
             'clear':              'nothing',
@@ -199,19 +200,23 @@ class TestMPDClient(unittest.TestCase):
             'rm':                 'nothing',
             'save':               'nothing',
             # Database Commands
+            'albumart':           'composite',
             'count':              'object',
+            'getfingerprint':     'object',
             'find':               'songs',
             'findadd':            'nothing',
             'list':               'list',
             'listall':            'database',
             'listallinfo':        'database',
+            'listfiles':          'database',
             'lsinfo':             'database',
+            'readcomments':       'object',
+            'readpicture':        'composite',
             'search':             'songs',
             'searchadd':          'nothing',
             'searchaddpl':        'nothing',
             'update':             'item',
             'rescan':             'item',
-            'readcomments':       'object',
             # Mounts and neighbors
             'mount':              'nothing',
             'unmount':            'nothing',
@@ -228,20 +233,28 @@ class TestMPDClient(unittest.TestCase):
             'kill':               None,
             'password':           'nothing',
             'ping':               'nothing',
+            'binarylimit':        'nothing',
+            'tagtypes':           'list',
+            'tagtypes disable':   'nothing',
+            'tagtypes enable':    'nothing',
+            'tagtypes clear':     'nothing',
+            'tagtypes all':       'nothing',
             # Partition Commands
             'partition':          'nothing',
             'listpartitions':     'list',
             'newpartition':       'nothing',
+            'delpartition':       'nothing',
+            'moveoutput':         'nothing',
             # Audio Output Commands
             'disableoutput':      'nothing',
             'enableoutput':       'nothing',
             'toggleoutput':       'nothing',
             'outputs':            'outputs',
+            'outputset':          'nothing',
             # Reflection Commands
             'config':             'object',
             'commands':           'list',
             'notcommands':        'list',
-            'tagtypes':           'list',
             'urlhandlers':        'list',
             'decoders':           'plugins',
             # Client to Client
