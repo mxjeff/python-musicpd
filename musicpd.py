@@ -569,7 +569,7 @@ class MPDClient:
             obj['data'] = self._read_binary(amount)
         except IOError as err:
             raise ConnectionError('Error reading binary content: %s' % err)
-        if len(obj['data']) != amount:
+        if len(obj['data']) != amount:  # can we ever get there?
             raise ConnectionError('Error reading binary content: '
                       'Expects %sB, got %s' % (amount, len(obj['data'])))
         # Fetches trailing new line
@@ -709,6 +709,9 @@ class MPDClient:
         self._reset()
 
     def fileno(self):
+        """Return the socket’s file descriptor (a small integer).
+        This is useful with :py:obj:`select.select`.
+        """
         if self._sock is None:
             raise ConnectionError("Not connected")
         return self._sock.fileno()
