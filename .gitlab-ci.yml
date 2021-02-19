@@ -7,14 +7,27 @@ stages:
   - test
   - build
 
-test:
+.test:
   stage: test
   script:
   - pip install pytest-cov
   - py.test -q --cov=musicpd test.py
-  coverage: '/musicpd.py\s+\d+\s+\d+\s+(\d+)%/'
   only:
     - pushes
+
+test-py3.9:
+  extends: ".test"
+  image: "python:3.9"
+  coverage: '/musicpd.py\s+\d+\s+\d+\s+(\d+)%/'
+
+test-py3.8:
+  extends: ".test"
+  image: "python:3.8"
+
+test-py3.7:
+  extends: ".test"
+  image: "python:3.7"
+
 
 build:
   stage: build
