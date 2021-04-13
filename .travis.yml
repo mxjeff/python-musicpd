@@ -6,5 +6,7 @@ branches:
 
 python:
   - "3.7"
+  - "3.8"
+  - "3.9"
 
 script: python3 setup.py test
