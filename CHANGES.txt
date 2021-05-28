@@ -1,8 +1,14 @@
 python-musicpd Changes List
 ===========================
 
-Changes in 0.6.0 UNRELEASED
----------------------------
+Changes in 0.6.1
+----------------
+
+* …
+
+
+Changes in 0.6.0
+----------------
 
 * Add binarylimit command
 * Add getvol command

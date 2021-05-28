@@ -28,7 +28,7 @@ HELLO_PREFIX = "OK MPD "
 ERROR_PREFIX = "ACK "
 SUCCESS = "OK"
 NEXT = "list_OK"
-VERSION = '0.6.0'
+VERSION = '0.6.1'
 #: seconds before a tcp connection attempt times out (overriden by MPD_TIMEOUT env. var.)
 CONNECTION_TIMEOUT = 30
 
