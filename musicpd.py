@@ -406,6 +406,8 @@ class MPDClient:
                 parts.append('{0!s}'.format(Range(arg)))
             else:
                 parts.append('"%s"' % escape(str(arg)))
+        if '\n' in ' '.join(parts):
+            raise CommandError('new line found in the command!')
         self._write_line(" ".join(parts))
 
     def _read_binary(self, amount):

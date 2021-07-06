@@ -4,7 +4,7 @@ python-musicpd Changes List
 Changes in 0.6.1
 ----------------
 
-* …
+* Raises an exception if command contains '\n'
 
 
 Changes in 0.6.0
