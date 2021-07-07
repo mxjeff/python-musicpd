@@ -1,11 +1,12 @@
 python-musicpd Changes List
 ===========================
 
-Changes in 0.6.1
+Changes in 0.7.0
 ----------------
 
+* Add socket timeout (disabled by default)
+* MPD_TIMEOUT is set for both tcp and unix sockets
 * Raises an exception if command contains '\n'
-
 
 Changes in 0.6.0
 ----------------

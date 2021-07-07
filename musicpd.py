@@ -28,10 +28,12 @@ HELLO_PREFIX = "OK MPD "
 ERROR_PREFIX = "ACK "
 SUCCESS = "OK"
 NEXT = "list_OK"
-VERSION = '0.6.1'
-#: seconds before a tcp connection attempt times out (overriden by MPD_TIMEOUT env. var.)
+VERSION = '0.7.0'
+#: Seconds before a connection attempt times out
+#: (overriden by MPD_TIMEOUT env. var.)
 CONNECTION_TIMEOUT = 30
-
+#: Socket timeout in second (Default is None for no timeout)
+SOCKET_TIMEOUT = None
 
 
 def iterator_wrapper(func):
@@ -157,6 +159,11 @@ class MPDClient:
 
     def __init__(self):
         self.iterate = False
+        #: Socket timeout value in seconds
+        self._socket_timeout = SOCKET_TIMEOUT
+        #: Current connection timeout value, defaults to
+        #: :py:attr:`musicpd.MPD_TIMEOUT` or env. var. ``MPD_TIMEOUT`` if provided
+        self.mpd_timeout = None
         self._reset()
         self._commands = {
             # Status Commands
@@ -324,7 +331,7 @@ class MPDClient:
         self.mpd_timeout = os.getenv('MPD_TIMEOUT')
         if self.mpd_timeout and self.mpd_timeout.isdigit():
             self.mpd_timeout = int(self.mpd_timeout)
-        else:  # Use 30s default even is MPD_TIMEOUT carries gargage
+        else:  # Use CONNECTION_TIMEOUT as default even if MPD_TIMEOUT carries gargage
             self.mpd_timeout = CONNECTION_TIMEOUT
 
     def __getattr__(self, attr):
@@ -611,7 +618,9 @@ class MPDClient:
         if path.startswith('@'):
             path = '\0'+path[1:]
         sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+        sock.settimeout(self.mpd_timeout)
         sock.connect(path)
+        sock.settimeout(self.socket_timeout)
         return sock
 
     def _connect_tcp(self, host, port):
@@ -629,7 +638,7 @@ class MPDClient:
                 sock = socket.socket(af, socktype, proto)
                 sock.settimeout(self.mpd_timeout)
                 sock.connect(sa)
-                sock.settimeout(None)
+                sock.settimeout(self.socket_timeout)
                 return sock
             except socket.error as socket_err:
                 err = socket_err
@@ -658,14 +667,18 @@ class MPDClient:
 
         The connect method honors MPD_HOST/MPD_PORT environment variables.
 
-        The underlying tcp socket also honors MPD_TIMEOUT environment variable
-        and defaults to :py:obj:`musicpd.CONNECTION_TIMEOUT`.
+        The underlying socket also honors MPD_TIMEOUT environment variable
+        and defaults to :py:obj:`musicpd.CONNECTION_TIMEOUT` (connect command only).
+
+        If you want to have a timeout for each command once you got connected,
+        set its value in :py:obj:`MPDClient.socket_timeout` (in second) or at
+        module level in :py:obj:`musicpd.SOCKET_TIMEOUT`.
 
         .. note:: Default host/port
 
           If host evaluate to :py:obj:`False`
            * use ``MPD_HOST`` environment variable if set, extract password if present,
-           * else looks for a existing file in ``${XDG_RUNTIME_DIR:-/run/}/mpd/socket``
+           * else looks for an existing file in ``${XDG_RUNTIME_DIR:-/run/}/mpd/socket``
            * else set host to ``localhost``
 
           If port evaluate to :py:obj:`False`
@@ -694,6 +707,18 @@ class MPDClient:
         except:
             self.disconnect()
             raise
+
+    @property
+    def socket_timeout(self):
+        """Socket timeout in second (defaults to :py:obj:`SOCKET_TIMEOUT`).
+        Use None to disable socket timout."""
+        return self._socket_timeout
+
+    @socket_timeout.setter
+    def socket_timeout(self, timeout):
+        self._socket_timeout = timeout
+        if getattr(self._sock, 'settimeout', False):
+            self._sock.settimeout(self._socket_timeout)
 
     def disconnect(self):
         """Closes the MPD connection.

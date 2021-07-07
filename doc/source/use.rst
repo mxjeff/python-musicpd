@@ -35,7 +35,7 @@ The client honors the following environment variables:
     | For abstract socket use "@" as prefix : "`@socket`" and then with a password  "`pass@@socket`"
     | Regular unix socket are set with an absolute path: "`/run/mpd/socket`"
   * ``MPD_PORT`` MPD port, relevant for TCP socket only, ie with :abbr:`FQDN (fully qualified domain name)` defined host
-  * ``MPD_TIMEOUT`` timeout for connecting to MPD and for waiting for MPD’s response in seconds
+  * ``MPD_TIMEOUT`` timeout for connecting to MPD and waiting for MPD’s response in seconds
   * ``XDG_RUNTIME_DIR`` path to look for potential socket: ``${XDG_RUNTIME_DIR}/mpd/socket``
 
 Defaults settings
@@ -171,5 +171,69 @@ You can also use `readpicture` command to fetch embedded picture:
     >>> cli.disconnect()
 
 Refer to `MPD protocol documentation`_ for the meaning of `binary`, `size` and `data`.
+
+Socket timeout
+--------------
+
+.. note::
+  When the timeout is reached it raises a :py:obj:`socket.timeout` exception. An :py:obj:`OSError` subclass.
+
+A timeout is used for the initial MPD connection (``connect`` command), then
+the socket is put in blocking mode with no timeout. Its value is set in
+:py:obj:`musicpd.CONNECTION_TIMEOUT` at module level and
+:py:obj:`musicpd.MPDClient.mpd_timeout` in MPDClient instances . However it
+is possible to set socket timeout for all command setting
+:py:obj:`musicpd.MPDClient.socket_timeout` attribute to a value in second.
+
+Having ``socket_timeout`` enabled can help to detect "half-open connection".
+For instance loosing connectivity without the server explicitly closing the
+connection (switching network interface ethernet/wifi, router down, etc…).
+
+**Nota bene**: with ``socket_timeout`` enabled each command sent to MPD might
+timeout. A couple of seconds should be enough for commands to complete except
+for the special case of ``idle`` command which by definition *“ waits until
+there is a noteworthy change in one or more of MPD’s subsystems.”* (cf. `MPD
+protocol documentation`_).
+
+Here is a solution to use ``idle`` command with ``socket_timeout``:
+
+.. code-block:: python
+
+    import musicpd
+    import select
+    import socket
+
+    cli = musicpd.MPDClient()
+    try:
+        cli.socket_timeout = 10  # seconds
+        select_timeout = 5 # second
+        cli.connect()
+        while True:
+            cli.send_idle()  # use send_ API to avoid blocking on read
+            _read, _, _ = select.select([cli], [], [], select_timeout)
+            if _read:  # tries to read response
+                ret = cli.fetch_idle()
+                print(', '.join(ret))  # Do something
+            else: # cancels idle
+                cli.noidle()
+    except socket.timeout as err:
+        print(f'{err} (timeout {cli.socket_timeout})')
+    except KeyboardInterrupt:
+        pass
+
+Some explanations:
+
+  * First launch a non blocking ``idle`` command. This call do not wait for a
+    response to avoid socket timeout waiting for an MPD event.
+  * ``select`` waits for something to read on the socket (the idle response
+    in this case), returns after ``select_timeout`` seconds anyway.
+  * In case there is something to read read it using ``fetch_idle``
+  * Nothing to read, cancel idle with ``noidle``
+
+All three commands in the while loop (send_idle, fetch_idle, noidle) are not
+triggering a socket timeout unless the connection is actually lost (actually it
+could also be that MPD took to much time to answer, but MPD taking more than a
+couple of seconds for these commands should never occur).
+
 
 .. _MPD protocol documentation: http://www.musicpd.org/doc/protocol/
