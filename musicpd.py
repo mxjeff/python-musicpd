@@ -162,7 +162,7 @@ class MPDClient:
         #: Socket timeout value in seconds
         self._socket_timeout = SOCKET_TIMEOUT
         #: Current connection timeout value, defaults to
-        #: :py:attr:`musicpd.MPD_TIMEOUT` or env. var. ``MPD_TIMEOUT`` if provided
+        #: :py:obj:`CONNECTION_TIMEOUT` or env. var. ``MPD_TIMEOUT`` if provided
         self.mpd_timeout = None
         self._reset()
         self._commands = {
