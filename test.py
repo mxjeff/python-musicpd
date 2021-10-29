@@ -10,21 +10,13 @@ Test suite highly borrowed^Wsteal from python-mpd2 [0] project.
 
 import itertools
 import os
-import sys
 import types
 import unittest
+import unittest.mock as mock
 import warnings
 
 import musicpd
 
-try:
-    import unittest.mock as mock
-except ImportError:
-    try:
-        import mock
-    except ImportError:
-        print("Please install mock from PyPI to run tests!")
-        sys.exit(1)
 
 # show deprecation warnings
 warnings.simplefilter('default')
@@ -123,7 +115,7 @@ class testEnvVar(unittest.TestCase):
         client = musicpd.MPDClient()
         self.assertEqual(client.mpd_timeout,
                          musicpd.CONNECTION_TIMEOUT,
-                         'Garbage\'s not silently ignore to use default value')
+                         'Garbage is silently ignore to use default value')
         os.environ['MPD_TIMEOUT'] = '42'
         client = musicpd.MPDClient()
         self.assertEqual(client.mpd_timeout, 42)
