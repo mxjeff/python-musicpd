@@ -551,6 +551,13 @@ class TestMPDClient(unittest.TestCase):
         self.client.command_list_end()
         self.assertMPDReceived('command_list_end\n')
 
+    def test_two_word_commands(self):
+        self.MPDWillReturn('OK\n')
+        self.client.tagtypes_clear()
+        self.assertMPDReceived('tagtypes clear\n')
+        self.MPDWillReturn('OK\n')
+        with self.assertRaises(AttributeError):
+            self.client.foo_bar()
 
 class testConnection(unittest.TestCase):
 
