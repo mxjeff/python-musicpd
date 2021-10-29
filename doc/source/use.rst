@@ -218,6 +218,10 @@ Here is a solution to use ``idle`` command with ``socket_timeout``:
                 cli.noidle()
     except socket.timeout as err:
         print(f'{err} (timeout {cli.socket_timeout})')
+    except (OSError, musicpd.MPDError) as err:
+        print(f'{err!r}')
+        if cli._sock is not None:
+            cli.disconnect()
     except KeyboardInterrupt:
         pass
 
@@ -237,3 +241,4 @@ couple of seconds for these commands should never occur).
 
 
 .. _MPD protocol documentation: http://www.musicpd.org/doc/protocol/
+.. vim: spell spelllang=en
