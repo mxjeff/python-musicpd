@@ -1,6 +1,11 @@
 python-musicpd Changes List
 ===========================
 
+Changes in 0.8.0
+----------------
+
+* Need python 3.6 minimum (modernize code)
+
 Changes in 0.7.0
 ----------------
 

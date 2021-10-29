@@ -17,8 +17,6 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with python-musicpd.  If not, see <http://www.gnu.org/licenses/>.
 
-# pylint: disable=missing-docstring
-
 import socket
 import os
 
@@ -28,7 +26,7 @@ HELLO_PREFIX = "OK MPD "
 ERROR_PREFIX = "ACK "
 SUCCESS = "OK"
 NEXT = "list_OK"
-VERSION = '0.7.0'
+VERSION = '0.8.0b0'
 #: Seconds before a connection attempt times out
 #: (overriden by MPD_TIMEOUT env. var.)
 CONNECTION_TIMEOUT = 30
@@ -107,8 +105,8 @@ class Range:
         for index in self.tpl:
             try:
                 index = int(index)
-            except (TypeError, ValueError):
-                raise CommandError('Not a tuple of int')
+            except (TypeError, ValueError) as err:
+                raise CommandError('Not a tuple of int') from err
 
 
 class _NotConnected:
@@ -116,7 +114,7 @@ class _NotConnected:
     def __getattr__(self, attr):
         return self._dummy
 
-    def _dummy(*args):
+    def _dummy(self, *args):
         raise ConnectionError("Not connected")
 
 
@@ -349,8 +347,8 @@ class MPDClient:
         if command not in self._commands:
             command = command.replace("_", " ")
             if command not in self._commands:
-                raise AttributeError("'%s' object has no attribute '%s'" %
-                                     (self.__class__.__name__, attr))
+                cls = self.__class__.__name__
+                raise AttributeError(f"'{cls}' object has no attribute '{attr}'")
         return lambda *args: wrapper(command, args)
 
     def _send(self, command, args):
@@ -362,36 +360,31 @@ class MPDClient:
         if retval is not None:
             self._pending.append(command)
 
-    def _fetch(self, command, args=None):
+    def _fetch(self, command, args=None):  # pylint: disable=unused-argument
+        cmd_fmt = command.replace(" ", "_")
         if self._command_list is not None:
-            raise CommandListError("Cannot use fetch_%s in a command list" %
-                                   command.replace(" ", "_"))
+            raise CommandListError(f"Cannot use fetch_{cmd_fmt} in a command list")
         if self._iterating:
-            raise IteratingError("Cannot use fetch_%s while iterating" %
-                                 command.replace(" ", "_"))
+            raise IteratingError(f"Cannot use fetch_{cmd_fmt} while iterating")
         if not self._pending:
             raise PendingCommandError("No pending commands to fetch")
         if self._pending[0] != command:
-            raise PendingCommandError("'%s' is not the currently "
-                                      "pending command" % command)
+            raise PendingCommandError(f"'{command}' is not the currently pending command")
         del self._pending[0]
         retval = self._commands[command]
         if callable(retval):
             return retval()
         return retval
 
-    def _execute(self, command, args):
+    def _execute(self, command, args):  # pylint: disable=unused-argument
         if self._iterating:
-            raise IteratingError("Cannot execute '%s' while iterating" %
-                                 command)
+            raise IteratingError(f"Cannot execute '{command}' while iterating")
         if self._pending:
-            raise PendingCommandError(
-                "Cannot execute '%s' with pending commands" % command)
+            raise PendingCommandError(f"Cannot execute '{command}' with pending commands")
         retval = self._commands[command]
         if self._command_list is not None:
             if not callable(retval):
-                raise CommandListError(
-                    "'%s' not allowed in command list" % command)
+                raise CommandListError(f"'{command}' not allowed in command list")
             self._write_command(command, args)
             self._command_list.append(retval)
         else:
@@ -399,9 +392,10 @@ class MPDClient:
             if callable(retval):
                 return retval()
             return retval
+        return None
 
     def _write_line(self, line):
-        self._wfile.write("%s\n" % line)
+        self._wfile.write(f"{line!s}\n")
         self._wfile.flush()
 
     def _write_command(self, command, args=None):
@@ -442,20 +436,20 @@ class MPDClient:
             raise CommandError(error)
         if self._command_list is not None:
             if line == NEXT:
-                return
+                return None
             if line == SUCCESS:
-                raise ProtocolError("Got unexpected '%s'" % SUCCESS)
+                raise ProtocolError(f"Got unexpected '{SUCCESS}'")
         elif line == SUCCESS:
-            return
+            return None
         return line
 
     def _read_pair(self, separator, binary=False):
         line = self._read_line(binary=binary)
         if line is None:
-            return
+            return None
         pair = line.split(separator, 1)
         if len(pair) < 2:
-            raise ProtocolError("Could not parse pair: '%s'" % line)
+            raise ProtocolError(f"Could not parse pair: '{line}'")
         return pair
 
     def _read_pairs(self, separator=": ", binary=False):
@@ -469,8 +463,7 @@ class MPDClient:
         for key, value in self._read_pairs():
             if key != seen:
                 if seen is not None:
-                    raise ProtocolError("Expected key '%s', got '%s'" %
-                                        (seen, key))
+                    raise ProtocolError(f"Expected key '{seen}', got '{key}'")
                 seen = key
             yield value
 
@@ -509,12 +502,12 @@ class MPDClient:
     def _fetch_nothing(self):
         line = self._read_line()
         if line is not None:
-            raise ProtocolError("Got unexpected return value: '%s'" % line)
+            raise ProtocolError(f"Got unexpected return value: '{line}'")
 
     def _fetch_item(self):
         pairs = list(self._read_pairs())
         if len(pairs) != 1:
-            return
+            return None
         return pairs[0][1]
 
     @iterator_wrapper
@@ -577,10 +570,11 @@ class MPDClient:
         try:
             obj['data'] = self._read_binary(amount)
         except IOError as err:
-            raise ConnectionError('Error reading binary content: %s' % err)
-        if len(obj['data']) != amount:  # can we ever get there?
+            raise ConnectionError(f'Error reading binary content: {err}') from err
+        data_bytes = len(obj['data'])
+        if data_bytes != amount:  # can we ever get there?
             raise ConnectionError('Error reading binary content: '
-                      'Expects %sB, got %s' % (amount, len(obj['data'])))
+                    f'Expects {amount}B, got {data_bytes}')
         # Fetches trailing new line
         self._read_line(binary=True)
         # Fetches SUCCESS code
@@ -597,7 +591,7 @@ class MPDClient:
             raise ConnectionError("Connection lost while reading MPD hello")
         line = line.rstrip("\n")
         if not line.startswith(HELLO_PREFIX):
-            raise ProtocolError("Got invalid MPD hello: '%s'" % line)
+            raise ProtocolError(f"Got invalid MPD hello: '{line}'")
         self.mpd_version = line[len(HELLO_PREFIX):].strip()
 
     def _reset(self):
@@ -612,8 +606,7 @@ class MPDClient:
 
     def _connect_unix(self, path):
         if not hasattr(socket, "AF_UNIX"):
-            raise ConnectionError(
-                "Unix domain sockets not supported on this platform")
+            raise ConnectionError("Unix domain sockets not supported on this platform")
         # abstract socket
         if path.startswith('@'):
             path = '\0'+path[1:]
@@ -646,14 +639,12 @@ class MPDClient:
                     sock.close()
         if err is not None:
             raise ConnectionError(str(err))
-        else:
-            raise ConnectionError("getaddrinfo returns an empty list")
+        raise ConnectionError("getaddrinfo returns an empty list")
 
     def noidle(self):
         # noidle's special case
         if not self._pending or self._pending[0] != 'idle':
-            raise CommandError(
-                'cannot send noidle if send_idle was not called')
+            raise CommandError('cannot send noidle if send_idle was not called')
         del self._pending[0]
         self._write_command("noidle")
         return self._fetch_list()
@@ -749,8 +740,7 @@ class MPDClient:
         if self._iterating:
             raise IteratingError("Cannot begin command list while iterating")
         if self._pending:
-            raise PendingCommandError("Cannot begin command list "
-                                      "with pending commands")
+            raise PendingCommandError("Cannot begin command list with pending commands")
         self._write_command("command_list_ok_begin")
         self._command_list = []
 
