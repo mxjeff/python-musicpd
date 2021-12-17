@@ -726,6 +726,13 @@ class MPDClient:
             self._sock.close()
         self._reset()
 
+    def __enter__(self):
+        self.connect()
+        return self
+
+    def __exit__(self, exception_type, exception_value, exception_traceback):
+        self.disconnect()
+
     def fileno(self):
         """Return the socket’s file descriptor (a small integer).
         This is useful with :py:obj:`select.select`.

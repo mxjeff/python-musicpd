@@ -593,6 +593,18 @@ class testException(unittest.TestCase):
             with self.assertRaises(musicpd.CommandError):
                 cli.find('(album == "foo\nbar")')
 
+class testContextManager(unittest.TestCase):
+
+    def test_enter_exit(self):
+        os.environ['MPD_HOST'] = '@abstract'
+        with mock.patch('musicpd.socket') as socket_mock:
+            sock = mock.MagicMock(name='socket')
+            socket_mock.socket.return_value = sock
+            cli = musicpd.MPDClient()
+            with cli as c:
+                sock.connect.assert_called_with('\0abstract')
+                sock.close.assert_not_called()
+            sock.close.assert_called()
 
 if __name__ == '__main__':
     unittest.main()
