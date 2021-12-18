@@ -24,6 +24,8 @@ them), and the functions used to parse their responses see :ref:`commands`.
 
 See the `MPD protocol documentation`_ for more details.
 
+.. _environment_variables:
+
 Environment variables
 ---------------------
 
@@ -38,13 +40,32 @@ The client honors the following environment variables:
   * ``MPD_TIMEOUT`` timeout for connecting to MPD and waiting for MPD’s response in seconds
   * ``XDG_RUNTIME_DIR`` path to look for potential socket: ``${XDG_RUNTIME_DIR}/mpd/socket``
 
-Defaults settings
------------------
+.. _default_settings:
+
+Default settings
+----------------
 
   * If ``MPD_HOST`` is not set, then look for a socket in ``${XDG_RUNTIME_DIR}/mpd/socket``
   * If there is no socket use ``localhost``
   * If ``MPD_PORT`` is not set, then use ``6600``
   * If ``MPD_TIMEOUT`` is not set, then uses :py:obj:`musicpd.CONNECTION_TIMEOUT`
+
+
+Context manager
+---------------
+
+Calling MPDClient in a context manager :py:obj:`musicpd.MPDClient.connect` is
+transparently called with :ref:`default setting<default_settings>` (use
+:ref:`environment variables<environment_variables>` to override defaults).
+Leaving the context manager :py:obj:`musicpd.MPDClient.disconnect` is called.
+
+.. code-block:: python
+
+    import os
+    os.environ['MPD_HOST'] = 'mpdhost'
+    with MPDClient() as c:
+        c.status()
+        c.next()
 
 Command lists
 -------------

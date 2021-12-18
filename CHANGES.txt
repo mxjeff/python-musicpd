@@ -5,6 +5,7 @@ Changes in 0.8.0
 ----------------
 
 * Need python 3.6 minimum (modernize code)
+* Add context management for MPDClient instance (Thanks Wonko der Verständige)
 
 Changes in 0.7.0
 ----------------
