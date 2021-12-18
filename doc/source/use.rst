@@ -122,7 +122,7 @@ Idle prefixed commands
 ----------------------
 
 Each command have a *send\_<CMD>* and a *fetch\_<CMD>* variant, which allows to
-send a MPD command and then fetch the result later.
+send a MPD command and then fetch the result later (non-blocking call).
 This is useful for the idle command:
 
 .. code-block:: python
@@ -142,6 +142,8 @@ This is useful for the idle command:
     >>> client.send_idle()
     >>> gobject.io_add_watch(client, gobject.IO_IN, callback)
     >>> gobject.MainLoop().run()
+
+See also use of :ref:`socket timeout<socket_timeout>` with idle command.
 
 Fetching binary content (cover art)
 -----------------------------------
@@ -192,6 +194,8 @@ You can also use `readpicture` command to fetch embedded picture:
     >>> cli.disconnect()
 
 Refer to `MPD protocol documentation`_ for the meaning of `binary`, `size` and `data`.
+
+.. _socket_timeout:
 
 Socket timeout
 --------------
@@ -257,7 +261,7 @@ Some explanations:
 
 All three commands in the while loop (send_idle, fetch_idle, noidle) are not
 triggering a socket timeout unless the connection is actually lost (actually it
-could also be that MPD took to much time to answer, but MPD taking more than a
+could also be that MPD took too much time to answer, but MPD taking more than a
 couple of seconds for these commands should never occur).
 
 
