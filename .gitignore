@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2012-2022  kaliko <kaliko@azylum.org>
+# SPDX-License-Identifier: GPL-3.0-or-later
 # python
 __pycache__
 *.pyc.

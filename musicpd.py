@@ -1,22 +1,11 @@
-# python-musicpd: Python MPD client library
-# Copyright (C) 2012-2021  kaliko <kaliko@azylum.org>
-# Copyright (C) 2021       Wonko der Verständige <wonko@hanstool.org>
-# Copyright (C) 2019       Naglis Jonaitis <naglis@mailbox.org>
-# Copyright (C) 2019       Bart Van Loon <bbb@bbbart.be>
-# Copyright (C) 2008-2010  J. Alexander Treuman <jat@spatialrift.net>
-#
-# python-musicpd is free software: you can redistribute it and/or modify
-# it under the terms of the GNU Lesser General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# python-musicpd is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU Lesser General Public License for more details.
-#
-# You should have received a copy of the GNU Lesser General Public License
-# along with python-musicpd.  If not, see <http://www.gnu.org/licenses/>.
+# SPDX-FileCopyrightText: 2012-2022  kaliko <kaliko@azylum.org>
+# SPDX-FileCopyrightText: 2021       Wonko der Verständige <wonko@hanstool.org>
+# SPDX-FileCopyrightText: 2019       Naglis Jonaitis <naglis@mailbox.org>
+# SPDX-FileCopyrightText: 2019       Bart Van Loon <bbb@bbbart.be>
+# SPDX-FileCopyrightText: 2008-2010  J. Alexander Treuman <jat@spatialrift.net>
+# SPDX-License-Identifier: GPL-3.0-or-later
+"""python-musicpd: Python Music Player Daemon client library"""
+
 
 import socket
 import os

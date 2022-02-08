@@ -1,4 +1,6 @@
 # coding: utf-8
+# SPDX-FileCopyrightText: 2018-2021  kaliko <kaliko@azylum.org>
+# SPDX-License-Identifier: GPL-3.0-or-later
 #
 # Python MPD Module documentation build configuration file, created by
 # sphinx-quickstart on Mon Mar 12 14:37:32 2018.

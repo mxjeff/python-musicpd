@@ -1,3 +1,6 @@
+.. SPDX-FileCopyrightText: 2018-2021  kaliko <kaliko@azylum.org>
+.. SPDX-License-Identifier: GPL-3.0-or-later
+
 .. include:: ../../README.rst
 
 Installation
