@@ -15,10 +15,14 @@ stages:
   only:
     - pushes
 
+test-py3.10:
+  extends: ".test"
+  image: "python:3.10"
+  coverage: '/musicpd.py\s+\d+\s+\d+\s+(\d+)%/'
+
 test-py3.9:
   extends: ".test"
   image: "python:3.9"
-  coverage: '/musicpd.py\s+\d+\s+\d+\s+(\d+)%/'
 
 test-py3.8:
   extends: ".test"
