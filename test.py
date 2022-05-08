@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 # SPDX-FileCopyrightText: 2012-2021  kaliko <kaliko@azylum.org>
-# SPDX-License-Identifier: GPL-3.0-or-later
+# SPDX-License-Identifier: LGPL-3.0-or-later
 # pylint: disable=missing-docstring
 """
 Test suite highly borrowed^Wsteal from python-mpd2 [0] project.

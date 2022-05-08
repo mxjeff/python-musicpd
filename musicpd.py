@@ -3,7 +3,7 @@
 # SPDX-FileCopyrightText: 2019       Naglis Jonaitis <naglis@mailbox.org>
 # SPDX-FileCopyrightText: 2019       Bart Van Loon <bbb@bbbart.be>
 # SPDX-FileCopyrightText: 2008-2010  J. Alexander Treuman <jat@spatialrift.net>
-# SPDX-License-Identifier: GPL-3.0-or-later
+# SPDX-License-Identifier: LGPL-3.0-or-later
 """python-musicpd: Python Music Player Daemon client library"""
 
 
