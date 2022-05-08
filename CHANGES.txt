@@ -1,6 +1,11 @@
 python-musicpd Changes List
 ===========================
 
+Changes in 0.9.0
+----------------
+
+ * 
+
 Changes in 0.8.0
 ----------------
 
