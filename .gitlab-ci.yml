@@ -15,6 +15,10 @@ stages:
   only:
     - pushes
 
+test-py3.11:
+  extends: ".test"
+  image: "python:3.11"
+
 test-py3.10:
   extends: ".test"
   image: "python:3.10"
