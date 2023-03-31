@@ -5,6 +5,7 @@ Changes in 0.9.0
 ----------------
 
  * Use right SPDX identifier for license headers
+ * mpd_version attribute init to empty string instead of None
 
 Changes in 0.8.0
 ----------------

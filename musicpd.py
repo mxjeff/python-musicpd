@@ -152,6 +152,10 @@ class MPDClient:
         #: Current connection timeout value, defaults to
         #: :py:obj:`CONNECTION_TIMEOUT` or env. var. ``MPD_TIMEOUT`` if provided
         self.mpd_timeout = None
+        self.mpd_version = ''
+        """Protocol version as exposed by the server as a :py:obj:`str`
+
+        .. note:: This is the version of the protocol spoken, not the real version of the daemon."""
         self._reset()
         self._commands = {
             # Status Commands
@@ -585,7 +589,7 @@ class MPDClient:
         self.mpd_version = line[len(HELLO_PREFIX):].strip()
 
     def _reset(self):
-        self.mpd_version = None
+        self.mpd_version = ''
         self._iterating = False
         self._pending = []
         self._command_list = None
