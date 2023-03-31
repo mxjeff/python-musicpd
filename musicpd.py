@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2012-2022  kaliko <kaliko@azylum.org>
+# SPDX-FileCopyrightText: 2012-2023  kaliko <kaliko@azylum.org>
 # SPDX-FileCopyrightText: 2021       Wonko der Verständige <wonko@hanstool.org>
 # SPDX-FileCopyrightText: 2019       Naglis Jonaitis <naglis@mailbox.org>
 # SPDX-FileCopyrightText: 2019       Bart Van Loon <bbb@bbbart.be>
