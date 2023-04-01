@@ -299,10 +299,11 @@ class MPDClient:
         self.host = 'localhost'
         self.pwd = None
         self.port = os.getenv('MPD_PORT', '6600')
-        if os.getenv('MPD_HOST'):
+        _host = os.getenv('MPD_HOST', '')
+        if _host:
             # If password is set: MPD_HOST=pass@host
-            if '@' in os.getenv('MPD_HOST'):
-                mpd_host_env = os.getenv('MPD_HOST').split('@', 1)
+            if '@' in _host:
+                mpd_host_env = _host.split('@', 1)
                 if mpd_host_env[0]:
                     # A password is actually set
                     self.pwd = mpd_host_env[0]
@@ -313,16 +314,16 @@ class MPDClient:
                     self.host = '@'+mpd_host_env[1]
             else:
                 # MPD_HOST is a plain host
-                self.host = os.getenv('MPD_HOST')
+                self.host = _host
         else:
             # Is socket there
             xdg_runtime_dir = os.getenv('XDG_RUNTIME_DIR', '/run')
             rundir = os.path.join(xdg_runtime_dir, 'mpd/socket')
             if os.path.exists(rundir):
                 self.host = rundir
-        self.mpd_timeout = os.getenv('MPD_TIMEOUT')
-        if self.mpd_timeout and self.mpd_timeout.isdigit():
-            self.mpd_timeout = int(self.mpd_timeout)
+        _mpd_timeout = os.getenv('MPD_TIMEOUT', '')
+        if _mpd_timeout.isdigit():
+            self.mpd_timeout = int(_mpd_timeout)
         else:  # Use CONNECTION_TIMEOUT as default even if MPD_TIMEOUT carries gargage
             self.mpd_timeout = CONNECTION_TIMEOUT
 
