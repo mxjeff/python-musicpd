@@ -419,6 +419,12 @@ class TestMPDClient(unittest.TestCase):
         self.client.send_status()
         self.assertRaises(musicpd.CommandError, self.client.noidle)
 
+    def test_send_noidle_calls_noidle(self):
+        self.MPDWillReturn('OK\n') # nothing changed after idle
+        self.client.send_idle()
+        self.client.send_noidle()
+        self.assertMPDReceived('noidle\n')
+
     def test_client_to_client(self):
         self.MPDWillReturn('OK\n')
         self.assertIsNone(self.client.subscribe("monty"))
