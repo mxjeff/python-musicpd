@@ -1,4 +1,4 @@
-.. SPDX-FileCopyrightText: 2018-2021  kaliko <kaliko@azylum.org>
+.. SPDX-FileCopyrightText: 2018-2023  kaliko <kaliko@azylum.org>
 .. SPDX-License-Identifier: LGPL-3.0-or-later
 
 Using the client library
@@ -86,15 +86,18 @@ Command lists are also supported using `command_list_ok_begin()` and
 Ranges
 ------
 
-Provide a 2-tuple as argument for command supporting ranges (cf. `MPD protocol documentation`_ for more details).
-Possible ranges are: "START:END", "START:" and ":" :
+Some commands (e.g. delete) allow specifying a range in the form `"START:END"` (cf. `MPD protocol documentation`_ for more details).
+
+Possible ranges are: `"START:END"`, `"START:"` and `":"` :
+
+Instead of giving the plain string as `"START:END"`, you **can** provide a :py:obj:`tuple` as `(START,END)`. The module is then ensuring the format is correct and raises an :py:obj:`musicpd.CommandError` exception otherwise. Empty start or end can be specified as en empty string `''` or :py:obj:`None`.
 
 .. code-block:: python
 
     # An intelligent clear
     # clears played track in the queue, currentsong included
     pos = client.currentsong().get('pos', 0)
-    # the 2-tuple range object accepts str, no need to convert to int
+    # the range object accepts str, no need to convert to int
     client.delete((0, pos))
     # missing end interpreted as highest value possible, pay attention still need a tuple.
     client.delete((pos,))  # purge queue from current to the end
@@ -108,6 +111,8 @@ as a single colon as argument (i.e. sending just ":"):
     client.rangeid(())  # send an empty tuple
 
 Empty start in range (i.e. ":END") are not possible and will raise a CommandError.
+
+Remember the of the tuple is optional, range can still be specified as single string `START:END`. In case of malformed range a CommandError is still raised.
 
 Iterators
 ----------

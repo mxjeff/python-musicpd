@@ -75,28 +75,42 @@ class Range:
 
     def __init__(self, tpl):
         self.tpl = tpl
+        self.lower = ''
+        self.upper = ''
         self._check()
 
     def __str__(self):
-        if len(self.tpl) == 0:
-            return ':'
-        if len(self.tpl) == 1:
-            return '{0}:'.format(self.tpl[0])
-        return '{0[0]}:{0[1]}'.format(self.tpl)
+        return f'{self.lower}:{self.upper}'
 
     def __repr__(self):
-        return 'Range({0})'.format(self.tpl)
+        return f'Range({self.tpl})'
+
+    def _check_element(self, item):
+        if item is None or item == '':
+            return ''
+        try:
+            return str(int(item))
+        except (TypeError, ValueError) as err:
+            raise CommandError(f'Not an integer: "{item}"') from err
+        return item
 
     def _check(self):
         if not isinstance(self.tpl, tuple):
             raise CommandError('Wrong type, provide a tuple')
-        if len(self.tpl) not in [0, 1, 2]:
-            raise CommandError('length not in [0, 1, 2]')
-        for index in self.tpl:
-            try:
-                index = int(index)
-            except (TypeError, ValueError) as err:
-                raise CommandError('Not a tuple of int') from err
+        if len(self.tpl) == 0:
+            return
+        if len(self.tpl) == 1:
+            self.lower = self._check_element(self.tpl[0])
+            return
+        if len(self.tpl) != 2:
+            raise CommandError('Range wrong size (0, 1 or 2 allowed)')
+        self.lower = self._check_element(self.tpl[0])
+        self.upper = self._check_element(self.tpl[1])
+        if self.lower == '' and self.upper != '':
+            raise CommandError(f'Integer expected to start the range: {self.tpl}')
+        if self.upper.isdigit() and self.lower.isdigit():
+            if int(self.lower) > int(self.upper):
+                raise CommandError(f'Wrong range: {self.lower} > {self.upper}')
 
 
 class _NotConnected:

@@ -614,5 +614,35 @@ class testContextManager(unittest.TestCase):
                 sock.close.assert_not_called()
             sock.close.assert_called()
 
+class testRange(unittest.TestCase):
+
+    def test_range(self):
+        tests = [
+                ((),          ':'),
+                ((None,None), ':'),
+                (('',''),     ':'),
+                (('',),       ':'),
+                ((42,42),     '42:42'),
+                ((42,),       '42:'),
+                (('42',),     '42:'),
+                (('42',None), '42:'),
+                (('42',''),   '42:'),
+        ]
+        for tpl, result in tests:
+            self.assertEqual(str(musicpd.Range(tpl)), result)
+        with self.assertRaises(musicpd.CommandError):
+            #CommandError: Integer expected to start the range: (None, 42)
+            musicpd.Range((None,'42'))
+        with self.assertRaises(musicpd.CommandError):
+            # CommandError: Not an integer: "foo"
+            musicpd.Range(('foo',))
+        with self.assertRaises(musicpd.CommandError):
+            # CommandError: Wrong range: 42 > 41
+            musicpd.Range(('42',41))
+        with self.assertRaises(musicpd.CommandError):
+            # CommandError: Wrong range: 42 > 41
+            musicpd.Range(('42','42','42'))
+
+
 if __name__ == '__main__':
     unittest.main()
