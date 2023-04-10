@@ -302,16 +302,20 @@ class MPDClient:
             "readmessages":       self._fetch_messages,
             "sendmessage":        self._fetch_nothing,
         }
+        #: host used with the current connection (:py:obj:`str`)
+        self.host = None
+        #: password detected in :envvar:`MPD_HOST` environment variable (:py:obj:`str`)
+        self.pwd = None
+        #: port used with the current connection (:py:obj:`int`, :py:obj:`str`)
+        self.port = None
         self._get_envvars()
 
     def _get_envvars(self):
         """
-        Retrieve MPD env. var. to overrides "localhost:6600"
-            Use MPD_HOST/MPD_PORT if set
-            else use MPD_HOST=${XDG_RUNTIME_DIR:-/run/}/mpd/socket if file exists
+        Retrieve MPD env. var. to overrides default "localhost:6600"
         """
+        # Set some defaults
         self.host = 'localhost'
-        self.pwd = None
         self.port = os.getenv('MPD_PORT', '6600')
         _host = os.getenv('MPD_HOST', '')
         if _host:
