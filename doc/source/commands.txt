@@ -7,7 +7,7 @@ status                                     -> fetch_object
 stats                                      -> fetch_object
 
 == Playback Option Commands
-consume            <bool>                  -> fetch_nothing
+consume            <str>                   -> fetch_nothing
 crossfade          <int>                   -> fetch_nothing
 mixrampdb          <str>                   -> fetch_nothing
 mixrampdelay       <int>                   -> fetch_nothing
@@ -133,3 +133,10 @@ commands         -> fetch_list
 notcommands      -> fetch_list
 urlhandlers      -> fetch_list
 decoders         -> fetch_plugins
+
+== Client to Client
+subscribe      <str>       -> self._fetch_nothing,
+unsubscribe    <str>       -> self._fetch_nothing,
+channels                   -> self._fetch_list,
+readmessages               -> self._fetch_messages,
+sendmessage    <str> <str> -> self._fetch_nothing,

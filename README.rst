@@ -1,5 +1,5 @@
-Python MusicPlayerDaemon client module
-***************************************
+Music Player Daemon client module
+*********************************
 
 An MPD (Music Player Daemon) client library written in pure Python.
 
@@ -11,3 +11,5 @@ An MPD (Music Player Daemon) client library written in pure Python.
 :Dependencies:  None
 :Compatibility: Python 3.6+
 :Licence:       GNU LGPLv3
+
+----

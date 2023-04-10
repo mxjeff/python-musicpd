@@ -16,43 +16,78 @@ The client library can be used as follows:
                                        #   test ${XDG_RUNTIME_DIR}/mpd/socket for existence
                                        #   fallback to localhost:6600
                                        # connect support host/port argument as well
-    print(client.mpd_version)          # print the mpd protocol version
-    print(client.cmd('foo', 42))       # print result of the request "cmd foo 42"
-                                       # (nb. for actual command, see link to the protocol below)
+    print(client.mpd_version)          # print the MPD protocol version
+    client.setvol('42')                # sets the volume
     client.disconnect()                # disconnect from the server
 
-In the example above `cmd` in not an actual MPD command, for a list of
-supported commands, their arguments (as MPD currently understands
-them), and the functions used to parse their responses see :ref:`commands`.
+The MPD command protocol exchanges line-based text records. The client emits a
+command with optional arguments. In the example above the client sends a
+`setvol` command with the string argument `42`.
 
-See the `MPD protocol documentation`_ for more details.
+MPD commands are exposed as :py:class:`musicpd.MPDClient` methods. Methods
+**arguments are python strings**. Some commands are composed of more than one word
+(ie "**tagtypes [disable|enable|all]**"), for these use a `snake case`_ style to
+access the method. Then **"tagtypes enable"** command is called with
+**"tagtypes_enable"**.
+
+Remember MPD protocol is text based, then all MPD command arguments are UTF-8
+strings. In the example above, an integer can be used as argument for the
+`setvol` command, but it is then evaluated as a string when the command is
+written to the socket. To avoid confusion use regular string instead of relying
+on object string representation.
+
+:py:class:`musicpd.MPDClient` methods returns different kinds of objects depending on the command. Could be :py:obj:`None`, a single object as a :py:obj:`str` or a :py:obj:`dict`, a list of :py:obj:`dict`.
+
+For more about the protocol and MPD commands see the `MPD protocol
+documentation`_.
+
+For a list of currently supported commands in this python module see
+:ref:`commands`.
 
 .. _environment_variables:
 
 Environment variables
 ---------------------
 
-The client honors the following environment variables:
+:py:class:`musicpd.MPDClient` honors the following environment variables:
 
-  * ``MPD_HOST`` MPD host (:abbr:`FQDN (fully qualified domain name)`, socket path or abstract socket) and password.
+.. envvar:: MPD_HOST
 
-    | To define a password set MPD_HOST to "`password@host`" (password only "`password@`")
-    | For abstract socket use "@" as prefix : "`@socket`" and then with a password  "`pass@@socket`"
-    | Regular unix socket are set with an absolute path: "`/run/mpd/socket`"
-  * ``MPD_PORT`` MPD port, relevant for TCP socket only, ie with :abbr:`FQDN (fully qualified domain name)` defined host
-  * ``MPD_TIMEOUT`` timeout for connecting to MPD and waiting for MPD’s response in seconds
-  * ``XDG_RUNTIME_DIR`` path to look for potential socket: ``${XDG_RUNTIME_DIR}/mpd/socket``
+   MPD host (:abbr:`FQDN (fully qualified domain name)`, IP, socket path or abstract socket) and password.
+
+    | To define a **password** set :envvar:`MPD_HOST` to "*password@host*" (password only "*password@*")
+    | For **abstract socket** use "@" as prefix : "*@socket*" and then with a password  "*pass@@socket*"
+    | Regular **unix socket** are set with an absolute path: "*/run/mpd/socket*"
+
+.. envvar:: MPD_PORT
+
+   MPD port, relevant for TCP socket only
+
+.. envvar:: MPD_TIMEOUT
+
+   socket timeout when connecting to MPD and waiting for MPD’s response (in seconds)
+
+.. envvar:: XDG_RUNTIME_DIR
+
+   path to look for potential socket
 
 .. _default_settings:
 
 Default settings
 ----------------
 
-  * If ``MPD_HOST`` is not set, then look for a socket in ``${XDG_RUNTIME_DIR}/mpd/socket``
-  * If there is no socket use ``localhost``
-  * If ``MPD_PORT`` is not set, then use ``6600``
-  * If ``MPD_TIMEOUT`` is not set, then uses :py:obj:`musicpd.CONNECTION_TIMEOUT`
+Default host:
+ * use :envvar:`MPD_HOST` environment variable if set, extract password if present,
+ * else looks for an existing file in :envvar:`${XDG_RUNTIME_DIR:-/run/}/mpd/socket`
+ * else set host to ``localhost``
 
+Default port:
+ * use :envvar:`MPD_PORT` environment variable is set
+ * else use ``6600``
+
+Default timeout:
+ * use :envvar:`MPD_TIMEOUT` is set
+ * else use :py:obj:`musicpd.CONNECTION_TIMEOUT`
 
 Context manager
 ---------------
@@ -90,7 +125,7 @@ Some commands (e.g. delete) allow specifying a range in the form `"START:END"` (
 
 Possible ranges are: `"START:END"`, `"START:"` and `":"` :
 
-Instead of giving the plain string as `"START:END"`, you **can** provide a :py:obj:`tuple` as `(START,END)`. The module is then ensuring the format is correct and raises an :py:obj:`musicpd.CommandError` exception otherwise. Empty start or end can be specified as en empty string `''` or :py:obj:`None`.
+Instead of giving the plain string as `"START:END"`, you **can** provide a :py:obj:`tuple` as `(START,END)`. The module is then ensuring the format is correct and raises an :py:obj:`musicpd.CommandError` exception otherwise. Empty start or end can be specified as en empty string ``''`` or :py:obj:`None`.
 
 .. code-block:: python
 
@@ -102,8 +137,8 @@ Instead of giving the plain string as `"START:END"`, you **can** provide a :py:o
     # missing end interpreted as highest value possible, pay attention still need a tuple.
     client.delete((pos,))  # purge queue from current to the end
 
-A notable case is the `rangeid` command allowing an empty range specified
-as a single colon as argument (i.e. sending just ":"):
+A notable case is the *rangeid* command allowing an empty range specified
+as a single colon as argument (i.e. sending just ``":"``):
 
 .. code-block:: python
 
@@ -112,7 +147,7 @@ as a single colon as argument (i.e. sending just ":"):
 
 Empty start in range (i.e. ":END") are not possible and will raise a CommandError.
 
-Remember the of the tuple is optional, range can still be specified as single string `START:END`. In case of malformed range a CommandError is still raised.
+Remember the of the tuple is optional, range can still be specified as single string ``"START:END"``.
 
 Iterators
 ----------
@@ -274,4 +309,5 @@ couple of seconds for these commands should never occur).
 
 
 .. _MPD protocol documentation: http://www.musicpd.org/doc/protocol/
+.. _snake case: https://en.wikipedia.org/wiki/Snake_case
 .. vim: spell spelllang=en

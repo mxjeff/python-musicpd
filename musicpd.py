@@ -1,10 +1,11 @@
+# -*- coding: utf-8 -*-
 # SPDX-FileCopyrightText: 2012-2023  kaliko <kaliko@azylum.org>
 # SPDX-FileCopyrightText: 2021       Wonko der Verständige <wonko@hanstool.org>
 # SPDX-FileCopyrightText: 2019       Naglis Jonaitis <naglis@mailbox.org>
 # SPDX-FileCopyrightText: 2019       Bart Van Loon <bbb@bbbart.be>
 # SPDX-FileCopyrightText: 2008-2010  J. Alexander Treuman <jat@spatialrift.net>
 # SPDX-License-Identifier: LGPL-3.0-or-later
-"""python-musicpd: Python Music Player Daemon client library"""
+"""Python Music Player Daemon client library"""
 
 
 import socket
@@ -16,9 +17,10 @@ HELLO_PREFIX = "OK MPD "
 ERROR_PREFIX = "ACK "
 SUCCESS = "OK"
 NEXT = "list_OK"
+#: Module version
 VERSION = '0.9.0b0'
 #: Seconds before a connection attempt times out
-#: (overriden by MPD_TIMEOUT env. var.)
+#: (overriden by :envvar:`MPD_TIMEOUT` env. var.)
 CONNECTION_TIMEOUT = 30
 #: Socket timeout in second (Default is None for no timeout)
 SOCKET_TIMEOUT = None
@@ -44,31 +46,31 @@ def iterator_wrapper(func):
 
 
 class MPDError(Exception):
-    pass
+    """Main musicpd Exception"""
 
 
 class ConnectionError(MPDError):
-    pass
+    """Fatal Connection Error, cannot recover from it."""
 
 
 class ProtocolError(MPDError):
-    pass
+    """Fatal Protocol Error, cannot recover from it"""
 
 
 class CommandError(MPDError):
-    pass
+    """Malformed command, socket should be fine, can reuse it"""
 
 
 class CommandListError(MPDError):
-    pass
+    """"""
 
 
 class PendingCommandError(MPDError):
-    pass
+    """"""
 
 
 class IteratingError(MPDError):
-    pass
+    """"""
 
 
 class Range:
@@ -123,14 +125,15 @@ class _NotConnected:
 
 
 class MPDClient:
-    """MPDClient instance will look for ``MPD_HOST``/``MPD_PORT``/``XDG_RUNTIME_DIR`` environment
-    variables and set instance attribute ``host``, ``port`` and ``pwd``
-    accordingly. Regarding ``MPD_HOST`` format to expose password refer
-    MPD client manual :manpage:`mpc (1)`.
+    """MPDClient instance will look for :envvar:`MPD_HOST`/:envvar:`MPD_PORT`/:envvar:`XDG_RUNTIME_DIR` environment
+    variables and set instance attribute :py:attr:`host`, :py:attr:`port` and :py:obj:`pwd`
+    accordingly.
 
-    Then :py:obj:`musicpd.MPDClient.connect` will use ``host`` and ``port`` as defaults if not provided as args.
+    Then :py:obj:`musicpd.MPDClient.connect` will use :py:obj:`host` and
+    :py:obj:`port` as defaults if not provided as args.
 
-    Cf. :py:obj:`musicpd.MPDClient.connect` for details.
+    Regarding :envvar:`MPD_HOST` format to expose password refer this module
+    documentation or MPD client manual :manpage:`mpc (1)`.
 
     >>> from os import environ
     >>> environ['MPD_HOST'] = 'pass@mpdhost'
@@ -141,21 +144,28 @@ class MPDClient:
     True
     >>> cli.connect() # will use host/port as set in MPD_HOST/MPD_PORT
 
-    :ivar str host: host used with the current connection
-    :ivar str,int port: port used with the current connection
-    :ivar str pwd: password detected in ``MPD_HOST`` environment variable
+    .. note::
 
-    .. warning:: Instance attribute host/port/pwd
+      default host:
+       * use :envvar:`MPD_HOST` environment variable if set, extract password if present,
+       * else use :envvar:`XDG_RUNTIME_DIR` to looks for an existing file in ``${XDG_RUNTIME_DIR:-/run/}/mpd/socket``
+       * else set host to ``localhost``
 
-      While :py:attr:`musicpd.MPDClient().host` and
-      :py:attr:`musicpd.MPDClient().port` keep track of current connection
-      host and port, :py:attr:`musicpd.MPDClient().pwd` is set once with
+      default port:
+       * use :envvar:`MPD_PORT` environment variable is set
+       * else use ``6600``
+
+    .. warning:: **Instance attribute host/port/pwd**
+
+      While :py:attr:`musicpd.MPDClient.host` and
+      :py:attr:`musicpd.MPDClient.port` keep track of current connection
+      host and port, :py:attr:`musicpd.MPDClient.pwd` is set once with
       password extracted from environment variable.
-      Calling :py:meth:`musicpd.MPDClient().password()` with a new password
-      won't update :py:attr:`musicpd.MPDClient().pwd` value.
+      Calling :py:meth:`password` methode with a new password
+      won't update :py:attr:`musicpd.MPDClient.pwd` value.
 
-      Moreover, :py:attr:`musicpd.MPDClient().pwd` is only an helper attribute
-      exposing password extracted from ``MPD_HOST`` environment variable, it
+      Moreover, :py:attr:`musicpd.MPDClient.pwd` is only an helper attribute
+      exposing password extracted from :envvar:`MPD_HOST` environment variable, it
       will not be used as default value for the :py:meth:`password` method
     """
 
@@ -665,29 +675,19 @@ class MPDClient:
     def connect(self, host=None, port=None):
         """Connects the MPD server
 
-        :param str host: hostname, IP or FQDN (defaults to `localhost` or socket, see below for details)
-        :param port: port number (defaults to 6600)
+        :param str host: hostname, IP or FQDN (defaults to *localhost* or socket)
+        :param port: port number (defaults to *6600*)
         :type port: str or int
 
-        The connect method honors MPD_HOST/MPD_PORT environment variables.
+        If host/port are :py:obj:`None` the socket uses :py:attr:`host`/:py:attr:`port`
+        attributes as defaults. Cf. :py:obj:`MPDClient` for the logic behind default host/port.
 
-        The underlying socket also honors MPD_TIMEOUT environment variable
+        The underlying socket also honors :envvar:`MPD_TIMEOUT` environment variable
         and defaults to :py:obj:`musicpd.CONNECTION_TIMEOUT` (connect command only).
 
         If you want to have a timeout for each command once you got connected,
         set its value in :py:obj:`MPDClient.socket_timeout` (in second) or at
         module level in :py:obj:`musicpd.SOCKET_TIMEOUT`.
-
-        .. note:: Default host/port
-
-          If host evaluate to :py:obj:`False`
-           * use ``MPD_HOST`` environment variable if set, extract password if present,
-           * else looks for an existing file in ``${XDG_RUNTIME_DIR:-/run/}/mpd/socket``
-           * else set host to ``localhost``
-
-          If port evaluate to :py:obj:`False`
-           * if ``MPD_PORT`` environment variable is set, use it for port
-           * else use ``6600``
         """
         if not host:
             host = self.host

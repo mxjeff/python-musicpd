@@ -1,4 +1,4 @@
-.. SPDX-FileCopyrightText: 2018-2021  kaliko <kaliko@azylum.org>
+.. SPDX-FileCopyrightText: 2018-2023  kaliko <kaliko@azylum.org>
 .. SPDX-License-Identifier: LGPL-3.0-or-later
 
 .. include:: ../../README.rst
@@ -20,7 +20,7 @@ Installation
 
 
 Library overview
-----------------
+================
 Here is a snippet allowing to list the last modified artists in the media library:
 
 .. code:: python3
@@ -46,7 +46,7 @@ Here is a snippet allowing to list the last modified artists in the media librar
 
 
 Build documentation
---------------------
+===================
 
 .. code:: bash
 
@@ -67,6 +67,7 @@ Contents
 .. toctree::
    :maxdepth: 2
 
+   self
    use.rst
    doc.rst
    commands.rst
