@@ -8,37 +8,61 @@ stages:
   - test
   - build
 
+.cache_python:
+  variables:
+    FF_USE_FASTZIP: 1  # enable faster caching/artifacting
+    PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+  cache:
+    key: "$CI_JOB_NAME-$CI_COMMIT_REF_SLUG"
+    paths:  # cache the venv and pip cache (you may opt to use just 1 of these)
+      - $PIP_CACHE_DIR
+      #- venv
+
 .test:
   stage: test
   script:
+    - python -m venv venv
+    - source venv/bin/activate
     - pip install pytest-cov
     - py.test -q --cov=musicpd test.py
   only:
     - pushes
 
 test-py3.11:
-  extends: ".test"
+  extends:
+    - .cache_python
+    - .test
   image: "python:3.11"
 
 test-py3.10:
-  extends: ".test"
+  extends:
+    - .cache_python
+    - .test
   image: "python:3.10"
   coverage: '/musicpd.py\s+\d+\s+\d+\s+(\d+)%/'
 
 test-py3.9:
-  extends: ".test"
+  extends:
+    - .cache_python
+    - .test
   image: "python:3.9"
 
 test-py3.8:
-  extends: ".test"
+  extends:
+    - .cache_python
+    - .test
   image: "python:3.8"
 
 test-py3.7:
-  extends: ".test"
+  extends:
+    - .cache_python
+    - .test
   image: "python:3.7"
 
 test-py3.6:
-  extends: ".test"
+  extends:
+    - .cache_python
+    - .test
   image: "python:3.6"
 
 
