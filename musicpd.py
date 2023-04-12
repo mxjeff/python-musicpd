@@ -8,8 +8,9 @@
 """Python Music Player Daemon client library"""
 
 
-import socket
+import logging
 import os
+import socket
 
 from functools import wraps
 
@@ -24,6 +25,8 @@ VERSION = '0.9.0b0'
 CONNECTION_TIMEOUT = 30
 #: Socket timeout in second (Default is None for no timeout)
 SOCKET_TIMEOUT = None
+
+log = logging.getLogger(__name__)
 
 
 def iterator_wrapper(func):
@@ -334,24 +337,30 @@ class MPDClient:
                 mpd_host_env = _host.split('@', 1)
                 if mpd_host_env[0]:
                     # A password is actually set
+                    log.debug('password detected in MPD_HOST, set client pwd attribute')
                     self.pwd = mpd_host_env[0]
                     if mpd_host_env[1]:
                         self.host = mpd_host_env[1]
+                        log.debug('host detected in MPD_HOST: %s', self.host)
                 elif mpd_host_env[1]:
                     # No password set but leading @ is an abstract socket
                     self.host = '@'+mpd_host_env[1]
+                    log.debug('host detected in MPD_HOST: %s (abstract socket)', self.host)
             else:
                 # MPD_HOST is a plain host
                 self.host = _host
+                log.debug('host detected in MPD_HOST: @%s', self.host)
         else:
             # Is socket there
             xdg_runtime_dir = os.getenv('XDG_RUNTIME_DIR', '/run')
             rundir = os.path.join(xdg_runtime_dir, 'mpd/socket')
             if os.path.exists(rundir):
                 self.host = rundir
+                log.debug('host detected in ${XDG_RUNTIME_DIR}/run: %s (unix socket)', self.host)
         _mpd_timeout = os.getenv('MPD_TIMEOUT', '')
         if _mpd_timeout.isdigit():
             self.mpd_timeout = int(_mpd_timeout)
+            log.debug('timeout detected in MPD_TIMEOUT: %d', self.mpd_timeout)
         else:  # Use CONNECTION_TIMEOUT as default even if MPD_TIMEOUT carries gargage
             self.mpd_timeout = CONNECTION_TIMEOUT
 
@@ -700,8 +709,10 @@ class MPDClient:
         if self._sock is not None:
             raise ConnectionError("Already connected")
         if host[0] in ['/', '@']:
+            log.debug('Connecting unix socket %s', host)
             self._sock = self._connect_unix(host)
         else:
+            log.debug('Connecting tcp socket %s:%s (timeout: %ss)', host, port, self.mpd_timeout)
             self._sock = self._connect_tcp(host, port)
         self._rfile = self._sock.makefile("r", encoding='utf-8', errors='surrogateescape')
         self._rbfile = self._sock.makefile("rb")
@@ -711,6 +722,7 @@ class MPDClient:
         except:
             self.disconnect()
             raise
+        log.debug('Connected')
 
     @property
     def socket_timeout(self):
