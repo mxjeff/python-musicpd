@@ -28,7 +28,7 @@ stages:
     - changes:
         - musicpd.py
         - test.py
-    - if: $MUSICPD_TEST
+    - if: $CI_PIPELINE_SOURCE == "schedule"
 
 test-py3.11:
   extends:
@@ -91,6 +91,7 @@ build:
         - .gitlab-ci.yml
         - musicpd.py
         - test.py
+    - if: $CI_PIPELINE_SOURCE == "schedule"
 
 tag_release:
   stage: build
@@ -118,6 +119,7 @@ build_doc:
     - if: $CI_PIPELINE_SOURCE == "push"
       changes:
         - doc/source/*
+    - if: $CI_PIPELINE_SOURCE == "schedule"
 
 pages:
   stage: build
