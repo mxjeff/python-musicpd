@@ -19,7 +19,7 @@ ERROR_PREFIX = "ACK "
 SUCCESS = "OK"
 NEXT = "list_OK"
 #: Module version
-VERSION = '0.9.0b0'
+VERSION = '0.9.0b1'
 #: Seconds before a connection attempt times out
 #: (overriden by :envvar:`MPD_TIMEOUT` env. var.)
 CONNECTION_TIMEOUT = 30
