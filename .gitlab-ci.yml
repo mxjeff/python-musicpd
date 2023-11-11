@@ -26,8 +26,8 @@ stages:
     - py.test -q --cov=musicpd test.py
   rules:
     - changes:
-      - musicpd.py
-      - test.py
+        - musicpd.py
+        - test.py
     - if: $MUSICPD_TEST
 
 test-py3.11:
@@ -87,6 +87,10 @@ build:
       - dist/*.*
   rules:
     - if: $CI_PIPELINE_SOURCE == "push"
+      changes:
+        - .gitlab-ci.yml
+        - musicpd.py
+        - test.py
 
 tag_release:
   stage: build
@@ -103,6 +107,17 @@ tag_release:
     name: "$CI_PROJECT_NAME-$CI_COMMIT_TAG"
   rules:
     - if: $CI_COMMIT_TAG
+
+# Documentation
+build_doc:
+  stage: build
+  script:
+    - pip install sphinx sphinx_rtd_theme
+    - sphinx-build doc/source -b html ./html -D html_theme=sphinx_rtd_theme
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push"
+      changes:
+        - doc/source/*
 
 pages:
   stage: build
