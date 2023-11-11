@@ -26,7 +26,9 @@ stages:
     - pip install pytest-cov
     - py.test -q --cov=musicpd test.py
   only:
-    - pushes
+    changes:
+      - musicpd.py
+      - test.py
 
 test-py3.11:
   extends:
@@ -68,9 +70,14 @@ test-py3.6:
 
 build:
   stage: build
+  extends:
+    - .cache_python
   script:
+    - python -m venv venv
+    - source venv/bin/activate
+    - pip install build
     # packaging test
-    - python setup.py bdist_wheel sdist
+    - python3 -m build -s -w
     - pip install dist/*.whl
     - pip install twine
     - twine check dist/*
@@ -85,8 +92,13 @@ build:
 
 tag_release:
   stage: build
+  extends:
+    - .cache_python
   script:
-    - python setup.py bdist_wheel sdist
+    - python -m venv venv
+    - source venv/bin/activate
+    - pip install build
+    - python3 -m build -s -w
   artifacts:
     paths:
       - dist/*.whl

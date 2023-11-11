@@ -55,9 +55,7 @@ Build documentation
     # Installs sphinx if needed
     python3 -m venv venv && . ./venv/bin/activate
     pip install sphinx
-    # And build
-    python3 setup.py build_sphinx
-    # Or call sphinx
+    # Call sphinx
     sphinx-build -d ./doc/build/doctrees doc/source -b html ./doc/build/html
 
 

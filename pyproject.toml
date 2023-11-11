@@ -1,0 +1,34 @@
+# SPDX-FileCopyrightText: 2023  kaliko <kaliko@azylum.org>
+# SPDX-License-Identifier: LGPL-3.0-or-later
+[project]
+name = "python-musicpd"
+keywords = ["mpd", "Music Player Daemon"]
+description = "An MPD (Music Player Daemon) client library written in pure Python."
+authors = [
+  { name="Kaliko Jack", email="kaliko@azylum.org" },
+]
+license = {file = "LICENSE.txt"}
+readme = "README.rst"
+requires-python = ">=3.6"
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dynamic = ["version"]
+
+[project.optional-dependencies]
+sphinx = ["Sphinx>=5.3.0"]
+
+[project.urls]
+"Homepage" = "https://kaliko.me/python-musicpd/"
+
+[build-system]
+requires = ["setuptools>=61.0.0"]
+
+[tool.setuptools.dynamic]
+version = {attr = "musicpd.VERSION"}
