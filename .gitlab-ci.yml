@@ -30,6 +30,12 @@ stages:
         - test.py
     - if: $CI_PIPELINE_SOURCE == "schedule"
 
+test-py3.12:
+  extends:
+    - .cache_python
+    - .test
+  image: "python:3.12"
+
 test-py3.11:
   extends:
     - .cache_python
