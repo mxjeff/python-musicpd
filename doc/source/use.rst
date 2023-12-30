@@ -147,7 +147,7 @@ as a single colon as argument (i.e. sending just ``":"``):
 
 Empty start in range (i.e. ":END") are not possible and will raise a CommandError.
 
-Remember the of the tuple is optional, range can still be specified as single string ``"START:END"``.
+.. note:: Remember the use of a tuple is **optional**. Range can still be specified as a plain string ``"START:END"``.
 
 Iterators
 ----------
