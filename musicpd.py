@@ -23,7 +23,7 @@ VERSION = '0.9.0b1'
 #: Seconds before a connection attempt times out
 #: (overriden by :envvar:`MPD_TIMEOUT` env. var.)
 CONNECTION_TIMEOUT = 30
-#: Socket timeout in second (Default is None for no timeout)
+#: Socket timeout in second > 0 (Default is :py:obj:`None` for no timeout)
 SOCKET_TIMEOUT = None
 
 log = logging.getLogger(__name__)
@@ -727,14 +727,24 @@ class MPDClient:
     @property
     def socket_timeout(self):
         """Socket timeout in second (defaults to :py:obj:`SOCKET_TIMEOUT`).
-        Use None to disable socket timout."""
+        Use :py:obj:`None` to disable socket timout.
+
+        :setter: Set the socket timeout
+        :type: int or None (integer > 0)
+        """
         return self._socket_timeout
 
     @socket_timeout.setter
     def socket_timeout(self, timeout):
-        self._socket_timeout = timeout
+        if timeout is not None:
+            if int(timeout) <= 0:
+                raise ValueError('socket_timeout expects a non zero positive integer')
+            self._socket_timeout = int(timeout)
+        else:
+            self._socket_timeout = timeout
         if getattr(self._sock, 'settimeout', False):
             self._sock.settimeout(self._socket_timeout)
+
 
     def disconnect(self):
         """Closes the MPD connection.

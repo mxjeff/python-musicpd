@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # coding: utf-8
-# SPDX-FileCopyrightText: 2012-2021  kaliko <kaliko@azylum.org>
+# SPDX-FileCopyrightText: 2012-2023  kaliko <kaliko@azylum.org>
 # SPDX-License-Identifier: LGPL-3.0-or-later
 # pylint: disable=missing-docstring
 """
@@ -588,6 +588,35 @@ class testConnection(unittest.TestCase):
             cli.connect()
             sock.connect.assert_called_with('/run/mpd/socket')
 
+    def test_sockettimeout(self):
+        with mock.patch('musicpd.socket') as socket_mock:
+            sock = mock.MagicMock(name='socket')
+            socket_mock.socket.return_value = sock
+            cli = musicpd.MPDClient()
+            # Default is no socket timeout
+            cli.connect()
+            sock.settimeout.assert_called_with(None)
+            cli.disconnect()
+            # set a socket timeout before connection
+            cli.socket_timeout = 10
+            cli.connect()
+            sock.settimeout.assert_called_with(10)
+            # Set socket timeout while already connected
+            cli.socket_timeout = 42
+            sock.settimeout.assert_called_with(42)
+            # set a socket timeout using str
+            cli.socket_timeout = '10'
+            sock.settimeout.assert_called_with(10)
+            # Set socket timeout to None
+            cli.socket_timeout = None
+            sock.settimeout.assert_called_with(None)
+            # Set socket timeout Raises Exception
+            with self.assertRaises(ValueError):
+                cli.socket_timeout = 'foo'
+            with self.assertRaises(ValueError, msg='socket_timeout expects a non zero positive integer'):
+                cli.socket_timeout = '0'
+            with self.assertRaises(ValueError, msg='socket_timeout expects a non zero positive integer'):
+                cli.socket_timeout = '-1'
 
 class testException(unittest.TestCase):
 
