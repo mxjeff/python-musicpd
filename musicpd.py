@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# SPDX-FileCopyrightText: 2012-2023  kaliko <kaliko@azylum.org>
+# SPDX-FileCopyrightText: 2012-2024  kaliko <kaliko@azylum.org>
 # SPDX-FileCopyrightText: 2021       Wonko der Verständige <wonko@hanstool.org>
 # SPDX-FileCopyrightText: 2019       Naglis Jonaitis <naglis@mailbox.org>
 # SPDX-FileCopyrightText: 2019       Bart Van Loon <bbb@bbbart.be>
@@ -436,9 +436,9 @@ class MPDClient:
         parts = [command]
         for arg in args:
             if isinstance(arg, tuple):
-                parts.append('{0!s}'.format(Range(arg)))
+                parts.append(f'{Range(arg)!s}')
             else:
-                parts.append('"%s"' % escape(str(arg)))
+                parts.append(f'"{escape(str(arg))}"')
         if '\n' in ' '.join(parts):
             raise CommandError('new line found in the command!')
         self._write_line(" ".join(parts))
