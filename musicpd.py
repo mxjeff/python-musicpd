@@ -648,7 +648,7 @@ class MPDClient:
             sock.connect(path)
             sock.settimeout(self.socket_timeout)
         except socket.error as socket_err:
-            raise ConnectionError(socket_err.strerror) from socket_err
+            raise ConnectionError(socket_err) from socket_err
         return sock
 
     def _connect_tcp(self, host, port):
@@ -662,7 +662,7 @@ class MPDClient:
                                      socket.SOCK_STREAM, socket.IPPROTO_TCP,
                                      flags)
         except socket.error as gaierr:
-            raise ConnectionError(gaierr.strerror) from gaierr
+            raise ConnectionError(gaierr) from gaierr
         for res in gai:
             af, socktype, proto, _, sa = res
             sock = None
@@ -674,12 +674,12 @@ class MPDClient:
                 sock.settimeout(self.socket_timeout)
                 return sock
             except socket.error as socket_err:
-                log.debug('opening socket %s failed: %s}', sa, socket_err)
+                log.debug('opening socket %s failed: %s', sa, socket_err)
                 err = socket_err
                 if sock is not None:
                     sock.close()
         if err is not None:
-            raise ConnectionError(err.strerror)
+            raise ConnectionError(err)
         raise ConnectionError("getaddrinfo returns an empty list")
 
     def noidle(self):

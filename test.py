@@ -633,7 +633,7 @@ class TestConnectionError(unittest.TestCase):
         cli = musicpd.MPDClient()
         with self.assertRaises(musicpd.ConnectionError) as cme:
             cli.connect()
-        self.assertEqual('err 42', str(cme.exception))
+        self.assertEqual('[Errno 42] err 42', str(cme.exception))
 
     def test_non_available_unix_socket(self):
         delattr(musicpd.socket, 'AF_UNIX')
@@ -651,7 +651,7 @@ class TestConnectionError(unittest.TestCase):
         cli = musicpd.MPDClient()
         with self.assertRaises(musicpd.ConnectionError) as cme:
             cli.connect(host=TEST_MPD_HOST)
-        self.assertEqual('gaierr 42', str(cme.exception))
+        self.assertEqual('[Errno 42] gaierr 42', str(cme.exception))
 
     @mock.patch('socket.getaddrinfo')
     @mock.patch('socket.socket')
@@ -665,7 +665,7 @@ class TestConnectionError(unittest.TestCase):
         cli = musicpd.MPDClient()
         with self.assertRaises(musicpd.ConnectionError) as cme:
             cli.connect(host=TEST_MPD_HOST)
-        self.assertEqual('tcp conn err 42', str(cme.exception))
+        self.assertEqual('[Errno 42] tcp conn err 42', str(cme.exception))
 
     @mock.patch('socket.getaddrinfo')
     def test_connect_tcp_connect_empty_gai(self, gai_mock):
