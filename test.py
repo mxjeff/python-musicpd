@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # coding: utf-8
-# SPDX-FileCopyrightText: 2012-2023  kaliko <kaliko@azylum.org>
+# SPDX-FileCopyrightText: 2012-2024  kaliko <kaliko@azylum.org>
 # SPDX-License-Identifier: LGPL-3.0-or-later
 # pylint: disable=missing-docstring
 """
@@ -14,11 +14,12 @@ import itertools
 import os
 import types
 import unittest
-import unittest.mock as mock
+import unittest.mock
 import warnings
 
 import musicpd
 
+mock = unittest.mock
 
 # show deprecation warnings
 warnings.simplefilter('default')
@@ -27,7 +28,7 @@ warnings.simplefilter('default')
 TEST_MPD_HOST, TEST_MPD_PORT = ('example.com', 10000)
 
 
-class testEnvVar(unittest.TestCase):
+class TestEnvVar(unittest.TestCase):
 
     def test_envvar(self):
         # mock "os.path.exists" here to ensure there are no socket in
@@ -559,7 +560,7 @@ class TestMPDClient(unittest.TestCase):
         with self.assertRaises(AttributeError):
             self.client.foo_bar()
 
-class testConnection(unittest.TestCase):
+class TestConnection(unittest.TestCase):
 
     def test_exposing_fileno(self):
         with mock.patch('musicpd.socket') as socket_mock:
@@ -613,14 +614,72 @@ class testConnection(unittest.TestCase):
             # Set socket timeout Raises Exception
             with self.assertRaises(ValueError):
                 cli.socket_timeout = 'foo'
-            with self.assertRaises(ValueError, msg='socket_timeout expects a non zero positive integer'):
+            with self.assertRaises(ValueError,
+                    msg='socket_timeout expects a non zero positive integer'):
                 cli.socket_timeout = '0'
-            with self.assertRaises(ValueError, msg='socket_timeout expects a non zero positive integer'):
+            with self.assertRaises(ValueError,
+                    msg='socket_timeout expects a non zero positive integer'):
                 cli.socket_timeout = '-1'
 
-class testException(unittest.TestCase):
 
-    def test_CommandError_on_newline(self):
+class TestConnectionError(unittest.TestCase):
+
+    @mock.patch('socket.socket')
+    def test_connect_unix(self, socket_mock):
+        """Unix socket socket.error should raise a musicpd.ConnectionError"""
+        mocked_socket = socket_mock.return_value
+        mocked_socket.connect.side_effect = musicpd.socket.error(42, 'err 42')
+        os.environ['MPD_HOST'] = '/run/mpd/socket'
+        cli = musicpd.MPDClient()
+        with self.assertRaises(musicpd.ConnectionError) as cme:
+            cli.connect()
+        self.assertEqual('err 42', str(cme.exception))
+
+    def test_non_available_unix_socket(self):
+        delattr(musicpd.socket, 'AF_UNIX')
+        os.environ['MPD_HOST'] = '/run/mpd/socket'
+        cli = musicpd.MPDClient()
+        with self.assertRaises(musicpd.ConnectionError) as cme:
+            cli.connect()
+        self.assertEqual('Unix domain sockets not supported on this platform',
+                         str(cme.exception))
+
+    @mock.patch('socket.getaddrinfo')
+    def test_connect_tcp_getaddrinfo(self, gai_mock):
+        """TCP socket.gaierror should raise a musicpd.ConnectionError"""
+        gai_mock.side_effect = musicpd.socket.error(42, 'gaierr 42')
+        cli = musicpd.MPDClient()
+        with self.assertRaises(musicpd.ConnectionError) as cme:
+            cli.connect(host=TEST_MPD_HOST)
+        self.assertEqual('gaierr 42', str(cme.exception))
+
+    @mock.patch('socket.getaddrinfo')
+    @mock.patch('socket.socket')
+    def test_connect_tcp_connect(self, socket_mock, gai_mock):
+        """A socket.error should raise a musicpd.ConnectionError
+        Mocking getaddrinfo to prevent network access (DNS)
+        """
+        gai_mock.return_value = [range(5)]
+        mocked_socket = socket_mock.return_value
+        mocked_socket.connect.side_effect = musicpd.socket.error(42, 'tcp conn err 42')
+        cli = musicpd.MPDClient()
+        with self.assertRaises(musicpd.ConnectionError) as cme:
+            cli.connect(host=TEST_MPD_HOST)
+        self.assertEqual('tcp conn err 42', str(cme.exception))
+
+    @mock.patch('socket.getaddrinfo')
+    def test_connect_tcp_connect_empty_gai(self, gai_mock):
+        """An empty getaddrinfo should raise a musicpd.ConnectionError"""
+        gai_mock.return_value = []
+        cli = musicpd.MPDClient()
+        with self.assertRaises(musicpd.ConnectionError) as cme:
+            cli.connect(host=TEST_MPD_HOST)
+        self.assertEqual('getaddrinfo returns an empty list', str(cme.exception))
+
+
+class TestCommandErrorException(unittest.TestCase):
+
+    def test_error_on_newline(self):
         os.environ['MPD_HOST'] = '/run/mpd/socket'
         with mock.patch('musicpd.socket') as socket_mock:
             sock = mock.MagicMock(name='socket')

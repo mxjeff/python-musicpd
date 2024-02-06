@@ -19,7 +19,7 @@ ERROR_PREFIX = "ACK "
 SUCCESS = "OK"
 NEXT = "list_OK"
 #: Module version
-VERSION = '0.9.0b1'
+VERSION = '0.9.0b2'
 #: Seconds before a connection attempt times out
 #: (overriden by :envvar:`MPD_TIMEOUT` env. var.)
 CONNECTION_TIMEOUT = 30
@@ -642,10 +642,13 @@ class MPDClient:
         # abstract socket
         if path.startswith('@'):
             path = '\0'+path[1:]
-        sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
-        sock.settimeout(self.mpd_timeout)
-        sock.connect(path)
-        sock.settimeout(self.socket_timeout)
+        try:
+            sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+            sock.settimeout(self.mpd_timeout)
+            sock.connect(path)
+            sock.settimeout(self.socket_timeout)
+        except socket.error as socket_err:
+            raise ConnectionError(socket_err.strerror) from socket_err
         return sock
 
     def _connect_tcp(self, host, port):
@@ -654,23 +657,29 @@ class MPDClient:
         except AttributeError:
             flags = 0
         err = None
-        for res in socket.getaddrinfo(host, port, socket.AF_UNSPEC,
-                                      socket.SOCK_STREAM, socket.IPPROTO_TCP,
-                                      flags):
+        try:
+            gai = socket.getaddrinfo(host, port, socket.AF_UNSPEC,
+                                     socket.SOCK_STREAM, socket.IPPROTO_TCP,
+                                     flags)
+        except socket.error as gaierr:
+            raise ConnectionError(gaierr.strerror) from gaierr
+        for res in gai:
             af, socktype, proto, _, sa = res
             sock = None
             try:
+                log.debug('opening socket %s', sa)
                 sock = socket.socket(af, socktype, proto)
                 sock.settimeout(self.mpd_timeout)
                 sock.connect(sa)
                 sock.settimeout(self.socket_timeout)
                 return sock
             except socket.error as socket_err:
+                log.debug('opening socket %s failed: %s}', sa, socket_err)
                 err = socket_err
                 if sock is not None:
                     sock.close()
         if err is not None:
-            raise ConnectionError(str(err))
+            raise ConnectionError(err.strerror)
         raise ConnectionError("getaddrinfo returns an empty list")
 
     def noidle(self):

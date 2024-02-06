@@ -10,6 +10,8 @@ Changes in 0.9.0
  * Improved Range object to deal with window parameter
  * Add logging
  * Switch to pyproject.toml (setuptools build system)
+ * The connect sequence raises ConnectionError only on error,
+   previously getaddrinfo or unix socket connection error raised an OSError
 
 Changes in 0.8.0
 ----------------
