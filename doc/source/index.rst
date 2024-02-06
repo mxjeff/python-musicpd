@@ -69,6 +69,7 @@ Contents
    use.rst
    doc.rst
    commands.rst
+   examples.rst
    contribute.rst
 
 

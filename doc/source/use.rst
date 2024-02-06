@@ -36,10 +36,16 @@ strings. In the example above, an integer can be used as argument for the
 written to the socket. To avoid confusion use regular string instead of relying
 on object string representation.
 
-:py:class:`musicpd.MPDClient` methods returns different kinds of objects depending on the command. Could be :py:obj:`None`, a single object as a :py:obj:`str` or a :py:obj:`dict`, a list of :py:obj:`dict`.
+:py:class:`musicpd.MPDClient` methods returns different kinds of objects
+depending on the command. Could be :py:obj:`None`, a single object as a
+:py:obj:`str` or a :py:obj:`dict`, a list of :py:obj:`dict`.
 
-For more about the protocol and MPD commands see the `MPD protocol
-documentation`_.
+Then :py:class:`musicpd.MPDClient` **methods signatures** are not hard coded
+within this module since the protocol is handled on the server side. Please
+refer to the protocol and MPD commands in `MPD protocol documentation`_ to
+learn how to call commands and what kind of arguments they expect.
+
+Some examples are provided for the most common cases, see :ref:`examples`.
 
 For a list of currently supported commands in this python module see
 :ref:`commands`.
