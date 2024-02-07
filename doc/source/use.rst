@@ -218,7 +218,7 @@ Fetching album covers is possible with albumart, here is an example:
     >>>         print('something went wrong', file=sys.stderr)
     >>> cli.disconnect()
 
-A `CommandError` is raised if the album does not expose a cover.
+A :py:obj:`musicpd.CommandError` is raised if the album does not expose a cover.
 
 You can also use `readpicture` command to fetch embedded picture:
 
@@ -313,6 +313,15 @@ triggering a socket timeout unless the connection is actually lost (actually it
 could also be that MPD took too much time to answer, but MPD taking more than a
 couple of seconds for these commands should never occur).
 
+
+Exceptions
+----------
+
+The :py:obj:`musicpd.MPDClient.connect` method raises
+:py:obj:`musicpd.ConnectionError` only but then, calling other MPD commands,
+the module can raise :py:obj:`musicpd.MPDError` or an :py:obj:`OSError` depending on the error and where it occurs.
+
+Using musicpd module both :py:obj:`musicpd.MPDError` and :py:obj:`OSError` exceptions families are expected.
 
 .. _MPD protocol documentation: http://www.musicpd.org/doc/protocol/
 .. _snake case: https://en.wikipedia.org/wiki/Snake_case
