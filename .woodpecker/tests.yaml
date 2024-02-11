@@ -1,0 +1,47 @@
+matrix:
+  PYTHON_VERSION:
+    - 3.6
+    - 3.7
+    - 3.8
+    - 3.9
+    - 3.10
+    - 3.11
+    - 3.12
+
+steps:
+  - name: test
+    image: python:${PYTHON_VERSION}
+    commands:
+      - python -m venv venv
+      - . venv/bin/activate
+      - pip install pytest-cov build
+      - py.test -q --cov=musicpd test.py
+    when:
+      - path:
+          include: ['musicpd.py', 'test.py', '.woodpecker/*']
+        event: [ push, tag, manual ]
+
+  - name: build
+    image: python:${PYTHON_VERSION}
+    commands:
+      - . venv/bin/activate
+      # packaging test
+      - python3 -m build -s -w
+      - pip install dist/*.whl
+    when:
+      - evaluate: 'PYTHON_VERSION in ["3.9", "3.10", "3.11", "3.12"]'
+        path:
+          include: ['pyproject.toml', '.woodpecker/*']
+        event: [ push, tag, manual ]
+
+  - name: sphinx
+    image: python:${PYTHON_VERSION}
+    commands:
+      - . venv/bin/activate
+      - pip install sphinx sphinx_rtd_theme
+      - sphinx-build doc/source -b html ./html -D html_theme=sphinx_rtd_theme
+    when:
+      - evaluate: 'PYTHON_VERSION == "3.12"'
+        path:
+          include: ['doc/**', '.woodpecker/*', 'README.rst']
+        event: [push, tag, manual]

@@ -1,0 +1,19 @@
+---
+# CI_PREV_PIPELINE_STATUS is set wrong on workflow failures
+# https://github.com/woodpecker-ci/woodpecker/issues/3343
+
+steps:
+  - name: notify success
+    image: debian:stable-backports
+    environment:
+      STATUS: success
+    commands:
+      - apt update && apt install -q2 -y go-sendxmpp/stable-backports ca-certificates
+      - bash .woodpecker/notify.sh
+    when:
+      - event: [ push, manual ]
+
+depends_on:
+  - tests
+
+runs_on: [ success ]
