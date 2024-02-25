@@ -349,7 +349,7 @@ class MPDClient:
             else:
                 # MPD_HOST is a plain host
                 self.host = _host
-                log.debug('host detected in MPD_HOST: @%s', self.host)
+                log.debug('host detected in MPD_HOST: %s', self.host)
         else:
             # Is socket there
             xdg_runtime_dir = os.getenv('XDG_RUNTIME_DIR', '/run')
