@@ -12,6 +12,7 @@ Changes in 0.9.0
  * Switch to pyproject.toml (setuptools build system)
  * The connect sequence raises ConnectionError only on error,
    previously getaddrinfo or unix socket connection error raised an OSError
+ * Improved documentation, add examples
 
 Changes in 0.8.0
 ----------------

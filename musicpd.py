@@ -164,12 +164,12 @@ class MPDClient:
       :py:attr:`musicpd.MPDClient.port` keep track of current connection
       host and port, :py:attr:`musicpd.MPDClient.pwd` is set once with
       password extracted from environment variable.
-      Calling :py:meth:`password` methode with a new password
+      Calling MPS's password method with a new password
       won't update :py:attr:`musicpd.MPDClient.pwd` value.
 
       Moreover, :py:attr:`musicpd.MPDClient.pwd` is only an helper attribute
       exposing password extracted from :envvar:`MPD_HOST` environment variable, it
-      will not be used as default value for the :py:meth:`password` method
+      will not be used as default value for the MPD's password command.
     """
 
     def __init__(self):
@@ -738,8 +738,8 @@ class MPDClient:
         """Socket timeout in second (defaults to :py:obj:`SOCKET_TIMEOUT`).
         Use :py:obj:`None` to disable socket timout.
 
-        :setter: Set the socket timeout
-        :type: int or None (integer > 0)
+        :setter: Set the socket timeout (integer > 0)
+        :type: int or None
         """
         return self._socket_timeout
 

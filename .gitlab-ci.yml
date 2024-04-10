@@ -120,7 +120,7 @@ build_doc:
   stage: build
   script:
     - pip install sphinx sphinx_rtd_theme
-    - sphinx-build doc/source -b html ./html -D html_theme=sphinx_rtd_theme
+    - sphinx-build doc/source -b html ./html -D html_theme=sphinx_rtd_theme -E -W -n --keep-going
   rules:
     - if: $CI_PIPELINE_SOURCE == "push"
       changes:

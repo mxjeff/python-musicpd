@@ -84,15 +84,15 @@ Default settings
 
 Default host:
  * use :envvar:`MPD_HOST` environment variable if set, extract password if present,
- * else looks for an existing file in :envvar:`${XDG_RUNTIME_DIR:-/run/}/mpd/socket`
+ * else use :envvar:`XDG_RUNTIME_DIR` to looks for an existing file in ``${XDG_RUNTIME_DIR}/mpd/socket``, :envvar:`XDG_RUNTIME_DIR` defaults to ``/run`` if not set.
  * else set host to ``localhost``
 
 Default port:
- * use :envvar:`MPD_PORT` environment variable is set
+ * use :envvar:`MPD_PORT` environment variable if set
  * else use ``6600``
 
 Default timeout:
- * use :envvar:`MPD_TIMEOUT` is set
+ * use :envvar:`MPD_TIMEOUT` if set
  * else use :py:obj:`musicpd.CONNECTION_TIMEOUT`
 
 Context manager
@@ -313,15 +313,19 @@ triggering a socket timeout unless the connection is actually lost (actually it
 could also be that MPD took too much time to answer, but MPD taking more than a
 couple of seconds for these commands should never occur).
 
+.. _exceptions:
 
 Exceptions
 ----------
 
-The :py:obj:`musicpd.MPDClient.connect` method raises
-:py:obj:`musicpd.ConnectionError` only but then, calling other MPD commands,
-the module can raise :py:obj:`musicpd.MPDError` or an :py:obj:`OSError` depending on the error and where it occurs.
+The :py:obj:`connect<musicpd.MPDClient.connect>` method raises
+:py:obj:`ConnectionError<musicpd.ConnectionError>` only (an :py:obj:`MPDError<musicpd.MPDError>` exception) but then, calling other MPD commands, the module can raise
+:py:obj:`MPDError<musicpd.MPDError>` or an :py:obj:`OSError` depending on the error and
+where it occurs.
 
-Using musicpd module both :py:obj:`musicpd.MPDError` and :py:obj:`OSError` exceptions families are expected.
+Then using musicpd module both :py:obj:`musicpd.MPDError` and :py:obj:`OSError`
+exceptions families are expected, see :ref:`examples<exceptions_example>` for a
+way to deal with this.
 
 .. _MPD protocol documentation: http://www.musicpd.org/doc/protocol/
 .. _snake case: https://en.wikipedia.org/wiki/Snake_case

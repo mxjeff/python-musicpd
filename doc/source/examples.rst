@@ -42,3 +42,16 @@ A plain client monitoring changes on MPD.
    :language: python
    :linenos:
 
+.. _exceptions_example:
+
+Dealing with Exceptions
+-----------------------
+
+Musicpd module will raise it's own :py:obj:`MPDError<musicpd.MPDError>`
+exceptions **and** python :py:obj:`OSError`. Then you can wrap
+:py:obj:`OSError` in :py:obj:`MPDError<musicpd.MPDError>` exceptions to have to deal
+with a single type of exceptions in your code:
+
+.. literalinclude:: examples/exceptions.py
+   :language: python
+   :linenos:

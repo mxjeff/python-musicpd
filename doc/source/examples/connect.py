@@ -1,4 +1,3 @@
-import musicpd
 import logging
 
 import musicpd
