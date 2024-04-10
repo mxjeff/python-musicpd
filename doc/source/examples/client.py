@@ -13,7 +13,7 @@ class MyClient(musicpd.MPDClient):
     def __init__(self):
         # Set logging to debug level
         logging.basicConfig(level=logging.DEBUG,
-                            format='%(levelname)-8s %(message)s')
+                            format='%(levelname)-8s %(module)-8s %(message)s')
         self.log = logging.getLogger(__name__)
         super().__init__()
         # Set host/port/password after init to overrides defaults
