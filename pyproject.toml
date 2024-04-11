@@ -30,5 +30,8 @@ sphinx = ["Sphinx>=5.3.0"]
 [build-system]
 requires = ["setuptools>=61.0.0"]
 
+[tool.setuptools]
+py-modules = ["musicpd"]
+
 [tool.setuptools.dynamic]
 version = {attr = "musicpd.VERSION"}
