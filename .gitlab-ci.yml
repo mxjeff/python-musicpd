@@ -97,6 +97,8 @@ build:
         - .gitlab-ci.yml
         - musicpd.py
         - test.py
+        - MANIFEST.in
+        - pyproject.toml
     - if: $CI_PIPELINE_SOURCE == "schedule"
 
 tag_release:
