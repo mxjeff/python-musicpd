@@ -1,6 +1,11 @@
 python-musicpd Changes List
 ===========================
 
+Changes in 0.9.1
+----------------
+
+ * Improved documentation, add supported commands rtype
+
 Changes in 0.9.0
 ----------------
 

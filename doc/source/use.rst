@@ -38,7 +38,9 @@ on object string representation.
 
 :py:class:`musicpd.MPDClient` methods returns different kinds of objects
 depending on the command. Could be :py:obj:`None`, a single object as a
-:py:obj:`str` or a :py:obj:`dict`, a list of :py:obj:`dict`.
+:py:obj:`str`, a :py:obj:`list`, a :py:obj:`dict` or a list of :py:obj:`dict`.
+See :ref:`commands exposed in the module<commands>` for more about returned
+type.
 
 Then :py:class:`musicpd.MPDClient` **methods signatures** are not hard coded
 within this module since the protocol is handled on the server side. Please

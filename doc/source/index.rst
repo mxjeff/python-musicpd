@@ -68,8 +68,8 @@ Contents
    self
    use.rst
    doc.rst
-   commands.rst
    examples.rst
+   commands.rst
    contribute.rst
 
 

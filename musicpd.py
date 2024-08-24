@@ -19,7 +19,7 @@ ERROR_PREFIX = "ACK "
 SUCCESS = "OK"
 NEXT = "list_OK"
 #: Module version
-VERSION = '0.9.0'
+VERSION = '0.9.1'
 #: Seconds before a connection attempt times out
 #: (overriden by :envvar:`MPD_TIMEOUT` env. var.)
 CONNECTION_TIMEOUT = 30
@@ -185,14 +185,14 @@ class MPDClient:
         .. note:: This is the version of the protocol spoken, not the real version of the daemon."""
         self._reset()
         self._commands = {
-            # Status Commands
+            # Querying MPD’s status # querying-mpd-s-status
             "clearerror":         self._fetch_nothing,
             "currentsong":        self._fetch_object,
             "idle":               self._fetch_list,
             #"noidle":             None,
             "status":             self._fetch_object,
             "stats":              self._fetch_object,
-            # Playback Option Commands
+            # Playback Option # playback-options
             "consume":            self._fetch_nothing,
             "crossfade":          self._fetch_nothing,
             "mixrampdb":          self._fetch_nothing,
@@ -205,7 +205,7 @@ class MPDClient:
             "replay_gain_mode":   self._fetch_nothing,
             "replay_gain_status": self._fetch_item,
             "volume":             self._fetch_nothing,
-            # Playback Control Commands
+            # Controlling playback # controlling-playback
             "next":               self._fetch_nothing,
             "pause":              self._fetch_nothing,
             "play":               self._fetch_nothing,
@@ -215,7 +215,7 @@ class MPDClient:
             "seekid":             self._fetch_nothing,
             "seekcur":            self._fetch_nothing,
             "stop":               self._fetch_nothing,
-            # Queue Commands
+            # The Queue # the-queue
             "add":                self._fetch_nothing,
             "addid":              self._fetch_item,
             "clear":              self._fetch_nothing,
@@ -238,7 +238,7 @@ class MPDClient:
             "swapid":             self._fetch_nothing,
             "addtagid":           self._fetch_nothing,
             "cleartagid":         self._fetch_nothing,
-            # Stored Playlist Commands
+            # Stored playlists # stored-playlists
             "listplaylist":       self._fetch_list,
             "listplaylistinfo":   self._fetch_songs,
             "listplaylists":      self._fetch_playlists,
@@ -250,7 +250,7 @@ class MPDClient:
             "rename":             self._fetch_nothing,
             "rm":                 self._fetch_nothing,
             "save":               self._fetch_nothing,
-            # Database Commands
+            # The music database # the-music-database
             "albumart":           self._fetch_composite,
             "count":              self._fetch_object,
             "getfingerprint":     self._fetch_object,
@@ -268,18 +268,18 @@ class MPDClient:
             "searchaddpl":        self._fetch_nothing,
             "update":             self._fetch_item,
             "rescan":             self._fetch_item,
-            # Mounts and neighbors
+            # Mounts and neighbors # mounts-and-neighbors
             "mount":              self._fetch_nothing,
             "unmount":            self._fetch_nothing,
             "listmounts":         self._fetch_mounts,
             "listneighbors":      self._fetch_neighbors,
-            # Sticker Commands
+            # Stickers # stickers
             "sticker get":        self._fetch_item,
             "sticker set":        self._fetch_nothing,
             "sticker delete":     self._fetch_nothing,
             "sticker list":       self._fetch_list,
             "sticker find":       self._fetch_songs,
-            # Connection Commands
+            # Connection settings # connection-settings
             "close":              None,
             "kill":               None,
             "password":           self._fetch_nothing,
@@ -290,25 +290,25 @@ class MPDClient:
             "tagtypes enable":    self._fetch_nothing,
             "tagtypes clear":     self._fetch_nothing,
             "tagtypes all":       self._fetch_nothing,
-            # Partition Commands
+            # Partition Commands # partition-commands
             "partition":          self._fetch_nothing,
             "listpartitions":     self._fetch_list,
             "newpartition":       self._fetch_nothing,
             "delpartition":       self._fetch_nothing,
             "moveoutput":         self._fetch_nothing,
-            # Audio Output Commands
+            # Audio output devices # audio-output-devices
             "disableoutput":      self._fetch_nothing,
             "enableoutput":       self._fetch_nothing,
             "toggleoutput":       self._fetch_nothing,
             "outputs":            self._fetch_outputs,
             "outputset":          self._fetch_nothing,
-            # Reflection Commands
+            # Reflection # reflection
             "config":             self._fetch_object,
             "commands":           self._fetch_list,
             "notcommands":        self._fetch_list,
             "urlhandlers":        self._fetch_list,
             "decoders":           self._fetch_plugins,
-            # Client to Client
+            # Client to Client # client-to-client
             "subscribe":          self._fetch_nothing,
             "unsubscribe":        self._fetch_nothing,
             "channels":           self._fetch_list,
