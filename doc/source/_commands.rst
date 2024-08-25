@@ -133,6 +133,7 @@ Protocol documentation: `Stickers <https://mpd.readthedocs.io/en/latest/protocol
 * **sticker delete** -> None
 * **sticker list** -> list
 * **sticker find** -> list[dict]
+* **stickernames** -> list
 
 Connection settings
 ^^^^^^^^^^^^^^^^^^^
