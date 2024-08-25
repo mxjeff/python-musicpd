@@ -246,6 +246,7 @@ class MPDClient:
             "playlistadd":        self._fetch_nothing,
             "playlistclear":      self._fetch_nothing,
             "playlistdelete":     self._fetch_nothing,
+            "playlistlength":     self._fetch_object,
             "playlistmove":       self._fetch_nothing,
             "rename":             self._fetch_nothing,
             "rm":                 self._fetch_nothing,

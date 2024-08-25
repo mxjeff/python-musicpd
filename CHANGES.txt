@@ -4,6 +4,7 @@ python-musicpd Changes List
 Changes in 0.9.1
 ----------------
 
+ * Add playlistlength command
  * Add stickernames command
  * Add searchcount command
  * Improved documentation, add supported commands rtype

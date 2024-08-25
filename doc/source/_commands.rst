@@ -84,6 +84,7 @@ Protocol documentation: `Stored playlists <https://mpd.readthedocs.io/en/latest/
 * **playlistadd** -> None
 * **playlistclear** -> None
 * **playlistdelete** -> None
+* **playlistlength** -> dict
 * **playlistmove** -> None
 * **rename** -> None
 * **rm** -> None
