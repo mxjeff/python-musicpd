@@ -109,6 +109,7 @@ Protocol documentation: `The music database <https://mpd.readthedocs.io/en/lates
 * **search** -> list[dict]
 * **searchadd** -> None
 * **searchaddpl** -> None
+* **searchcount** -> dict
 * **update** -> str
 * **rescan** -> str
 

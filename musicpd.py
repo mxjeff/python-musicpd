@@ -266,6 +266,7 @@ class MPDClient:
             "search":             self._fetch_songs,
             "searchadd":          self._fetch_nothing,
             "searchaddpl":        self._fetch_nothing,
+            "searchcount":        self._fetch_object,
             "update":             self._fetch_item,
             "rescan":             self._fetch_item,
             # Mounts and neighbors # mounts-and-neighbors
