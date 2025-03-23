@@ -282,6 +282,8 @@ class MPDClient:
             "sticker list":       self._fetch_list,
             "sticker find":       self._fetch_songs,
             "stickernames":       self._fetch_list,
+            "stickertypes":       self._fetch_list,
+            "stickernamestypes":  self._fetch_list,
             # Connection settings # connection-settings
             "close":              None,
             "kill":               None,
