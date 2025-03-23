@@ -1,4 +1,4 @@
-Below the commands list last updated for v0.9.1.
+Below the commands list last updated for v0.9.2.
 
 Querying MPD’s status
 ^^^^^^^^^^^^^^^^^^^^^
@@ -79,6 +79,7 @@ Protocol documentation: `Stored playlists <https://mpd.readthedocs.io/en/latest/
 
 * **listplaylist** -> list
 * **listplaylistinfo** -> list[dict]
+* **searchplaylist** -> list[dict]
 * **listplaylists** -> dict
 * **load** -> None
 * **playlistadd** -> None
@@ -135,6 +136,8 @@ Protocol documentation: `Stickers <https://mpd.readthedocs.io/en/latest/protocol
 * **sticker list** -> list
 * **sticker find** -> list[dict]
 * **stickernames** -> list
+* **stickertypes** -> list
+* **stickernamestypes** -> list
 
 Connection settings
 ^^^^^^^^^^^^^^^^^^^
@@ -149,6 +152,12 @@ Protocol documentation: `Connection settings <https://mpd.readthedocs.io/en/late
 * **tagtypes enable** -> None
 * **tagtypes clear** -> None
 * **tagtypes all** -> None
+* **protocol** -> list
+* **protocol disable** -> None
+* **protocol enable** -> None
+* **protocol clear** -> None
+* **protocol all** -> None
+* **protocol available** -> list
 
 Partition Commands
 ^^^^^^^^^^^^^^^^^^
