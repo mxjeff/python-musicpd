@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2023  kaliko <kaliko@azylum.org>
+# SPDX-FileCopyrightText: 2023-2025  kaliko <kaliko@azylum.org>
 # SPDX-License-Identifier: LGPL-3.0-or-later
 [project]
 name = "python-musicpd"
@@ -7,7 +7,7 @@ description = "An MPD (Music Player Daemon) client library written in pure Pytho
 authors = [
   { name="Kaliko Jack", email="kaliko@azylum.org" },
 ]
-license = {file = "LICENSE.txt"}
+license = "LGPL-3.0-or-later"
 readme = "README.rst"
 requires-python = ">=3.6"
 classifiers = [
