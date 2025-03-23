@@ -293,6 +293,12 @@ class MPDClient:
             "tagtypes enable":    self._fetch_nothing,
             "tagtypes clear":     self._fetch_nothing,
             "tagtypes all":       self._fetch_nothing,
+            "protocol":           self._fetch_list,
+            "protocol disable":   self._fetch_nothing,
+            "protocol enable":    self._fetch_nothing,
+            "protocol clear":     self._fetch_nothing,
+            "protocol all":       self._fetch_nothing,
+            "protocol available": self._fetch_list,
             # Partition Commands # partition-commands
             "partition":          self._fetch_nothing,
             "listpartitions":     self._fetch_list,
