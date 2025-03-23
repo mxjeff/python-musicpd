@@ -241,6 +241,7 @@ class MPDClient:
             # Stored playlists # stored-playlists
             "listplaylist":       self._fetch_list,
             "listplaylistinfo":   self._fetch_songs,
+            "searchplaylist":     self._fetch_songs,
             "listplaylists":      self._fetch_playlists,
             "load":               self._fetch_nothing,
             "playlistadd":        self._fetch_nothing,

@@ -7,6 +7,7 @@ Changes in 0.9.2
  * Add missing build-backend in pyproject.toml
  * Add protocol commands
  * Add stickernamestypes and stickertypes commands
+ * Add searchplaylist command
 
 Changes in 0.9.1
 ----------------
