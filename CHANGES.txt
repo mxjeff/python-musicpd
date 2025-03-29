@@ -1,6 +1,11 @@
 python-musicpd Changes List
 ===========================
 
+Changes in 0.9.3
+----------------
+
+ * Fix deprecation in pyproject.toml
+
 Changes in 0.9.2
 ----------------
 
