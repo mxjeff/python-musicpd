@@ -11,7 +11,7 @@ steps:
       - apt update && apt install -q2 -y go-sendxmpp/stable-backports ca-certificates
       - bash .woodpecker/notify.sh
     when:
-      - event: [ push, manual ]
+      - event: [ push, manual, cron ]
 
 depends_on:
   - tests

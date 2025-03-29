@@ -19,7 +19,7 @@ steps:
     when:
       - path:
           include: ['musicpd.py', 'test.py', '.woodpecker/*']
-        event: [ push, tag, manual ]
+        event: [ push, manual, cron ]
 
   - name: build
     image: python:${PYTHON_VERSION}
@@ -32,7 +32,7 @@ steps:
       - evaluate: 'PYTHON_VERSION in ["3.9", "3.10", "3.11", "3.12"]'
         path:
           include: ['pyproject.toml', '.woodpecker/*']
-        event: [ push, tag, manual ]
+        event: [ push, manual, cron ]
 
   - name: sphinx
     image: python:${PYTHON_VERSION}
@@ -44,4 +44,4 @@ steps:
       - evaluate: 'PYTHON_VERSION == "3.12"'
         path:
           include: ['doc/**', '.woodpecker/*', 'README.rst']
-        event: [push, tag, manual]
+        event: [ push, manual, cron ]
