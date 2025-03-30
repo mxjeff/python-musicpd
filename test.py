@@ -728,8 +728,11 @@ class testRange(unittest.TestCase):
             # CommandError: Wrong range: 42 > 41
             musicpd.Range(('42',41))
         with self.assertRaises(musicpd.CommandError):
-            # CommandError: Wrong range: 42 > 41
+            # CommandError: Wrong range dimension
             musicpd.Range(('42','42','42'))
+        with self.assertRaises(musicpd.CommandError):
+            # CommandError: Wrong type, not a tuple
+            musicpd.Range(['42', '43'])
 
 
 if __name__ == '__main__':
