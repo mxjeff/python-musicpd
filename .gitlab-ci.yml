@@ -30,57 +30,18 @@ stages:
         - test.py
     - if: $CI_PIPELINE_SOURCE == "schedule"
 
-test-py3.13:
+tests:
   extends:
     - .cache_python
     - .test
-  image: "python:3.13"
-
-test-py3.12:
-  extends:
-    - .cache_python
-    - .test
-  image: "python:3.12"
-
-test-py3.11:
-  extends:
-    - .cache_python
-    - .test
-  image: "python:3.11"
-
-test-py3.10:
-  extends:
-    - .cache_python
-    - .test
-  image: "python:3.10"
-  coverage: '/musicpd.py\s+\d+\s+\d+\s+(\d+)%/'
-
-test-py3.9:
-  extends:
-    - .cache_python
-    - .test
-  image: "python:3.9"
-
-test-py3.8:
-  extends:
-    - .cache_python
-    - .test
-  image: "python:3.8"
-
-test-py3.7:
-  extends:
-    - .cache_python
-    - .test
-  image: "python:3.7"
-
-test-py3.6:
-  extends:
-    - .cache_python
-    - .test
-  image: "python:3.6"
+  image: "python:$VERSION"
+  parallel:
+    matrix:
+      - VERSION: ['3.6', '3.7', '3.8', '3.9', '3.10', '3.11', '3.12', '3.13']
 
 
 build:
+  image: "python:$VERSION"
   stage: build
   extends:
     - .cache_python
@@ -106,6 +67,9 @@ build:
         - MANIFEST.in
         - pyproject.toml
     - if: $CI_PIPELINE_SOURCE == "schedule"
+  parallel:
+    matrix: # uses python versions shipped in Debian
+      - VERSION: ['3.9', '3.11', '3.13']
 
 tag_release:
   stage: build
