@@ -5,6 +5,7 @@ Changes in 0.9.3
 ----------------
 
  * Fix deprecation in pyproject.toml
+ * Minimum python version raised to 3.9
 
 Changes in 0.9.2
 ----------------
