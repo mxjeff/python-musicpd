@@ -329,20 +329,17 @@ class MPDClient:
         }
         # fmt: on
         #: host used with the current connection (:py:obj:`str`)
-        self.host = None
+        self.host = 'localhost'
         #: password detected in :envvar:`MPD_HOST` environment variable (:py:obj:`str`)
         self.pwd = None
         #: port used with the current connection (:py:obj:`int`, :py:obj:`str`)
-        self.port = None
+        self.port = os.getenv('MPD_PORT', '6600')
         self._get_envvars()
 
     def _get_envvars(self):
         """
         Retrieve MPD env. var. to overrides default "localhost:6600"
         """
-        # Set some defaults
-        self.host = 'localhost'
-        self.port = os.getenv('MPD_PORT', '6600')
         _host = os.getenv('MPD_HOST', '')
         if _host:
             # If password is set: MPD_HOST=pass@host
@@ -724,13 +721,13 @@ class MPDClient:
             host = self.host
         else:
             self.host = host
-        if not port:
+        if port is None:
             port = self.port
         else:
             self.port = port
         if self._sock is not None:
             raise ConnectionError("Already connected")
-        if host[0] in ['/', '@']:
+        if host and host[0] in ['/', '@']:
             logger.debug('Connecting unix socket %s', host)
             self._sock = self._connect_unix(host)
         else:
