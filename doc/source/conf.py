@@ -1,5 +1,5 @@
 # coding: utf-8
-# SPDX-FileCopyrightText: 2018-2021  kaliko <kaliko@azylum.org>
+# SPDX-FileCopyrightText: 2018-2026  kaliko <kaliko@azylum.org>
 # SPDX-License-Identifier: LGPL-3.0-or-later
 #
 # Python MPD Module documentation build configuration file, created by
@@ -57,9 +57,9 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'Python MPD Module'
+project = 'Python MPD Module'
 from datetime import datetime
-copyright = u'2012-{}, {}'.format(datetime.now().year, __author__)
+copyright = '2012-{}, {}'.format(datetime.now().year, __author__)
 author = __author__
 
 # The version info for the project you're documenting, acts as replacement for
@@ -146,7 +146,7 @@ html_theme = 'classic'
 # The name for this set of Sphinx documents.
 # "<project> v<release> documentation" by default.
 #
-# html_title = u'Python MPD Module v0.0.1'
+# html_title = 'Python MPD Module v0.0.1'
 
 # A shorter title for the navigation bar.  Default is the same as html_title.
 #
@@ -273,8 +273,8 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'PythonMPDModule.tex', u'Python MPD Module Documentation',
-     u'kaliko', 'manual'),
+    (master_doc, 'PythonMPDModule.tex', 'Python MPD Module Documentation',
+     'kaliko', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -315,7 +315,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'pythonmpdmodule', u'Python MPD Module Documentation',
+    (master_doc, 'pythonmpdmodule', 'Python MPD Module Documentation',
      [author], 1)
 ]
 
@@ -330,7 +330,7 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'PythonMPDModule', u'Python MPD Module Documentation',
+    (master_doc, 'PythonMPDModule', 'Python MPD Module Documentation',
      author, 'PythonMPDModule', 'One line description of project.',
      'Miscellaneous'),
 ]

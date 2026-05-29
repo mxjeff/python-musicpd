@@ -743,12 +743,12 @@ class MPDClient:
         except:
             self.disconnect()
             raise
-        log.debug('Connected')
+        logger.debug('Connected')
 
     @property
     def socket_timeout(self):
         """Socket timeout in second (defaults to :py:obj:`SOCKET_TIMEOUT`).
-        Use :py:obj:`None` to disable socket timout.
+        Use :py:obj:`None` to disable socket timeout.
 
         :setter: Set the socket timeout (integer > 0)
         :type: int or None
