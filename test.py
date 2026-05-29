@@ -331,7 +331,12 @@ class TestMPDClient(unittest.TestCase):
 
     def test_fetch_item(self):
         self.MPDWillReturn('updating_db: 42\n', 'OK\n')
-        self.assertIsNotNone(self.client.update())
+        self.assertIsNotNone(self.client._fetch_item())
+
+    def test_fetch_item_raise(self):
+        self.MPDWillReturn('file: my-song.ogg\n', 'Pos: 0\n', 'Id: 66\n', 'OK\n')
+        with self.assertRaises(musicpd.ProtocolError):
+            self.assertIsNotNone(self.client._fetch_item())
 
     def test_fetch_object(self):
         # XXX: _read_objects() doesn't wait for the final OK

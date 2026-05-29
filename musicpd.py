@@ -549,7 +549,7 @@ class MPDClient:
     def _fetch_item(self):
         pairs = list(self._read_pairs())
         if len(pairs) != 1:
-            return None
+            raise ProtocolError(f"Expected 1 pair, got {len(pairs)}")
         return pairs[0][1]
 
     @iterator_wrapper
