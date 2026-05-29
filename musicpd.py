@@ -26,7 +26,7 @@ CONNECTION_TIMEOUT = 30
 #: Socket timeout in second > 0 (Default is :py:obj:`None` for no timeout)
 SOCKET_TIMEOUT = None
 
-log = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 
 def iterator_wrapper(func):
@@ -97,7 +97,6 @@ class Range:
             return str(int(item))
         except (TypeError, ValueError) as err:
             raise CommandError(f'Not an integer: "{item}"') from err
-        return item
 
     def _check(self):
         if not isinstance(self.tpl, tuple):
@@ -184,6 +183,7 @@ class MPDClient:
 
         .. note:: This is the version of the protocol spoken, not the real version of the daemon."""
         self._reset()
+        # fmt: off
         self._commands = {
             # Querying MPD’s status # querying-mpd-s-status
             "clearerror":         self._fetch_nothing,
@@ -327,6 +327,7 @@ class MPDClient:
             "readmessages":       self._fetch_messages,
             "sendmessage":        self._fetch_nothing,
         }
+        # fmt: on
         #: host used with the current connection (:py:obj:`str`)
         self.host = None
         #: password detected in :envvar:`MPD_HOST` environment variable (:py:obj:`str`)
@@ -349,30 +350,30 @@ class MPDClient:
                 mpd_host_env = _host.split('@', 1)
                 if mpd_host_env[0]:
                     # A password is actually set
-                    log.debug('password detected in MPD_HOST, set client pwd attribute')
+                    logger.debug('password detected in MPD_HOST, set client pwd attribute')
                     self.pwd = mpd_host_env[0]
                     if mpd_host_env[1]:
                         self.host = mpd_host_env[1]
-                        log.debug('host detected in MPD_HOST: %s', self.host)
+                        logger.debug('host detected in MPD_HOST: %s', self.host)
                 elif mpd_host_env[1]:
                     # No password set but leading @ is an abstract socket
                     self.host = '@'+mpd_host_env[1]
-                    log.debug('host detected in MPD_HOST: %s (abstract socket)', self.host)
+                    logger.debug('host detected in MPD_HOST: %s (abstract socket)', self.host)
             else:
                 # MPD_HOST is a plain host
                 self.host = _host
-                log.debug('host detected in MPD_HOST: %s', self.host)
+                logger.debug('host detected in MPD_HOST: %s', self.host)
         else:
             # Is socket there
             xdg_runtime_dir = os.getenv('XDG_RUNTIME_DIR', '/run')
             rundir = os.path.join(xdg_runtime_dir, 'mpd/socket')
             if os.path.exists(rundir):
                 self.host = rundir
-                log.debug('host detected in ${XDG_RUNTIME_DIR}/run: %s (unix socket)', self.host)
+                logger.debug('host detected in ${XDG_RUNTIME_DIR}/run: %s (unix socket)', self.host)
         _mpd_timeout = os.getenv('MPD_TIMEOUT', '')
         if _mpd_timeout.isdigit():
             self.mpd_timeout = int(_mpd_timeout)
-            log.debug('timeout detected in MPD_TIMEOUT: %d', self.mpd_timeout)
+            logger.debug('timeout detected in MPD_TIMEOUT: %d', self.mpd_timeout)
         else:  # Use CONNECTION_TIMEOUT as default even if MPD_TIMEOUT carries gargage
             self.mpd_timeout = CONNECTION_TIMEOUT
 
@@ -679,14 +680,14 @@ class MPDClient:
             af, socktype, proto, _, sa = res
             sock = None
             try:
-                log.debug('opening socket %s', sa)
+                logger.debug('opening socket %s', sa)
                 sock = socket.socket(af, socktype, proto)
                 sock.settimeout(self.mpd_timeout)
                 sock.connect(sa)
                 sock.settimeout(self.socket_timeout)
                 return sock
             except socket.error as socket_err:
-                log.debug('opening socket %s failed: %s', sa, socket_err)
+                logger.debug('opening socket %s failed: %s', sa, socket_err)
                 err = socket_err
                 if sock is not None:
                     sock.close()
@@ -730,10 +731,10 @@ class MPDClient:
         if self._sock is not None:
             raise ConnectionError("Already connected")
         if host[0] in ['/', '@']:
-            log.debug('Connecting unix socket %s', host)
+            logger.debug('Connecting unix socket %s', host)
             self._sock = self._connect_unix(host)
         else:
-            log.debug('Connecting tcp socket %s:%s (timeout: %ss)', host, port, self.mpd_timeout)
+            logger.debug('Connecting tcp socket %s:%s (timeout: %ss)', host, port, self.mpd_timeout)
             self._sock = self._connect_tcp(host, port)
         self._rfile = self._sock.makefile("r", encoding='utf-8', errors='surrogateescape')
         self._rbfile = self._sock.makefile("rb")
