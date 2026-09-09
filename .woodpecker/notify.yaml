@@ -1,0 +1,15 @@
+---
+
+steps:
+  - name: notify
+    image: debian:stable
+    environment:
+      DEBIAN_FRONTEND: noninteractive
+    commands:
+      - apt update && apt install -q2 -y go-sendxmpp ca-certificates
+      - bash .woodpecker/notify.sh
+    when:
+      - event: [ push, manual, cron ]
+
+depends_on:
+  - tests
