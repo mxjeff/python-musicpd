@@ -12,8 +12,7 @@ steps:
       - bash .woodpecker/notify.sh
     when:
       - event: [ push, manual, cron ]
+      - status: [ failure ]
 
 depends_on:
   - tests
-
-runs_on: [ failure ]
