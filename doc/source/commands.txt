@@ -75,7 +75,7 @@ count              group <str>                              -> fetch_object
 getfingerprint     <str>                                    -> fetch_object
 find               <str> <str> [<str> <str>]...             -> fetch_songs
 findadd            <str> <str> [<str> <str>]                -> fetch_nothing
-list               <str> [<str> <str>]...[group <str>]...   -> fetch_list
+list               <str> [<str> <str>]...[<Group>]...       -> fetch_list
 listall            [<str>]                                  -> fetch_database
 listallinfo        [<str>]                                  -> fetch_database
 listfiles          <str>                                    -> fetch_database

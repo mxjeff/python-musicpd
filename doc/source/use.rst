@@ -157,6 +157,30 @@ Empty start in range (i.e. ":END") are not possible and will raise a CommandErro
 
 .. note:: Remember the use of a tuple is **optional**. Range can still be specified as a plain string ``"START:END"``.
 
+Grouping list results
+---------------------
+
+The ``list`` command supports the ``group`` keyword to group results by one or
+more tags (cf. `MPD protocol documentation`_). Use the :py:obj:`musicpd.Group`
+marker as argument to send the ``group`` keyword:
+
+.. code-block:: python
+
+    # list albums grouped by artist, filtered on genre
+    albums = client.list('album', '(genre == "Punk")', musicpd.Group('artist'))
+    # albums is a list of dicts, group values are propagated on each row:
+    # [{'artist': 'Ramones', 'album': 'Leave Home'},
+    #  {'artist': 'The Clash', 'album': 'The Clash'}, ...]
+
+The ``group`` keyword can be repeated to group by several tags:
+
+.. code-block:: python
+
+    client.list('album', musicpd.Group('date'), musicpd.Group('artist'))
+
+Without any :py:obj:`musicpd.Group` argument, ``list`` still returns a flat
+list of tag values.
+
 Iterators
 ----------
 

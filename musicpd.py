@@ -117,6 +117,22 @@ class Range:
                 raise CommandError(f'Wrong range: {self.lower} > {self.upper}')
 
 
+class Group:
+    """Mark a tag used with the ``group`` keyword of the :py:obj:`list` command.
+
+    >>> client.list('album', '(genre == "Punk")', musicpd.Group('artist'))
+    """
+
+    def __init__(self, tag):
+        self.tag = tag
+
+    def __str__(self):
+        return f'group {self.tag}'
+
+    def __repr__(self):
+        return f'Group({self.tag!r})'
+
+
 class _NotConnected:
 
     def __getattr__(self, attr):
@@ -447,6 +463,8 @@ class MPDClient:
         for arg in args:
             if isinstance(arg, tuple):
                 parts.append(f'{Range(arg)!s}')
+            elif isinstance(arg, Group):
+                parts.append(f'group "{escape(str(arg.tag))}"')
             else:
                 parts.append(f'"{escape(str(arg))}"')
         if '\n' in ' '.join(parts):
@@ -501,13 +519,67 @@ class MPDClient:
             pair = self._read_pair(separator, binary=binary)
 
     def _read_list(self):
-        seen = None
-        for key, value in self._read_pairs():
-            if key != seen:
-                if seen is not None:
-                    raise ProtocolError(f"Expected key '{seen}', got '{key}'")
-                seen = key
-            yield value
+        """Read a ``list``-style response, flat or grouped.
+
+        Two response shapes are handled:
+
+        * **flat** — every line has the same key (e.g. ``Album: Foo`` then
+          ``Album: Bar``): values are yielded as a plain list.
+        * **grouped** — lines carry mixed keys, as returned by the ``list``
+          command with the ``group`` keyword. Group tags are only sent when
+          their value changes, so each row is rebuilt by propagating the
+          current group values.
+
+        For grouped responses, ``delimiters`` tracks the active tags in order
+        of appearance (the group hierarchy, ending with the listed tag). When
+        a key already present in the current row is seen, the row is yielded
+        and the ``while`` loop pops deeper tags from both the row and
+        ``delimiters`` until the changed key is reached, carrying the
+        shallower group values over to the next row.
+
+        Example::
+
+            Artist: Crass
+            Album: Stations
+            Album: Feeding
+            Artist: The Clash
+            Album: London Calling
+
+        yields::
+
+            [{'artist': 'Crass', 'album': 'Stations'},
+             {'artist': 'Crass', 'album': 'Feeding'},
+             {'artist': 'The Clash', 'album': 'London Calling'}]
+
+        .. note::
+            Grouping is detected from the response (mixed keys), not from the
+            command arguments, so plain and grouped ``list`` calls share the
+            same fetch method.
+        """
+        pairs = list(self._read_pairs())
+        if not pairs:
+            return
+        if len({key for key, _ in pairs}) == 1:
+            for _, value in pairs:
+                yield value
+            return
+        # Grouped list: group tags are only sent when their value changes,
+        # hence the dynamic delimiters handling.
+        delimiters = []
+        obj = {}
+        for key, value in pairs:
+            key = key.lower()
+            if key not in delimiters:
+                delimiters.append(key)
+            if obj and key in obj:
+                yield obj
+                obj = obj.copy()
+                while delimiters[-1] != key:
+                    obj.pop(delimiters[-1], None)
+                    delimiters.pop()
+            obj[key] = value
+        if obj:
+            yield obj
 
     def _read_playlist(self):
         for _, value in self._read_pairs(":"):

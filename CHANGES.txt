@@ -4,6 +4,7 @@ python-musicpd Changes List
 Changes in 0.9.3
 ----------------
 
+ * Add support for the list command grouping (Group marker)
  * Fix deprecation in pyproject.toml
  * Minimum python version raised to 3.9
 

@@ -325,9 +325,56 @@ class TestMPDClient(unittest.TestCase):
         self.assertMPDReceived('ping\n')
 
     def test_fetch_list(self):
-        self.MPDWillReturn('OK\n')
-        self.assertIsInstance(self.client.list('album'), list)
+        self.MPDWillReturn('Album: Foo\n', 'Album: Bar\n', 'OK\n')
+        self.assertEqual(['Foo', 'Bar'], self.client.list('album'))
         self.assertMPDReceived('list "album"\n')
+
+    def test_fetch_list_group(self):
+        self.MPDWillReturn('Artist: Foo\n', 'Album: Bar\n',
+                           'Album: Baz\n', 'Artist: Qux\n',
+                           'Album: Quux\n', 'OK\n')
+        self.assertEqual(
+            [{'artist': 'Foo', 'album': 'Bar'},
+             {'artist': 'Foo', 'album': 'Baz'},
+             {'artist': 'Qux', 'album': 'Quux'}],
+            self.client.list('album', musicpd.Group('artist')))
+        self.assertMPDReceived('list "album" group "artist"\n')
+
+    def test_fetch_list_group_filter(self):
+        self.MPDWillReturn('Artist: Foo\n', 'Album: Bar\n', 'OK\n')
+        self.assertEqual(
+            [{'artist': 'Foo', 'album': 'Bar'}],
+            self.client.list('album', '(genre == "Punk")',
+                             musicpd.Group('artist')))
+        self.assertMPDReceived(
+            'list "album" "(genre == \\"Punk\\")" group "artist"\n')
+
+    def test_fetch_list_multiple_groups(self):
+        self.MPDWillReturn('Date: 1979\n', 'Artist: Crass\n',
+                           'Album: Stations\n', 'Album: Feeding\n',
+                           'Artist: The Clash\n', 'Album: London\n',
+                           'OK\n')
+        self.assertEqual(
+            [{'date': '1979', 'artist': 'Crass', 'album': 'Stations'},
+             {'date': '1979', 'artist': 'Crass', 'album': 'Feeding'},
+             {'date': '1979', 'artist': 'The Clash', 'album': 'London'}],
+            self.client.list('album', musicpd.Group('date'),
+                             musicpd.Group('artist')))
+        self.assertMPDReceived(
+            'list "album" group "date" group "artist"\n')
+
+    def test_fetch_list_group_empty_value(self):
+        self.MPDWillReturn('Artist: \n', 'Album: Bar\n', 'OK\n')
+        self.assertEqual(
+            [{'artist': '', 'album': 'Bar'}],
+            self.client.list('album', musicpd.Group('artist')))
+
+    def test_fetch_list_group_send_fetch(self):
+        self.MPDWillReturn('Artist: Foo\n', 'Album: Bar\n', 'OK\n')
+        self.client.send_list('album', musicpd.Group('artist'))
+        self.assertEqual([{'artist': 'Foo', 'album': 'Bar'}],
+                         self.client.fetch_list())
+        self.assertMPDReceived('list "album" group "artist"\n')
 
     def test_fetch_item(self):
         self.MPDWillReturn('updating_db: 42\n', 'OK\n')
