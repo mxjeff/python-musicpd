@@ -37,7 +37,7 @@ tests:
   image: "python:$VERSION"
   parallel:
     matrix:
-      - VERSION: ['3.9', '3.10', '3.11', '3.12', '3.13']
+      - VERSION: ['3.11', '3.12', '3.13', '3.14', '3.15']
 
 
 build:
@@ -69,7 +69,7 @@ build:
     - if: $CI_PIPELINE_SOURCE == "schedule"
   parallel:
     matrix: # uses python versions shipped in Debian
-      - VERSION: ['3.9', '3.11', '3.13']
+      - VERSION: ['3.11', '3.12', '3.13', '3.14', '3.15']
 
 tag_release:
   stage: build

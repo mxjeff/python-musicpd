@@ -9,7 +9,7 @@ authors = [
 ]
 license-files = ["LICENSE.txt"]
 readme = "README.rst"
-requires-python = ">=3.9"
+requires-python = ">=3.11"
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
@@ -21,7 +21,10 @@ classifiers = [
 dynamic = ["version"]
 
 [project.optional-dependencies]
-sphinx = ["Sphinx>=5.3.0"]
+sphinx = [
+    "Sphinx>=5.3.0",
+    "sphinx-rtd-theme>=3.1.0",
+]
 
 [project.urls]
 "Homepage" = "https://kaliko.me/python-musicpd/"
@@ -35,3 +38,9 @@ py-modules = ["musicpd"]
 
 [tool.setuptools.dynamic]
 version = {attr = "musicpd.VERSION"}
+
+[dependency-groups]
+test = [
+    "pytest>=7.0.1",
+    "pytest-cov>=4.0.0",
+]
