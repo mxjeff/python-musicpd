@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # SPDX-FileCopyrightText: 2012-2025  kaliko <kaliko@azylum.org>
 # SPDX-FileCopyrightText: 2021       Wonko der Verständige <wonko@hanstool.org>
 # SPDX-FileCopyrightText: 2019       Naglis Jonaitis <naglis@mailbox.org>
@@ -11,7 +10,6 @@
 import logging
 import os
 import socket
-
 from functools import wraps
 
 HELLO_PREFIX = "OK MPD "
@@ -40,8 +38,7 @@ def iterator_wrapper(func):
 
         def iterator(gen):
             try:
-                for item in gen:
-                    yield item
+                yield from gen
             finally:
                 instance._iterating = False
         return iterator(generator)
@@ -411,8 +408,7 @@ class MPDClient:
 
     def _send(self, command, args):
         if self._command_list is not None:
-            raise CommandListError("Cannot use send_%s in a command list" %
-                                   command.replace(" ", "_"))
+            raise CommandListError("Cannot use send_{} in a command list".format(command.replace(" ", "_")))
         self._write_command(command, args)
         retval = self._commands[command]
         if retval is not None:
@@ -683,7 +679,7 @@ class MPDClient:
         amount = int(obj['binary'])
         try:
             obj['data'] = self._read_binary(amount)
-        except IOError as err:
+        except OSError as err:
             raise ConnectionError(f'Error reading binary content: {err}') from err
         data_bytes = len(obj['data'])
         if data_bytes != amount:  # can we ever get there?
@@ -729,7 +725,7 @@ class MPDClient:
             sock.settimeout(self.mpd_timeout)
             sock.connect(path)
             sock.settimeout(self.socket_timeout)
-        except socket.error as socket_err:
+        except OSError as socket_err:
             raise ConnectionError(socket_err) from socket_err
         return sock
 
@@ -743,7 +739,7 @@ class MPDClient:
             gai = socket.getaddrinfo(host, port, socket.AF_UNSPEC,
                                      socket.SOCK_STREAM, socket.IPPROTO_TCP,
                                      flags)
-        except socket.error as gaierr:
+        except OSError as gaierr:
             raise ConnectionError(gaierr) from gaierr
         for res in gai:
             af, socktype, proto, _, sa = res
@@ -755,7 +751,7 @@ class MPDClient:
                 sock.connect(sa)
                 sock.settimeout(self.socket_timeout)
                 return sock
-            except socket.error as socket_err:
+            except OSError as socket_err:
                 logger.debug('opening socket %s failed: %s', sa, socket_err)
                 err = socket_err
                 if sock is not None:

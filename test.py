@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# coding: utf-8
 # SPDX-FileCopyrightText: 2012-2024  kaliko <kaliko@azylum.org>
 # SPDX-License-Identifier: LGPL-3.0-or-later
 # pylint: disable=missing-docstring
@@ -8,14 +7,13 @@ Test suite highly borrowed^Wsteal from python-mpd2 [0] project.
 
 [0] https://github.com/Mic92/python-mpd2
 """
-
-
 import itertools
 import os
 import types
 import unittest
 import unittest.mock
 import warnings
+from typing import ClassVar
 
 import musicpd
 
@@ -128,7 +126,7 @@ class TestMPDClient(unittest.TestCase):
 
     longMessage = True
     # last sync: musicpd 0.6.0 unreleased / Fri Feb 19 15:34:53 CET 2021
-    commands = {
+    commands: ClassVar[dict] = {
             # Status Commands
             'clearerror':         'nothing',
             'currentsong':        'object',
@@ -314,8 +312,8 @@ class TestMPDClient(unittest.TestCase):
     def test_metaclass_commands(self):
         """Controls client has at least commands as last synchronized in
         TestMPDClient.commands"""
-        for cmd, ret in TestMPDClient.commands.items():
-            self.assertTrue(hasattr(self.client, cmd), msg='cmd "{}" not available!'.format(cmd))
+        for cmd in TestMPDClient.commands:
+            self.assertTrue(hasattr(self.client, cmd), msg=f'cmd "{cmd}" not available!')
             if ' ' in cmd:
                 self.assertTrue(hasattr(self.client, cmd.replace(' ', '_')))
 
@@ -749,7 +747,7 @@ class testContextManager(unittest.TestCase):
             sock = mock.MagicMock(name='socket')
             socket_mock.socket.return_value = sock
             cli = musicpd.MPDClient()
-            with cli as c:
+            with cli:
                 sock.connect.assert_called_with('\0abstract')
                 sock.close.assert_not_called()
             sock.close.assert_called()
