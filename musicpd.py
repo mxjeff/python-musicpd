@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2012-2025  kaliko <kaliko@azylum.org>
+# SPDX-FileCopyrightText: 2012-2026  kaliko <kaliko@azylum.org>
 # SPDX-FileCopyrightText: 2021       Wonko der Verständige <wonko@hanstool.org>
 # SPDX-FileCopyrightText: 2019       Naglis Jonaitis <naglis@mailbox.org>
 # SPDX-FileCopyrightText: 2019       Bart Van Loon <bbb@bbbart.be>
@@ -17,7 +17,7 @@ ERROR_PREFIX = "ACK "
 SUCCESS = "OK"
 NEXT = "list_OK"
 #: Module version
-VERSION = '0.9.3.dev0'
+VERSION = '0.9.3'
 #: Seconds before a connection attempt times out
 #: (overriden by :envvar:`MPD_TIMEOUT` env. var.)
 CONNECTION_TIMEOUT = 30
